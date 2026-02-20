@@ -68,7 +68,7 @@ export default function LandingPage() {
         <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-accent/10" />
         <div className="relative max-w-5xl mx-auto px-4 py-16 md:py-24 text-center">
           <div className="flex justify-center mb-8">
-            <img src={logoPath} alt="BarterConnect" className="w-80 md:w-[28rem] lg:w-[34rem]" data-testid="hero-logo" />
+            <img src={logoPath} alt="BarterConnect" className="w-64 md:w-80 lg:w-96" data-testid="hero-logo" />
           </div>
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
             <Sparkles className="w-3.5 h-3.5" />
