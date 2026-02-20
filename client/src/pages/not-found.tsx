@@ -9,8 +9,8 @@ export default function NotFound() {
     <div className="min-h-screen w-full flex flex-col bg-background">
       <header className="border-b px-4 py-3">
         <div className="max-w-5xl mx-auto flex items-center">
-          <Link href="/" className="header-logo-wrap">
-            <img src={logoPath} alt="BarterConnect" />
+          <Link href="/">
+            <img src={logoPath} alt="BarterConnect" className="h-10" />
           </Link>
         </div>
       </header>

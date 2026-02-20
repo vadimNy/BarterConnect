@@ -40,8 +40,8 @@ export function LoginPage() {
               <ArrowLeft className="w-4 h-4" />
             </Button>
           </Link>
-          <Link href="/" className="header-logo-wrap">
-            <img src={logoPath} alt="BarterConnect" />
+          <Link href="/">
+            <img src={logoPath} alt="BarterConnect" className="h-10" />
           </Link>
         </div>
       </header>
@@ -141,8 +141,8 @@ export function SignupPage() {
               <ArrowLeft className="w-4 h-4" />
             </Button>
           </Link>
-          <Link href="/" className="header-logo-wrap">
-            <img src={logoPath} alt="BarterConnect" />
+          <Link href="/">
+            <img src={logoPath} alt="BarterConnect" className="h-10" />
           </Link>
         </div>
       </header>

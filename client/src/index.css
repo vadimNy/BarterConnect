@@ -180,20 +180,6 @@
   }
 }
 
-.header-logo-wrap {
-  display: flex;
-  align-items: center;
-  height: 3rem;
-  overflow: hidden;
-}
-
-.header-logo-wrap img {
-  height: 12rem !important;
-  width: auto !important;
-  max-width: none !important;
-  flex-shrink: 0;
-  margin-top: 0.25rem;
-}
 
 /**
  * Using the elevate system.
