@@ -185,11 +185,12 @@
   height: 2.5rem;
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 .header-logo-wrap img {
-  margin-top: -15%;
-  margin-bottom: -15%;
+  margin-top: -30%;
+  margin-bottom: -30%;
 }
 
 /**
