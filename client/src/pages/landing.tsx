@@ -1,8 +1,10 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowRight, Repeat, Users, Share2, Shield, Sparkles, Handshake } from "lucide-react";
+import { ArrowRight, Users, Share2, Shield, Sparkles, Handshake, Repeat } from "lucide-react";
 import { useAuth } from "@/lib/auth";
+import logoPath from "@assets/BarterConnect_Logo_1771569174270.png";
+import iconPath from "@assets/BarterConnect_Icon_1771569174270.png";
 
 export default function LandingPage() {
   const { user } = useAuth();
@@ -41,9 +43,7 @@ export default function LandingPage() {
       <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="max-w-5xl mx-auto flex items-center justify-between gap-4 px-4 py-3">
           <div className="flex items-center gap-2">
-            <div className="flex items-center justify-center w-8 h-8 rounded-md bg-primary text-primary-foreground">
-              <Repeat className="w-4 h-4" />
-            </div>
+            <img src={iconPath} alt="BarterConnect" className="w-8 h-8" />
             <span className="font-semibold text-lg">BarterConnect</span>
           </div>
           <div className="flex items-center gap-2">
@@ -68,6 +68,9 @@ export default function LandingPage() {
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/10" />
         <div className="relative max-w-5xl mx-auto px-4 py-16 md:py-24 text-center">
+          <div className="flex justify-center mb-6">
+            <img src={logoPath} alt="BarterConnect" className="h-14 md:h-16" />
+          </div>
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
             <Sparkles className="w-3.5 h-3.5" />
             <span>Skill-based bartering platform</span>
@@ -158,7 +161,7 @@ export default function LandingPage() {
       <footer className="border-t py-6">
         <div className="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-sm text-muted-foreground">
           <div className="flex items-center gap-2">
-            <Repeat className="w-4 h-4" />
+            <img src={iconPath} alt="BarterConnect" className="w-5 h-5" />
             <span>BarterConnect</span>
           </div>
           <p>Trade skills, not money.</p>

@@ -4,7 +4,6 @@ import { useAuth } from "@/lib/auth";
 import {
   LayoutDashboard,
   PlusCircle,
-  Repeat,
   List,
   Heart,
   LogOut,
@@ -13,6 +12,7 @@ import {
   Zap,
 } from "lucide-react";
 import { useState } from "react";
+import iconPath from "@assets/BarterConnect_Icon_1771569174270.png";
 
 const navItems = [
   { href: "/app", label: "Dashboard", icon: LayoutDashboard },
@@ -33,9 +33,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <div className="max-w-5xl mx-auto flex items-center justify-between gap-4 px-4 py-3">
           <div className="flex items-center gap-2">
             <Link href="/app" className="flex items-center gap-2">
-              <div className="flex items-center justify-center w-8 h-8 rounded-md bg-primary text-primary-foreground">
-                <Repeat className="w-4 h-4" />
-              </div>
+              <img src={iconPath} alt="BarterConnect" className="w-8 h-8" />
               <span className="font-semibold text-lg hidden sm:inline">BarterConnect</span>
             </Link>
           </div>

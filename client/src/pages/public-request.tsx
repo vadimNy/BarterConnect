@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Repeat, ArrowRight, MapPin, Wifi, User } from "lucide-react";
+import { ArrowRight, MapPin, Wifi, User } from "lucide-react";
+import iconPath from "@assets/BarterConnect_Icon_1771569174270.png";
 
 type PublicRequest = {
   offerSkill: string;
@@ -25,9 +26,7 @@ export default function PublicRequestPage() {
     <div className="min-h-screen bg-background">
       <header className="border-b px-4 py-3">
         <div className="max-w-lg mx-auto flex items-center gap-2">
-          <div className="flex items-center justify-center w-8 h-8 rounded-md bg-primary text-primary-foreground">
-            <Repeat className="w-4 h-4" />
-          </div>
+          <img src={iconPath} alt="BarterConnect" className="w-8 h-8" />
           <span className="font-semibold text-lg">BarterConnect</span>
         </div>
       </header>

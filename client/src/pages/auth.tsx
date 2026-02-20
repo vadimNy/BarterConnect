@@ -5,8 +5,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/lib/auth";
-import { Repeat, Loader2, ArrowLeft } from "lucide-react";
+import { Loader2, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import iconPath from "@assets/BarterConnect_Icon_1771569174270.png";
 
 export function LoginPage() {
   const [email, setEmail] = useState("");
@@ -39,9 +40,7 @@ export function LoginPage() {
             </Button>
           </Link>
           <div className="flex items-center gap-2">
-            <div className="flex items-center justify-center w-7 h-7 rounded-md bg-primary text-primary-foreground">
-              <Repeat className="w-3.5 h-3.5" />
-            </div>
+            <img src={iconPath} alt="BarterConnect" className="w-7 h-7" />
             <span className="font-semibold">BarterConnect</span>
           </div>
         </div>
@@ -134,9 +133,7 @@ export function SignupPage() {
             </Button>
           </Link>
           <div className="flex items-center gap-2">
-            <div className="flex items-center justify-center w-7 h-7 rounded-md bg-primary text-primary-foreground">
-              <Repeat className="w-3.5 h-3.5" />
-            </div>
+            <img src={iconPath} alt="BarterConnect" className="w-7 h-7" />
             <span className="font-semibold">BarterConnect</span>
           </div>
         </div>
