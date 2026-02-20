@@ -41,7 +41,7 @@ export function LoginPage() {
             </Button>
           </Link>
           <Link href="/" className="header-logo-wrap">
-            <img src={logoPath} alt="BarterConnect" className="w-48" />
+            <img src={logoPath} alt="BarterConnect" />
           </Link>
         </div>
       </header>
@@ -142,7 +142,7 @@ export function SignupPage() {
             </Button>
           </Link>
           <Link href="/" className="header-logo-wrap">
-            <img src={logoPath} alt="BarterConnect" className="w-48" />
+            <img src={logoPath} alt="BarterConnect" />
           </Link>
         </div>
       </header>

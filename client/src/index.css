@@ -183,13 +183,15 @@
 .header-logo-wrap {
   display: flex;
   align-items: center;
-  height: 2.5rem;
+  height: 2.75rem;
+  overflow: hidden;
 }
 
 .header-logo-wrap img {
-  height: 5rem;
-  width: auto;
-  object-fit: contain;
+  height: 7rem !important;
+  width: auto !important;
+  max-width: none !important;
+  flex-shrink: 0;
 }
 
 /**

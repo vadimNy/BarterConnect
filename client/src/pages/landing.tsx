@@ -43,7 +43,7 @@ export default function LandingPage() {
       <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="max-w-5xl mx-auto flex items-center justify-between gap-4 px-4 py-3">
           <Link href="/" className="shrink-0 header-logo-wrap">
-            <img src={logoPath} alt="BarterConnect" className="w-56 md:w-64" data-testid="header-logo" />
+            <img src={logoPath} alt="BarterConnect" data-testid="header-logo" />
           </Link>
           <div className="flex items-center gap-2">
             {user ? (
