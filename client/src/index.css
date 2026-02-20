@@ -181,16 +181,17 @@
 }
 
 .header-logo-wrap {
-  overflow: hidden;
+  display: block;
+  position: relative;
   height: 2.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  overflow: hidden;
 }
 
 .header-logo-wrap img {
-  margin-top: -30%;
-  margin-bottom: -30%;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 /**
