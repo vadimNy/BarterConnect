@@ -41,7 +41,7 @@ export function LoginPage() {
             </Button>
           </Link>
           <Link href="/" className="flex items-center gap-0">
-            <img src={logoPath} alt="BarterConnect" className="h-8" />
+            <img src={logoPath} alt="BarterConnect" className="h-12" />
           </Link>
         </div>
       </header>
@@ -98,7 +98,7 @@ export function LoginPage() {
 
       <footer className="border-t py-4 px-4">
         <div className="max-w-5xl mx-auto flex items-center">
-          <img src={logoPath} alt="BarterConnect" className="h-6" />
+          <img src={logoPath} alt="BarterConnect" className="h-9" />
         </div>
       </footer>
     </div>
@@ -142,7 +142,7 @@ export function SignupPage() {
             </Button>
           </Link>
           <Link href="/" className="flex items-center gap-0">
-            <img src={logoPath} alt="BarterConnect" className="h-8" />
+            <img src={logoPath} alt="BarterConnect" className="h-12" />
           </Link>
         </div>
       </header>
@@ -222,7 +222,7 @@ export function SignupPage() {
 
       <footer className="border-t py-4 px-4">
         <div className="max-w-5xl mx-auto flex items-center">
-          <img src={logoPath} alt="BarterConnect" className="h-6" />
+          <img src={logoPath} alt="BarterConnect" className="h-9" />
         </div>
       </footer>
     </div>

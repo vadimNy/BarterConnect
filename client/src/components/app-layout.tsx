@@ -33,7 +33,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <div className="max-w-5xl mx-auto flex items-center justify-between gap-4 px-4 py-3">
           <div className="flex items-center gap-2">
             <Link href="/app" className="flex items-center gap-0">
-              <img src={logoPath} alt="BarterConnect" className="h-8" data-testid="app-header-logo" />
+              <img src={logoPath} alt="BarterConnect" className="h-12" data-testid="app-header-logo" />
             </Link>
           </div>
 
@@ -117,7 +117,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
       <footer className="border-t py-4 px-4">
         <div className="max-w-5xl mx-auto flex items-center justify-between text-sm text-muted-foreground">
-          <img src={logoPath} alt="BarterConnect" className="h-6" data-testid="app-footer-logo" />
+          <img src={logoPath} alt="BarterConnect" className="h-9" data-testid="app-footer-logo" />
           <span>Trade skills, not money.</span>
         </div>
       </footer>
