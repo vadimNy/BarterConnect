@@ -6,18 +6,20 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
+import { UserAvatar } from "@/components/user-avatar";
+import { useLocation } from "wouter";
 import AppLayout from "@/components/app-layout";
 import {
   Heart,
   Check,
   X,
-  ArrowRight,
   Mail,
   Clock,
   CheckCircle,
   XCircle,
   Inbox,
   Send,
+  MessageCircle,
 } from "lucide-react";
 
 type InterestData = {
@@ -25,11 +27,13 @@ type InterestData = {
   status: string;
   requesterName: string;
   requesterEmail: string;
+  requesterAvatarUrl: string | null;
   myRequestOffer: string;
   myRequestNeed: string;
   theirRequestOffer: string;
   theirRequestNeed: string;
   createdAt: string;
+  conversationId: number | null;
 };
 
 export default function InterestsPage() {
@@ -40,6 +44,7 @@ export default function InterestsPage() {
     queryKey: ["/api/interests"],
   });
   const { toast } = useToast();
+  const [, setLocation] = useLocation();
 
   const acceptMutation = useMutation({
     mutationFn: async (id: number) => {
@@ -47,7 +52,7 @@ export default function InterestsPage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/interests"] });
-      toast({ title: "Interest accepted!", description: "Contact info is now shared." });
+      toast({ title: "Interest accepted!", description: "You can now message each other." });
     },
   });
 
@@ -129,7 +134,14 @@ export default function InterestsPage() {
                 <Card key={interest.id}>
                   <CardContent className="p-4 space-y-3">
                     <div className="flex items-center justify-between gap-2 flex-wrap">
-                      <span className="text-sm font-medium">{interest.requesterName}</span>
+                      <div className="flex items-center gap-2">
+                        <UserAvatar
+                          name={interest.requesterName}
+                          avatarUrl={interest.requesterAvatarUrl}
+                          className="h-7 w-7"
+                        />
+                        <span className="text-sm font-medium">{interest.requesterName}</span>
+                      </div>
                       <StatusBadge status={interest.status} />
                     </div>
 
@@ -145,16 +157,30 @@ export default function InterestsPage() {
                     </div>
 
                     {interest.status === "accepted" && (
-                      <div className="flex items-center gap-2 p-3 rounded-md bg-muted/50 text-sm">
-                        <Mail className="w-4 h-4 text-primary shrink-0" />
-                        <span className="text-muted-foreground">Contact:</span>
-                        <a
-                          href={`mailto:${interest.requesterEmail}`}
-                          className="text-primary hover:underline font-medium"
-                          data-testid={`text-email-${interest.id}`}
-                        >
-                          {interest.requesterEmail}
-                        </a>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <div className="flex items-center gap-2 p-3 rounded-md bg-muted/50 text-sm flex-1">
+                          <Mail className="w-4 h-4 text-primary shrink-0" />
+                          <span className="text-muted-foreground">Contact:</span>
+                          <a
+                            href={`mailto:${interest.requesterEmail}`}
+                            className="text-primary hover:underline font-medium"
+                            data-testid={`text-email-${interest.id}`}
+                          >
+                            {interest.requesterEmail}
+                          </a>
+                        </div>
+                        {interest.conversationId && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="gap-1.5"
+                            onClick={() => setLocation("/messages")}
+                            data-testid={`button-message-${interest.id}`}
+                          >
+                            <MessageCircle className="w-3.5 h-3.5" />
+                            Message
+                          </Button>
+                        )}
                       </div>
                     )}
 
@@ -201,9 +227,16 @@ export default function InterestsPage() {
                 <Card key={interest.id}>
                   <CardContent className="p-4 space-y-3">
                     <div className="flex items-center justify-between gap-2 flex-wrap">
-                      <span className="text-sm font-medium">
-                        To: {interest.requesterName}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <UserAvatar
+                          name={interest.requesterName}
+                          avatarUrl={interest.requesterAvatarUrl}
+                          className="h-7 w-7"
+                        />
+                        <span className="text-sm font-medium">
+                          To: {interest.requesterName}
+                        </span>
+                      </div>
                       <StatusBadge status={interest.status} />
                     </div>
 
@@ -219,16 +252,30 @@ export default function InterestsPage() {
                     </div>
 
                     {interest.status === "accepted" && (
-                      <div className="flex items-center gap-2 p-3 rounded-md bg-muted/50 text-sm">
-                        <Mail className="w-4 h-4 text-primary shrink-0" />
-                        <span className="text-muted-foreground">Contact:</span>
-                        <a
-                          href={`mailto:${interest.requesterEmail}`}
-                          className="text-primary hover:underline font-medium"
-                          data-testid={`text-email-${interest.id}`}
-                        >
-                          {interest.requesterEmail}
-                        </a>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <div className="flex items-center gap-2 p-3 rounded-md bg-muted/50 text-sm flex-1">
+                          <Mail className="w-4 h-4 text-primary shrink-0" />
+                          <span className="text-muted-foreground">Contact:</span>
+                          <a
+                            href={`mailto:${interest.requesterEmail}`}
+                            className="text-primary hover:underline font-medium"
+                            data-testid={`text-email-${interest.id}`}
+                          >
+                            {interest.requesterEmail}
+                          </a>
+                        </div>
+                        {interest.conversationId && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="gap-1.5"
+                            onClick={() => setLocation("/messages")}
+                            data-testid={`button-message-${interest.id}`}
+                          >
+                            <MessageCircle className="w-3.5 h-3.5" />
+                            Message
+                          </Button>
+                        )}
                       </div>
                     )}
                   </CardContent>

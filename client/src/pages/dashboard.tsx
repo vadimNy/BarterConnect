@@ -14,6 +14,7 @@ import {
   MapPin,
   Wifi,
   List,
+  MessageCircle,
 } from "lucide-react";
 import type { Request } from "@shared/schema";
 
@@ -37,7 +38,7 @@ export default function DashboardPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <Link href="/requests/new">
             <Card className="hover-elevate cursor-pointer h-full">
               <CardContent className="flex items-center gap-4 p-5">
@@ -75,6 +76,20 @@ export default function DashboardPage() {
                 <div>
                   <p className="font-semibold text-sm">Interests</p>
                   <p className="text-xs text-muted-foreground">Manage connections</p>
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Link href="/messages">
+            <Card className="hover-elevate cursor-pointer h-full">
+              <CardContent className="flex items-center gap-4 p-5">
+                <div className="flex items-center justify-center w-10 h-10 rounded-md bg-primary/10 text-primary shrink-0">
+                  <MessageCircle className="w-5 h-5 text-accent" />
+                </div>
+                <div>
+                  <p className="font-semibold text-sm">Messages</p>
+                  <p className="text-xs text-muted-foreground">Chat with connections</p>
                 </div>
               </CardContent>
             </Card>

@@ -4,9 +4,10 @@ import { storage } from "./storage";
 import session from "express-session";
 import bcrypt from "bcryptjs";
 import { nanoid } from "nanoid";
-import { signupSchema, loginSchema, insertRequestSchema, insertInterestSchema } from "@shared/schema";
+import { signupSchema, loginSchema, insertRequestSchema, insertInterestSchema, insertMessageSchema } from "@shared/schema";
 import connectPgSimple from "connect-pg-simple";
 import pg from "pg";
+import { registerObjectStorageRoutes } from "./replit_integrations/object_storage";
 
 declare module "express-session" {
   interface SessionData {
@@ -47,6 +48,8 @@ export async function registerRoutes(
       },
     })
   );
+
+  registerObjectStorageRoutes(app);
 
   app.get("/api/auth/me", async (req, res) => {
     if (!req.session.userId) {
@@ -119,6 +122,22 @@ export async function registerRoutes(
     });
   });
 
+  app.post("/api/users/me/avatar", requireAuth, async (req, res) => {
+    try {
+      const { avatarUrl } = req.body;
+      if (!avatarUrl || typeof avatarUrl !== "string") {
+        return res.status(400).json({ message: "avatarUrl is required" });
+      }
+      await storage.updateUserAvatar(req.session.userId!, avatarUrl);
+      const user = await storage.getUserById(req.session.userId!);
+      if (!user) return res.status(404).json({ message: "User not found" });
+      const { passwordHash, ...safeUser } = user;
+      res.json(safeUser);
+    } catch (err: any) {
+      res.status(500).json({ message: err.message || "Internal error" });
+    }
+  });
+
   app.get("/api/requests", requireAuth, async (req, res) => {
     const reqs = await storage.getRequestsByUser(req.session.userId!);
     res.json(reqs);
@@ -141,7 +160,7 @@ export async function registerRoutes(
 
   app.post("/api/requests/:id/close", requireAuth, async (req, res) => {
     try {
-      await storage.closeRequest(parseInt(req.params.id), req.session.userId!);
+      await storage.closeRequest(parseInt(req.params.id as string), req.session.userId!);
       res.json({ message: "Request closed" });
     } catch (err: any) {
       res.status(500).json({ message: err.message });
@@ -150,7 +169,7 @@ export async function registerRoutes(
 
   app.post("/api/requests/:id/delete", requireAuth, async (req, res) => {
     try {
-      await storage.deleteRequest(parseInt(req.params.id), req.session.userId!);
+      await storage.deleteRequest(parseInt(req.params.id as string), req.session.userId!);
       res.json({ message: "Request deleted" });
     } catch (err: any) {
       res.status(500).json({ message: err.message });
@@ -195,8 +214,8 @@ export async function registerRoutes(
 
   app.post("/api/interests/:id/accept", requireAuth, async (req, res) => {
     try {
-      await storage.acceptInterest(parseInt(req.params.id), req.session.userId!);
-      res.json({ message: "Interest accepted" });
+      const interest = await storage.acceptInterest(parseInt(req.params.id as string), req.session.userId!);
+      res.json({ message: "Interest accepted", interest });
     } catch (err: any) {
       res.status(403).json({ message: err.message });
     }
@@ -204,10 +223,56 @@ export async function registerRoutes(
 
   app.post("/api/interests/:id/reject", requireAuth, async (req, res) => {
     try {
-      await storage.rejectInterest(parseInt(req.params.id), req.session.userId!);
+      await storage.rejectInterest(parseInt(req.params.id as string), req.session.userId!);
       res.json({ message: "Interest rejected" });
     } catch (err: any) {
       res.status(403).json({ message: err.message });
+    }
+  });
+
+  app.get("/api/conversations", requireAuth, async (req, res) => {
+    try {
+      const convs = await storage.getConversationsForUser(req.session.userId!);
+      res.json(convs);
+    } catch (err: any) {
+      res.status(500).json({ message: err.message });
+    }
+  });
+
+  app.get("/api/conversations/:id/messages", requireAuth, async (req, res) => {
+    try {
+      const conv = await storage.getConversationById(parseInt(req.params.id as string));
+      if (!conv) return res.status(404).json({ message: "Conversation not found" });
+
+      if (conv.userAId !== req.session.userId! && conv.userBId !== req.session.userId!) {
+        return res.status(403).json({ message: "Not your conversation" });
+      }
+
+      const msgs = await storage.getMessages(conv.id);
+      res.json(msgs);
+    } catch (err: any) {
+      res.status(500).json({ message: err.message });
+    }
+  });
+
+  app.post("/api/conversations/:id/messages", requireAuth, async (req, res) => {
+    try {
+      const conv = await storage.getConversationById(parseInt(req.params.id as string));
+      if (!conv) return res.status(404).json({ message: "Conversation not found" });
+
+      if (conv.userAId !== req.session.userId! && conv.userBId !== req.session.userId!) {
+        return res.status(403).json({ message: "Not your conversation" });
+      }
+
+      const parsed = insertMessageSchema.safeParse(req.body);
+      if (!parsed.success) {
+        return res.status(400).json({ message: parsed.error.errors[0].message });
+      }
+
+      const msg = await storage.createMessage(conv.id, req.session.userId!, parsed.data.body);
+      res.json(msg);
+    } catch (err: any) {
+      res.status(500).json({ message: err.message });
     }
   });
 

@@ -9,6 +9,7 @@ export const users = pgTable("users", {
   passwordHash: text("password_hash").notNull(),
   name: text("name").notNull(),
   city: text("city").notNull(),
+  avatarUrl: text("avatar_url"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -34,10 +35,27 @@ export const interests = pgTable("interests", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+export const conversations = pgTable("conversations", {
+  id: serial("id").primaryKey(),
+  userAId: integer("user_a_id").notNull().references(() => users.id),
+  userBId: integer("user_b_id").notNull().references(() => users.id),
+  interestId: integer("interest_id").references(() => interests.id),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const messages = pgTable("messages", {
+  id: serial("id").primaryKey(),
+  conversationId: integer("conversation_id").notNull().references(() => conversations.id),
+  senderId: integer("sender_id").notNull().references(() => users.id),
+  body: text("body").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
   createdAt: true,
   passwordHash: true,
+  avatarUrl: true,
 });
 
 export const signupSchema = z.object({
@@ -65,9 +83,15 @@ export const insertInterestSchema = z.object({
   targetRequestId: z.number(),
 });
 
+export const insertMessageSchema = z.object({
+  body: z.string().min(1, "Message cannot be empty").max(2000),
+});
+
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type Request = typeof requests.$inferSelect;
 export type InsertRequest = z.infer<typeof insertRequestSchema>;
 export type Interest = typeof interests.$inferSelect;
 export type InsertInterest = z.infer<typeof insertInterestSchema>;
+export type Conversation = typeof conversations.$inferSelect;
+export type Message = typeof messages.$inferSelect;

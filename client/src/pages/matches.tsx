@@ -5,15 +5,15 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
+import { UserAvatar } from "@/components/user-avatar";
 import AppLayout from "@/components/app-layout";
 import {
   Zap,
-  ArrowRight,
   MapPin,
   Wifi,
   Heart,
-  Share2,
   ArrowLeftRight,
+  Search,
 } from "lucide-react";
 
 type MatchData = {
@@ -32,8 +32,12 @@ type MatchData = {
     isRemote: boolean;
     description: string | null;
     userName: string;
+    userAvatarUrl: string | null;
   };
+  matchType: "exact" | "keyword";
+  matchingKeywords: string[];
   alreadyInterested: boolean;
+  sameCity: boolean;
 };
 
 export default function MatchesPage() {
@@ -65,7 +69,7 @@ export default function MatchesPage() {
             Matches
           </h1>
           <p className="text-muted-foreground text-sm">
-            People whose skills perfectly complement yours
+            People whose skills complement yours — exact and keyword matches
           </p>
         </div>
 
@@ -89,14 +93,26 @@ export default function MatchesPage() {
           </Card>
         ) : (
           <div className="space-y-4">
-            {matches.map((match, i) => (
+            {matches.map((match) => (
               <Card key={`${match.myRequest.id}-${match.matchedRequest.id}`}>
                 <CardContent className="p-4 space-y-3">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <Badge variant="secondary" className="text-xs font-medium">
-                      <ArrowLeftRight className="w-3 h-3 mr-1" />
-                      Two-Way Match
-                    </Badge>
+                    <UserAvatar
+                      name={match.matchedRequest.userName}
+                      avatarUrl={match.matchedRequest.userAvatarUrl}
+                      className="h-7 w-7"
+                    />
+                    {match.matchType === "exact" ? (
+                      <Badge variant="secondary" className="text-xs font-medium">
+                        <ArrowLeftRight className="w-3 h-3 mr-1" />
+                        Exact Match
+                      </Badge>
+                    ) : (
+                      <Badge variant="secondary" className="text-xs font-medium bg-accent/10 text-accent">
+                        <Search className="w-3 h-3 mr-1" />
+                        Keyword Match
+                      </Badge>
+                    )}
                     <span className="text-xs text-muted-foreground">
                       with <span className="font-medium text-foreground">{match.matchedRequest.userName}</span>
                     </span>
@@ -121,6 +137,17 @@ export default function MatchesPage() {
                       <p className="text-xs text-muted-foreground">You need this</p>
                     </div>
                   </div>
+
+                  {match.matchType === "keyword" && match.matchingKeywords.length > 0 && (
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <span className="text-xs text-muted-foreground">Matching keywords:</span>
+                      {match.matchingKeywords.map((kw) => (
+                        <Badge key={kw} variant="outline" className="text-[10px] px-1.5 py-0">
+                          {kw}
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
 
                   {match.matchedRequest.description && (
                     <p className="text-sm text-muted-foreground line-clamp-2">

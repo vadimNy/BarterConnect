@@ -1,6 +1,10 @@
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth";
+import { UserAvatar } from "@/components/user-avatar";
+import { useUpload } from "@/hooks/use-upload";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 import {
   LayoutDashboard,
   PlusCircle,
@@ -10,8 +14,10 @@ import {
   Menu,
   X,
   Zap,
+  MessageCircle,
+  Camera,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import logoPath from "@assets/BarterConnect_Logo_cropped.png";
 
 const navItems = [
@@ -20,12 +26,35 @@ const navItems = [
   { href: "/requests", label: "My Requests", icon: List },
   { href: "/matches", label: "Matches", icon: Zap },
   { href: "/interests", label: "Interests", icon: Heart },
+  { href: "/messages", label: "Messages", icon: MessageCircle },
 ];
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const { user, logout } = useAuth();
   const [location] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const { uploadFile, isUploading } = useUpload({
+    onSuccess: async (response) => {
+      await apiRequest("POST", "/api/users/me/avatar", {
+        avatarUrl: response.objectPath,
+      });
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
+    },
+  });
+
+  const handleAvatarClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      await uploadFile(file);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -57,6 +86,29 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           </nav>
 
           <div className="flex items-center gap-2">
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleFileChange}
+              data-testid="input-avatar-upload"
+            />
+            <button
+              onClick={handleAvatarClick}
+              className="relative group cursor-pointer"
+              disabled={isUploading}
+              data-testid="button-avatar"
+            >
+              <UserAvatar
+                name={user?.name || "?"}
+                avatarUrl={user?.avatarUrl}
+                className="h-8 w-8"
+              />
+              <div className="absolute inset-0 rounded-full bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <Camera className="w-3.5 h-3.5 text-white" />
+              </div>
+            </button>
             <span className="text-sm text-muted-foreground hidden sm:inline">{user?.name}</span>
             <Button
               variant="ghost"
