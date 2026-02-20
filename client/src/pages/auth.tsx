@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { useAuth } from "@/lib/auth";
 import { Loader2, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import logoPath from "@assets/BarterConnect_Logo_1771569174270.png";
+import logoPath from "@assets/BarterConnect_Logo_cropped.png";
 import iconPath from "@assets/BarterConnect_Icon_1771569174270.png";
 
 export function LoginPage() {
@@ -41,7 +41,7 @@ export function LoginPage() {
             </Button>
           </Link>
           <Link href="/">
-            <img src={logoPath} alt="BarterConnect" className="h-10" />
+            <img src={logoPath} alt="BarterConnect" className="h-12" />
           </Link>
         </div>
       </header>
@@ -142,7 +142,7 @@ export function SignupPage() {
             </Button>
           </Link>
           <Link href="/">
-            <img src={logoPath} alt="BarterConnect" className="h-10" />
+            <img src={logoPath} alt="BarterConnect" className="h-12" />
           </Link>
         </div>
       </header>

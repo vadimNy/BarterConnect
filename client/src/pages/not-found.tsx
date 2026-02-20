@@ -2,7 +2,7 @@ import { Link } from "wouter";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { AlertCircle } from "lucide-react";
-import logoPath from "@assets/BarterConnect_Logo_1771569174270.png";
+import logoPath from "@assets/BarterConnect_Logo_cropped.png";
 
 export default function NotFound() {
   return (
@@ -10,7 +10,7 @@ export default function NotFound() {
       <header className="border-b px-4 py-3">
         <div className="max-w-5xl mx-auto flex items-center">
           <Link href="/">
-            <img src={logoPath} alt="BarterConnect" className="h-10" />
+            <img src={logoPath} alt="BarterConnect" className="h-12" />
           </Link>
         </div>
       </header>
