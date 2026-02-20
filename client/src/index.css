@@ -173,6 +173,23 @@
   body {
     @apply font-sans antialiased bg-background text-foreground;
   }
+
+  .logo-crop {
+    object-fit: cover;
+    object-position: center;
+  }
+}
+
+.header-logo-wrap {
+  overflow: hidden;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.header-logo-wrap img {
+  margin-top: -15%;
+  margin-bottom: -15%;
 }
 
 /**

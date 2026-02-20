@@ -26,7 +26,7 @@ export default function PublicRequestPage() {
     <div className="min-h-screen bg-background flex flex-col">
       <header className="border-b px-4 py-3">
         <div className="max-w-lg mx-auto flex items-center gap-2">
-          <Link href="/" className="flex items-center gap-0">
+          <Link href="/" className="header-logo-wrap">
             <img src={logoPath} alt="BarterConnect" className="w-48" data-testid="public-header-logo" />
           </Link>
         </div>
