@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { useAuth } from "@/lib/auth";
 import { Loader2, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import logoPath from "@assets/BarterConnect_Logo_1771569174270.png";
 import iconPath from "@assets/BarterConnect_Icon_1771569174270.png";
 
 export function LoginPage() {
@@ -39,16 +40,18 @@ export function LoginPage() {
               <ArrowLeft className="w-4 h-4" />
             </Button>
           </Link>
-          <div className="flex items-center gap-2">
-            <img src={iconPath} alt="BarterConnect" className="w-7 h-7" />
-            <span className="font-semibold">BarterConnect</span>
-          </div>
+          <Link href="/" className="flex items-center gap-0">
+            <img src={logoPath} alt="BarterConnect" className="h-8" />
+          </Link>
         </div>
       </header>
 
       <div className="flex-1 flex items-center justify-center px-4 py-8">
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
+            <div className="flex justify-center mb-3">
+              <img src={iconPath} alt="BarterConnect" className="w-12 h-12" />
+            </div>
             <CardTitle className="text-2xl">Welcome back</CardTitle>
             <CardDescription>Log in to your account</CardDescription>
           </CardHeader>
@@ -85,13 +88,19 @@ export function LoginPage() {
             </form>
             <p className="text-sm text-muted-foreground text-center mt-4">
               Don't have an account?{" "}
-              <Link href="/signup" className="text-primary hover:underline" data-testid="link-signup">
+              <Link href="/signup" className="text-accent hover:underline font-medium" data-testid="link-signup">
                 Sign up
               </Link>
             </p>
           </CardContent>
         </Card>
       </div>
+
+      <footer className="border-t py-4 px-4">
+        <div className="max-w-5xl mx-auto flex items-center">
+          <img src={logoPath} alt="BarterConnect" className="h-6" />
+        </div>
+      </footer>
     </div>
   );
 }
@@ -132,16 +141,18 @@ export function SignupPage() {
               <ArrowLeft className="w-4 h-4" />
             </Button>
           </Link>
-          <div className="flex items-center gap-2">
-            <img src={iconPath} alt="BarterConnect" className="w-7 h-7" />
-            <span className="font-semibold">BarterConnect</span>
-          </div>
+          <Link href="/" className="flex items-center gap-0">
+            <img src={logoPath} alt="BarterConnect" className="h-8" />
+          </Link>
         </div>
       </header>
 
       <div className="flex-1 flex items-center justify-center px-4 py-8">
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
+            <div className="flex justify-center mb-3">
+              <img src={iconPath} alt="BarterConnect" className="w-12 h-12" />
+            </div>
             <CardTitle className="text-2xl">Create your account</CardTitle>
             <CardDescription>Start bartering your skills today</CardDescription>
           </CardHeader>
@@ -201,13 +212,19 @@ export function SignupPage() {
             </form>
             <p className="text-sm text-muted-foreground text-center mt-4">
               Already have an account?{" "}
-              <Link href="/login" className="text-primary hover:underline" data-testid="link-login">
+              <Link href="/login" className="text-accent hover:underline font-medium" data-testid="link-login">
                 Log in
               </Link>
             </p>
           </CardContent>
         </Card>
       </div>
+
+      <footer className="border-t py-4 px-4">
+        <div className="max-w-5xl mx-auto flex items-center">
+          <img src={logoPath} alt="BarterConnect" className="h-6" />
+        </div>
+      </footer>
     </div>
   );
 }

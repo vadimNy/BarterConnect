@@ -42,10 +42,9 @@ export default function LandingPage() {
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="max-w-5xl mx-auto flex items-center justify-between gap-4 px-4 py-3">
-          <div className="flex items-center gap-2">
-            <img src={iconPath} alt="BarterConnect" className="w-8 h-8" />
-            <span className="font-semibold text-lg">BarterConnect</span>
-          </div>
+          <Link href="/" className="flex items-center gap-0 shrink-0">
+            <img src={logoPath} alt="BarterConnect" className="h-9" data-testid="header-logo" />
+          </Link>
           <div className="flex items-center gap-2">
             {user ? (
               <Link href="/app">
@@ -66,10 +65,10 @@ export default function LandingPage() {
       </header>
 
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/10" />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-accent/10" />
         <div className="relative max-w-5xl mx-auto px-4 py-16 md:py-24 text-center">
-          <div className="flex justify-center mb-6">
-            <img src={logoPath} alt="BarterConnect" className="h-14 md:h-16" />
+          <div className="flex justify-center mb-8">
+            <img src={logoPath} alt="BarterConnect" className="h-20 md:h-28 lg:h-32" data-testid="hero-logo" />
           </div>
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
             <Sparkles className="w-3.5 h-3.5" />
@@ -77,7 +76,7 @@ export default function LandingPage() {
           </div>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4">
             Trade Skills,{" "}
-            <span className="text-primary">Not Money</span>
+            <span className="text-accent">Not Money</span>
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
             Connect with people who need what you know and know what you need.
@@ -107,7 +106,7 @@ export default function LandingPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {steps.map((step) => (
             <div key={step.num} className="text-center">
-              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary text-primary-foreground text-lg font-bold mb-4">
+              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-accent text-accent-foreground text-lg font-bold mb-4">
                 {step.num}
               </div>
               <h3 className="font-semibold text-lg mb-2">{step.title}</h3>
@@ -127,7 +126,7 @@ export default function LandingPage() {
             {features.map((f) => (
               <Card key={f.title} className="p-6">
                 <div className="flex items-start gap-4">
-                  <div className="flex items-center justify-center w-10 h-10 rounded-md bg-primary/10 text-primary shrink-0">
+                  <div className="flex items-center justify-center w-10 h-10 rounded-md bg-accent/15 text-accent shrink-0">
                     <f.icon className="w-5 h-5" />
                   </div>
                   <div>
@@ -142,7 +141,7 @@ export default function LandingPage() {
       </section>
 
       <section className="max-w-5xl mx-auto px-4 py-16 text-center">
-        <div className="flex items-center justify-center gap-2 text-primary mb-4">
+        <div className="flex items-center justify-center gap-2 text-accent mb-4">
           <Shield className="w-5 h-5" />
           <span className="text-sm font-medium">Safe & Secure</span>
         </div>
@@ -159,11 +158,10 @@ export default function LandingPage() {
       </section>
 
       <footer className="border-t py-6">
-        <div className="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-sm text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <img src={iconPath} alt="BarterConnect" className="w-5 h-5" />
-            <span>BarterConnect</span>
-          </div>
+        <div className="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-muted-foreground">
+          <Link href="/" className="flex items-center gap-0 shrink-0">
+            <img src={logoPath} alt="BarterConnect" className="h-7" data-testid="footer-logo" />
+          </Link>
           <p>Trade skills, not money.</p>
         </div>
       </footer>

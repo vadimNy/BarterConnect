@@ -41,7 +41,7 @@ export default function DashboardPage() {
           <Link href="/requests/new">
             <Card className="hover-elevate cursor-pointer h-full">
               <CardContent className="flex items-center gap-4 p-5">
-                <div className="flex items-center justify-center w-10 h-10 rounded-md bg-primary/10 text-primary shrink-0">
+                <div className="flex items-center justify-center w-10 h-10 rounded-md bg-accent/15 text-accent shrink-0">
                   <PlusCircle className="w-5 h-5" />
                 </div>
                 <div>
@@ -55,7 +55,7 @@ export default function DashboardPage() {
           <Link href="/matches">
             <Card className="hover-elevate cursor-pointer h-full">
               <CardContent className="flex items-center gap-4 p-5">
-                <div className="flex items-center justify-center w-10 h-10 rounded-md bg-primary/10 text-primary shrink-0">
+                <div className="flex items-center justify-center w-10 h-10 rounded-md bg-primary/10 text-accent shrink-0">
                   <Zap className="w-5 h-5" />
                 </div>
                 <div>
@@ -70,7 +70,7 @@ export default function DashboardPage() {
             <Card className="hover-elevate cursor-pointer h-full">
               <CardContent className="flex items-center gap-4 p-5">
                 <div className="flex items-center justify-center w-10 h-10 rounded-md bg-primary/10 text-primary shrink-0">
-                  <Heart className="w-5 h-5" />
+                  <Heart className="w-5 h-5 text-accent" />
                 </div>
                 <div>
                   <p className="font-semibold text-sm">Interests</p>

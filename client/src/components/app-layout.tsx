@@ -12,7 +12,7 @@ import {
   Zap,
 } from "lucide-react";
 import { useState } from "react";
-import iconPath from "@assets/BarterConnect_Icon_1771569174270.png";
+import logoPath from "@assets/BarterConnect_Logo_1771569174270.png";
 
 const navItems = [
   { href: "/app", label: "Dashboard", icon: LayoutDashboard },
@@ -32,9 +32,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="max-w-5xl mx-auto flex items-center justify-between gap-4 px-4 py-3">
           <div className="flex items-center gap-2">
-            <Link href="/app" className="flex items-center gap-2">
-              <img src={iconPath} alt="BarterConnect" className="w-8 h-8" />
-              <span className="font-semibold text-lg hidden sm:inline">BarterConnect</span>
+            <Link href="/app" className="flex items-center gap-0">
+              <img src={logoPath} alt="BarterConnect" className="h-8" data-testid="app-header-logo" />
             </Link>
           </div>
 
@@ -115,6 +114,13 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           {children}
         </div>
       </main>
+
+      <footer className="border-t py-4 px-4">
+        <div className="max-w-5xl mx-auto flex items-center justify-between text-sm text-muted-foreground">
+          <img src={logoPath} alt="BarterConnect" className="h-6" data-testid="app-footer-logo" />
+          <span>Trade skills, not money.</span>
+        </div>
+      </footer>
     </div>
   );
 }

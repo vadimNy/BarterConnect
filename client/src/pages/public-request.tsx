@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowRight, MapPin, Wifi, User } from "lucide-react";
-import iconPath from "@assets/BarterConnect_Icon_1771569174270.png";
+import logoPath from "@assets/BarterConnect_Logo_1771569174270.png";
 
 type PublicRequest = {
   offerSkill: string;
@@ -23,15 +23,16 @@ export default function PublicRequestPage() {
   });
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col">
       <header className="border-b px-4 py-3">
         <div className="max-w-lg mx-auto flex items-center gap-2">
-          <img src={iconPath} alt="BarterConnect" className="w-8 h-8" />
-          <span className="font-semibold text-lg">BarterConnect</span>
+          <Link href="/" className="flex items-center gap-0">
+            <img src={logoPath} alt="BarterConnect" className="h-8" data-testid="public-header-logo" />
+          </Link>
         </div>
       </header>
 
-      <div className="max-w-lg mx-auto px-4 py-8">
+      <div className="flex-1 max-w-lg mx-auto px-4 py-8 w-full">
         {isLoading ? (
           <div className="space-y-4">
             <Skeleton className="h-8 w-2/3" />
@@ -72,7 +73,7 @@ export default function PublicRequestPage() {
                   </div>
                   <div className="bg-muted/50 rounded-md p-4 space-y-1">
                     <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Looking For</p>
-                    <p className="text-lg font-semibold text-primary" data-testid="text-public-need">
+                    <p className="text-lg font-semibold text-accent" data-testid="text-public-need">
                       {request.needSkill}
                     </p>
                   </div>
@@ -114,6 +115,12 @@ export default function PublicRequestPage() {
           </div>
         )}
       </div>
+
+      <footer className="border-t py-4 px-4">
+        <div className="max-w-lg mx-auto flex items-center">
+          <img src={logoPath} alt="BarterConnect" className="h-6" data-testid="public-footer-logo" />
+        </div>
+      </footer>
     </div>
   );
 }
