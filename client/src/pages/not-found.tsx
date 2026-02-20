@@ -10,7 +10,7 @@ export default function NotFound() {
       <header className="border-b px-4 py-3">
         <div className="max-w-5xl mx-auto flex items-center">
           <Link href="/" className="flex items-center gap-0">
-            <img src={logoPath} alt="BarterConnect" className="h-12" />
+            <img src={logoPath} alt="BarterConnect" className="w-48" />
           </Link>
         </div>
       </header>
@@ -32,7 +32,7 @@ export default function NotFound() {
 
       <footer className="border-t py-4 px-4">
         <div className="max-w-5xl mx-auto flex items-center">
-          <img src={logoPath} alt="BarterConnect" className="h-9" />
+          <img src={logoPath} alt="BarterConnect" className="w-36" />
         </div>
       </footer>
     </div>

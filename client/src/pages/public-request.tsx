@@ -27,7 +27,7 @@ export default function PublicRequestPage() {
       <header className="border-b px-4 py-3">
         <div className="max-w-lg mx-auto flex items-center gap-2">
           <Link href="/" className="flex items-center gap-0">
-            <img src={logoPath} alt="BarterConnect" className="h-12" data-testid="public-header-logo" />
+            <img src={logoPath} alt="BarterConnect" className="w-48" data-testid="public-header-logo" />
           </Link>
         </div>
       </header>
@@ -118,7 +118,7 @@ export default function PublicRequestPage() {
 
       <footer className="border-t py-4 px-4">
         <div className="max-w-lg mx-auto flex items-center">
-          <img src={logoPath} alt="BarterConnect" className="h-9" data-testid="public-footer-logo" />
+          <img src={logoPath} alt="BarterConnect" className="w-36" data-testid="public-footer-logo" />
         </div>
       </footer>
     </div>

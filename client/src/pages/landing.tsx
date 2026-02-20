@@ -43,7 +43,7 @@ export default function LandingPage() {
       <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="max-w-5xl mx-auto flex items-center justify-between gap-4 px-4 py-3">
           <Link href="/" className="flex items-center gap-0 shrink-0">
-            <img src={logoPath} alt="BarterConnect" className="h-20" data-testid="header-logo" />
+            <img src={logoPath} alt="BarterConnect" className="w-56 md:w-64" data-testid="header-logo" />
           </Link>
           <div className="flex items-center gap-2">
             {user ? (
@@ -68,7 +68,7 @@ export default function LandingPage() {
         <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-accent/10" />
         <div className="relative max-w-5xl mx-auto px-4 py-16 md:py-24 text-center">
           <div className="flex justify-center mb-8">
-            <img src={logoPath} alt="BarterConnect" className="h-32 md:h-40 lg:h-48" data-testid="hero-logo" />
+            <img src={logoPath} alt="BarterConnect" className="w-80 md:w-[28rem] lg:w-[34rem]" data-testid="hero-logo" />
           </div>
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
             <Sparkles className="w-3.5 h-3.5" />
@@ -160,7 +160,7 @@ export default function LandingPage() {
       <footer className="border-t py-6">
         <div className="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-muted-foreground">
           <Link href="/" className="flex items-center gap-0 shrink-0">
-            <img src={logoPath} alt="BarterConnect" className="h-10" data-testid="footer-logo" />
+            <img src={logoPath} alt="BarterConnect" className="w-40" data-testid="footer-logo" />
           </Link>
           <p>Trade skills, not money.</p>
         </div>
