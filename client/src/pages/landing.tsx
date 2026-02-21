@@ -166,6 +166,9 @@ export default function LandingPage() {
             <Link href="/terms" className="hover:text-foreground transition-colors" data-testid="link-terms">
               Terms of Service
             </Link>
+            <Link href="/privacy" className="hover:text-foreground transition-colors" data-testid="link-privacy">
+              Privacy Policy
+            </Link>
             <p>Trade skills, not money.</p>
           </div>
         </div>

@@ -14,6 +14,7 @@ import InterestsPage from "@/pages/interests";
 import MessagesPage from "@/pages/messages";
 import AccountPage from "@/pages/account";
 import TermsPage from "@/pages/terms";
+import PrivacyPage from "@/pages/privacy";
 import PublicRequestPage from "@/pages/public-request";
 import NotFound from "@/pages/not-found";
 import { Loader2 } from "lucide-react";
@@ -43,6 +44,7 @@ function Router() {
       <Route path="/login" component={LoginPage} />
       <Route path="/signup" component={SignupPage} />
       <Route path="/terms" component={TermsPage} />
+      <Route path="/privacy" component={PrivacyPage} />
       <Route path="/r/:publicId" component={PublicRequestPage} />
       <Route path="/app">
         {() => <ProtectedRoute component={DashboardPage} />}
