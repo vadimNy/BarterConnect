@@ -10,6 +10,10 @@ export const users = pgTable("users", {
   name: text("name").notNull(),
   city: text("city").notNull(),
   avatarUrl: text("avatar_url"),
+  bio: text("bio"),
+  notifyMatches: boolean("notify_matches").default(true).notNull(),
+  notifyInterests: boolean("notify_interests").default(true).notNull(),
+  notifyMessages: boolean("notify_messages").default(true).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -87,6 +91,21 @@ export const insertMessageSchema = z.object({
   body: z.string().min(1, "Message cannot be empty").max(2000),
 });
 
+export const updateProfileSchema = z.object({
+  name: z.string().min(1, "Name is required").optional(),
+  city: z.string().min(1, "City is required").optional(),
+  bio: z.string().max(500, "Bio must be 500 characters or less").optional().nullable(),
+  notifyMatches: z.boolean().optional(),
+  notifyInterests: z.boolean().optional(),
+  notifyMessages: z.boolean().optional(),
+});
+
+export const changePasswordSchema = z.object({
+  currentPassword: z.string().min(1, "Current password is required"),
+  newPassword: z.string().min(8, "New password must be at least 8 characters"),
+});
+
+export type UpdateProfile = z.infer<typeof updateProfileSchema>;
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type Request = typeof requests.$inferSelect;

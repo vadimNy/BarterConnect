@@ -12,6 +12,7 @@ import MyRequestsPage from "@/pages/my-requests";
 import MatchesPage from "@/pages/matches";
 import InterestsPage from "@/pages/interests";
 import MessagesPage from "@/pages/messages";
+import AccountPage from "@/pages/account";
 import PublicRequestPage from "@/pages/public-request";
 import NotFound from "@/pages/not-found";
 import { Loader2 } from "lucide-react";
@@ -58,6 +59,9 @@ function Router() {
       </Route>
       <Route path="/messages">
         {() => <ProtectedRoute component={MessagesPage} />}
+      </Route>
+      <Route path="/account">
+        {() => <ProtectedRoute component={AccountPage} />}
       </Route>
       <Route component={NotFound} />
     </Switch>

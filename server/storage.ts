@@ -7,6 +7,7 @@ import {
   type InsertInterest,
   type Conversation,
   type Message,
+  type UpdateProfile,
   users,
   requests,
   interests,
@@ -28,6 +29,8 @@ export interface IStorage {
   getUserByEmail(email: string): Promise<User | undefined>;
   getUserById(id: number): Promise<User | undefined>;
   updateUserAvatar(id: number, avatarUrl: string): Promise<void>;
+  updateUserProfile(id: number, data: UpdateProfile): Promise<User>;
+  updateUserPassword(id: number, newPasswordHash: string): Promise<void>;
 
   createRequest(userId: number, data: InsertRequest, publicId: string): Promise<Request>;
   getRequestsByUser(userId: number): Promise<Request[]>;
@@ -98,6 +101,23 @@ export class DatabaseStorage implements IStorage {
 
   async updateUserAvatar(id: number, avatarUrl: string): Promise<void> {
     await db.update(users).set({ avatarUrl }).where(eq(users.id, id));
+  }
+
+  async updateUserProfile(id: number, data: UpdateProfile): Promise<User> {
+    const updateData: Record<string, any> = {};
+    if (data.name !== undefined) updateData.name = data.name;
+    if (data.city !== undefined) updateData.city = data.city;
+    if (data.bio !== undefined) updateData.bio = data.bio;
+    if (data.notifyMatches !== undefined) updateData.notifyMatches = data.notifyMatches;
+    if (data.notifyInterests !== undefined) updateData.notifyInterests = data.notifyInterests;
+    if (data.notifyMessages !== undefined) updateData.notifyMessages = data.notifyMessages;
+
+    const [user] = await db.update(users).set(updateData).where(eq(users.id, id)).returning();
+    return user;
+  }
+
+  async updateUserPassword(id: number, newPasswordHash: string): Promise<void> {
+    await db.update(users).set({ passwordHash: newPasswordHash }).where(eq(users.id, id));
   }
 
   async createRequest(userId: number, data: InsertRequest, publicId: string): Promise<Request> {

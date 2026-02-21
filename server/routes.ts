@@ -4,7 +4,7 @@ import { storage } from "./storage";
 import session from "express-session";
 import bcrypt from "bcryptjs";
 import { nanoid } from "nanoid";
-import { signupSchema, loginSchema, insertRequestSchema, insertInterestSchema, insertMessageSchema } from "@shared/schema";
+import { signupSchema, loginSchema, insertRequestSchema, insertInterestSchema, insertMessageSchema, updateProfileSchema, changePasswordSchema } from "@shared/schema";
 import connectPgSimple from "connect-pg-simple";
 import pg from "pg";
 import { registerObjectStorageRoutes } from "./replit_integrations/object_storage";
@@ -133,6 +133,43 @@ export async function registerRoutes(
       if (!user) return res.status(404).json({ message: "User not found" });
       const { passwordHash, ...safeUser } = user;
       res.json(safeUser);
+    } catch (err: any) {
+      res.status(500).json({ message: err.message || "Internal error" });
+    }
+  });
+
+  app.patch("/api/users/me", requireAuth, async (req, res) => {
+    try {
+      const parsed = updateProfileSchema.safeParse(req.body);
+      if (!parsed.success) {
+        return res.status(400).json({ message: parsed.error.errors[0].message });
+      }
+      const user = await storage.updateUserProfile(req.session.userId!, parsed.data);
+      const { passwordHash, ...safeUser } = user;
+      res.json(safeUser);
+    } catch (err: any) {
+      res.status(500).json({ message: err.message || "Internal error" });
+    }
+  });
+
+  app.post("/api/users/me/password", requireAuth, async (req, res) => {
+    try {
+      const parsed = changePasswordSchema.safeParse(req.body);
+      if (!parsed.success) {
+        return res.status(400).json({ message: parsed.error.errors[0].message });
+      }
+
+      const user = await storage.getUserById(req.session.userId!);
+      if (!user) return res.status(404).json({ message: "User not found" });
+
+      const valid = await bcrypt.compare(parsed.data.currentPassword, user.passwordHash);
+      if (!valid) {
+        return res.status(400).json({ message: "Current password is incorrect" });
+      }
+
+      const newHash = await bcrypt.hash(parsed.data.newPassword, 10);
+      await storage.updateUserPassword(req.session.userId!, newHash);
+      res.json({ message: "Password updated successfully" });
     } catch (err: any) {
       res.status(500).json({ message: err.message || "Internal error" });
     }
