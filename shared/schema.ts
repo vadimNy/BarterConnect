@@ -14,6 +14,7 @@ export const users = pgTable("users", {
   notifyMatches: boolean("notify_matches").default(true).notNull(),
   notifyInterests: boolean("notify_interests").default(true).notNull(),
   notifyMessages: boolean("notify_messages").default(true).notNull(),
+  tosAcceptedAt: timestamp("tos_accepted_at"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -67,6 +68,7 @@ export const signupSchema = z.object({
   password: z.string().min(8, "Password must be at least 8 characters"),
   name: z.string().min(1, "Display name is required"),
   city: z.string().min(1, "City is required"),
+  tosAccepted: z.boolean().refine((val) => val === true, { message: "You must accept the Terms of Service" }),
 });
 
 export const loginSchema = z.object({

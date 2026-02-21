@@ -162,7 +162,12 @@ export default function LandingPage() {
           <Link href="/" className="flex items-center gap-0 shrink-0">
             <img src={logoPath} alt="BarterConnect" className="w-40" data-testid="footer-logo" />
           </Link>
-          <p>Trade skills, not money.</p>
+          <div className="flex items-center gap-4">
+            <Link href="/terms" className="hover:text-foreground transition-colors" data-testid="link-terms">
+              Terms of Service
+            </Link>
+            <p>Trade skills, not money.</p>
+          </div>
         </div>
       </footer>
     </div>

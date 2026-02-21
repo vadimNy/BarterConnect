@@ -13,6 +13,7 @@ import MatchesPage from "@/pages/matches";
 import InterestsPage from "@/pages/interests";
 import MessagesPage from "@/pages/messages";
 import AccountPage from "@/pages/account";
+import TermsPage from "@/pages/terms";
 import PublicRequestPage from "@/pages/public-request";
 import NotFound from "@/pages/not-found";
 import { Loader2 } from "lucide-react";
@@ -41,6 +42,7 @@ function Router() {
       <Route path="/" component={LandingPage} />
       <Route path="/login" component={LoginPage} />
       <Route path="/signup" component={SignupPage} />
+      <Route path="/terms" component={TermsPage} />
       <Route path="/r/:publicId" component={PublicRequestPage} />
       <Route path="/app">
         {() => <ProtectedRoute component={DashboardPage} />}

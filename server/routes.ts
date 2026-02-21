@@ -70,7 +70,11 @@ export async function registerRoutes(
         return res.status(400).json({ message: parsed.error.errors[0].message });
       }
 
-      const { email, password, name, city } = parsed.data;
+      const { email, password, name, city, tosAccepted } = parsed.data;
+
+      if (!tosAccepted) {
+        return res.status(400).json({ message: "You must accept the Terms of Service" });
+      }
 
       const existing = await storage.getUserByEmail(email);
       if (existing) {
@@ -78,7 +82,7 @@ export async function registerRoutes(
       }
 
       const passwordHash = await bcrypt.hash(password, 10);
-      const user = await storage.createUser(email, passwordHash, name, city);
+      const user = await storage.createUser(email, passwordHash, name, city, true);
       req.session.userId = user.id;
 
       const { passwordHash: _, ...safeUser } = user;

@@ -25,7 +25,7 @@ const pool = new pg.Pool({
 export const db = drizzle(pool);
 
 export interface IStorage {
-  createUser(email: string, passwordHash: string, name: string, city: string): Promise<User>;
+  createUser(email: string, passwordHash: string, name: string, city: string, tosAccepted?: boolean): Promise<User>;
   getUserByEmail(email: string): Promise<User | undefined>;
   getUserById(id: number): Promise<User | undefined>;
   updateUserAvatar(id: number, avatarUrl: string): Promise<void>;
@@ -81,10 +81,16 @@ function keywordOverlap(keywords1: string[], keywords2: string[]): string[] {
 }
 
 export class DatabaseStorage implements IStorage {
-  async createUser(email: string, passwordHash: string, name: string, city: string): Promise<User> {
+  async createUser(email: string, passwordHash: string, name: string, city: string, tosAccepted?: boolean): Promise<User> {
     const [user] = await db
       .insert(users)
-      .values({ email, passwordHash, name, city })
+      .values({
+        email,
+        passwordHash,
+        name,
+        city,
+        tosAcceptedAt: tosAccepted ? new Date() : null,
+      })
       .returning();
     return user;
   }

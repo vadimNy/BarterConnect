@@ -4,9 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { useAuth } from "@/lib/auth";
 import { Loader2, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { tosContent } from "@/pages/terms";
 import logoPath from "@assets/BarterConnect_Logo_cropped.png";
 import iconPath from "@assets/BarterConnect_Icon_cropped.png";
 
@@ -110,6 +114,7 @@ export function SignupPage() {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [city, setCity] = useState("");
+  const [tosAccepted, setTosAccepted] = useState(false);
   const [loading, setLoading] = useState(false);
   const { signup } = useAuth();
   const [, navigate] = useLocation();
@@ -121,9 +126,13 @@ export function SignupPage() {
       toast({ title: "Error", description: "Password must be at least 8 characters", variant: "destructive" });
       return;
     }
+    if (!tosAccepted) {
+      toast({ title: "Error", description: "You must accept the Terms of Service to create an account", variant: "destructive" });
+      return;
+    }
     setLoading(true);
     try {
-      await signup({ email, password, name, city });
+      await signup({ email, password, name, city, tosAccepted: true });
       navigate("/app");
     } catch (err: any) {
       toast({ title: "Signup failed", description: err.message || "Could not create account", variant: "destructive" });
@@ -205,7 +214,37 @@ export function SignupPage() {
                   data-testid="input-password"
                 />
               </div>
-              <Button type="submit" className="w-full" disabled={loading} data-testid="button-submit-signup">
+              <div className="flex items-start gap-2">
+                <Checkbox
+                  id="tosAccepted"
+                  checked={tosAccepted}
+                  onCheckedChange={(checked) => setTosAccepted(checked === true)}
+                  data-testid="checkbox-tos"
+                  className="mt-0.5"
+                />
+                <Label htmlFor="tosAccepted" className="text-sm font-normal leading-snug cursor-pointer">
+                  I agree to the{" "}
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <button type="button" className="text-accent hover:underline font-medium" data-testid="link-tos-dialog">
+                        Terms of Service
+                      </button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-lg max-h-[80vh]">
+                      <DialogHeader>
+                        <DialogTitle>Terms of Service</DialogTitle>
+                      </DialogHeader>
+                      <ScrollArea className="h-[60vh] pr-4">
+                        <div className="whitespace-pre-wrap text-sm leading-relaxed text-muted-foreground" data-testid="text-tos-dialog-content">
+                          {tosContent}
+                        </div>
+                      </ScrollArea>
+                    </DialogContent>
+                  </Dialog>
+                </Label>
+              </div>
+
+              <Button type="submit" className="w-full" disabled={loading || !tosAccepted} data-testid="button-submit-signup">
                 {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
                 Create account
               </Button>
