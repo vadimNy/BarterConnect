@@ -1,0 +1,96 @@
+Build a mobile-first full-stack WEB APPLICATION MVP called “BarterConnect”.
+
+GOAL
+A skills barter platform where users post what they can OFFER and what they NEED, and the app shows direct matches (two-way matches). Keep it MVP-simple and production-lean.
+
+TECH STACK (REQUIRED)
+- Node.js + Express backend
+- SQLite database (file-based)
+- Server-side rendered pages using EJS OR a simple frontend with plain HTML/CSS/JS served by Express (do NOT use React for this MVP)
+- Use express-session for login sessions (cookie-based). Use bcrypt for password hashing.
+- Use a clean folder structure: /server, /views, /public, /db
+
+CORE FEATURES (MVP)
+1) Authentication
+- Sign up: email + password + display name + city (or “Remote”)
+- Login / logout
+- Protect all app pages behind login except landing page and public request page
+- Validation: unique email, password min 8 chars
+
+2) Create Barter Request
+- Form fields: offer_skill, need_skill, description (optional), city (default from user profile), remote checkbox
+- Save request to SQLite with status = “open”
+- User can view “My Requests” list and delete/close requests
+
+3) Matching
+- For each open request, show “Direct Matches” defined as:
+  - other_request.offer_skill == my_request.need_skill AND
+  - other_request.need_skill == my_request.offer_skill AND
+  - other_request.status == “open” AND
+  - other_request.user_id != my_user_id
+- Sort matches: same city first, then newest
+- Show matches on a “Matches” page and also per-request view
+
+4) Interest Handshake (NO chat yet)
+- On a match card, user can click “I’m Interested”
+- Creates an interest row with status “pending”
+- The owner of the matched request sees incoming interests and can Accept or Reject
+- If accepted, show each other’s contact info (email) on the match detail page
+- If rejected, hide contact info
+
+5) Shareable Request Page (growth feature)
+- After creating a request, show a “Share” button that copies a public link to clipboard:
+  /r/:public_id
+- Public page shows: offer, need, city/remote, description
+- Public page CTA: “Respond on BarterConnect” which takes user to signup/login
+- Do NOT expose private user data on public page besides display name
+
+PAGES / ROUTES (REQUIRED)
+Public:
+- GET /            Landing page describing barter concept + “Get Started”
+- GET /r/:publicId Public request page
+Auth:
+- GET /signup, POST /signup
+- GET /login, POST /login
+- POST /logout
+App (requires login):
+- GET /app                 dashboard (quick actions + my open requests)
+- GET /requests/new        create request form
+- POST /requests           create request
+- GET /requests            list my requests
+- POST /requests/:id/close close request
+- POST /requests/:id/delete delete request (optional)
+- GET /matches             list all matches for my open requests
+- POST /interests          create interest (request_id + target_request_id)
+- GET /interests           view incoming/outgoing interests
+- POST /interests/:id/accept
+- POST /interests/:id/reject
+
+DATABASE (SQLite)
+Create tables and run migrations automatically on start:
+- users(id, email unique, password_hash, name, city, created_at)
+- requests(id, user_id, offer_skill, need_skill, description, city, is_remote, status, public_id unique, created_at)
+- interests(id, requester_user_id, request_id, target_request_id, status, created_at)
+
+UI REQUIREMENTS
+- Mobile-first layout, readable on phones
+- Simple nav (Dashboard, Create, Matches, Interests, My Requests, Logout)
+- Use clean cards for requests/matches
+- Add good empty states (e.g., “No matches yet—share your request to reach more people.”)
+- No fancy design needed, but should look decent
+
+SECURITY / BASICS
+- Hash passwords with bcrypt
+- Use parameterized SQL
+- Validate inputs on server side
+- Only owners can edit/close/delete their requests
+- Only involved parties can see accepted contact info
+- Add basic rate limiting or simple anti-spam measure if easy (optional)
+
+DELIVERABLE
+A working Replit project that runs with a single “Run” click.
+Include a README with:
+- how to run
+- environment notes
+- default port
+- how to reset database
