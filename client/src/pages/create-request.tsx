@@ -13,6 +13,7 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 import AppLayout from "@/components/app-layout";
 import { Loader2, PlusCircle, CheckCircle2, Copy, ExternalLink, ArrowRight } from "lucide-react";
 import { SiLinkedin, SiFacebook, SiX, SiWhatsapp } from "react-icons/si";
+import { CityPicker } from "@/components/city-picker";
 import type { Request } from "@shared/schema";
 
 export default function CreateRequestPage() {
@@ -254,13 +255,10 @@ export default function CreateRequestPage() {
 
               <div className="space-y-2">
                 <Label htmlFor="city">City *</Label>
-                <Input
+                <CityPicker
                   id="city"
-                  placeholder="San Francisco"
                   value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                  required
-                  data-testid="input-city"
+                  onChange={setCity}
                 />
               </div>
 

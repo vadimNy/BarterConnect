@@ -12,6 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { Loader2, ArrowRight, Copy, Check, Share2, Sparkles } from "lucide-react";
 import { SiLinkedin, SiFacebook, SiX, SiWhatsapp } from "react-icons/si";
+import { CityPicker } from "@/components/city-picker";
 import logoPath from "@assets/BarterConnect_Logo_cropped.png";
 import iconPath from "@assets/BarterConnect_Icon_cropped.png";
 
@@ -212,13 +213,10 @@ export default function OnboardingPage() {
 
                 <div className="space-y-2">
                   <Label htmlFor="city">City *</Label>
-                  <Input
+                  <CityPicker
                     id="city"
-                    placeholder="San Francisco"
                     value={city}
-                    onChange={(e) => setCity(e.target.value)}
-                    required
-                    data-testid="input-onboarding-city"
+                    onChange={setCity}
                   />
                 </div>
 

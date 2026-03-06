@@ -13,6 +13,7 @@ import { useAuth } from "@/lib/auth";
 import { useToast } from "@/hooks/use-toast";
 import { useUpload } from "@/hooks/use-upload";
 import { apiRequest, queryClient } from "@/lib/queryClient";
+import { CityPicker } from "@/components/city-picker";
 import { UserAvatar } from "@/components/user-avatar";
 import AppLayout from "@/components/app-layout";
 import {
@@ -292,13 +293,10 @@ export default function AccountPage() {
                     City
                   </span>
                 </Label>
-                <Input
+                <CityPicker
                   id="city"
                   value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                  placeholder="Your city"
-                  required
-                  data-testid="input-account-city"
+                  onChange={setCity}
                 />
               </div>
 
