@@ -64,7 +64,7 @@ export default function DashboardPage() {
                   <PlusCircle className="w-5 h-5" />
                 </div>
                 <div>
-                  <p className="font-semibold text-sm">New Request</p>
+                  <p className="font-semibold text-sm">New Barter</p>
                   <p className="text-xs text-muted-foreground">Post a skill barter</p>
                 </div>
               </CardContent>
@@ -118,7 +118,7 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between gap-4 mb-4 flex-wrap">
             <h2 className="text-lg font-semibold flex items-center gap-2">
               <List className="w-5 h-5" />
-              My Open Requests
+              My Open Barters
             </h2>
             <Link href="/requests">
               <Button variant="ghost" size="sm" className="gap-1" data-testid="link-view-all-requests">
@@ -140,12 +140,12 @@ export default function DashboardPage() {
                 <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center mb-4">
                   <PlusCircle className="w-6 h-6 text-muted-foreground" />
                 </div>
-                <p className="font-medium mb-1">No open requests yet</p>
+                <p className="font-medium mb-1">No open barters yet</p>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Create your first barter request to start getting matched!
+                  Create your first barter to start getting matched!
                 </p>
                 <Link href="/requests/new">
-                  <Button size="sm" data-testid="button-create-first">Create Request</Button>
+                  <Button size="sm" data-testid="button-create-first">Create Barter</Button>
                 </Link>
               </CardContent>
             </Card>
@@ -206,10 +206,10 @@ export default function DashboardPage() {
                 </div>
                 <p className="font-medium mb-1" data-testid="text-no-suggestions">No suggestions yet</p>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Create barter requests to find people with matching skills!
+                  Create barters to find people with matching skills!
                 </p>
                 <Link href="/requests/new">
-                  <Button size="sm" data-testid="button-create-for-suggestions">Create Request</Button>
+                  <Button size="sm" data-testid="button-create-for-suggestions">Create Barter</Button>
                 </Link>
               </CardContent>
             </Card>
