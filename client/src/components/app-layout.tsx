@@ -21,7 +21,7 @@ import logoPath from "@assets/BarterConnect_Logo_cropped.png";
 const navItems = [
   { href: "/app", label: "Dashboard", icon: LayoutDashboard },
   { href: "/requests/new", label: "Create", icon: PlusCircle },
-  { href: "/requests", label: "My Requests", icon: List },
+  { href: "/requests", label: "My Barters", icon: List },
   { href: "/matches", label: "Matches", icon: Zap },
   { href: "/interests", label: "Interests", icon: Heart },
   { href: "/messages", label: "Messages", icon: MessageCircle, showBadge: true },
