@@ -33,7 +33,7 @@ export default function MyRequestsPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/requests"] });
       queryClient.invalidateQueries({ queryKey: ["/api/matches"] });
-      toast({ title: "Request closed" });
+      toast({ title: "Barter closed" });
     },
   });
 
@@ -44,7 +44,7 @@ export default function MyRequestsPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/requests"] });
       queryClient.invalidateQueries({ queryKey: ["/api/matches"] });
-      toast({ title: "Request deleted" });
+      toast({ title: "Barter deleted" });
     },
   });
 
@@ -63,12 +63,12 @@ export default function MyRequestsPage() {
         <div className="flex items-center justify-between gap-4 flex-wrap">
           <h1 className="text-2xl font-bold flex items-center gap-2">
             <List className="w-6 h-6" />
-            My Requests
+            My Barters
           </h1>
           <Link href="/requests/new">
             <Button size="sm" className="gap-1.5" data-testid="button-new-request">
               <PlusCircle className="w-4 h-4" />
-              New Request
+              New Barter
             </Button>
           </Link>
         </div>
@@ -85,12 +85,12 @@ export default function MyRequestsPage() {
               <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center mb-4">
                 <List className="w-6 h-6 text-muted-foreground" />
               </div>
-              <p className="font-medium mb-1">No requests yet</p>
+              <p className="font-medium mb-1">No barters yet</p>
               <p className="text-sm text-muted-foreground mb-4">
-                Create your first barter request to find skill matches.
+                Create your first barter to find skill matches.
               </p>
               <Link href="/requests/new">
-                <Button size="sm" data-testid="button-create-first-request">Create Request</Button>
+                <Button size="sm" data-testid="button-create-first-request">Create Barter</Button>
               </Link>
             </CardContent>
           </Card>
