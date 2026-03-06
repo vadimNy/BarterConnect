@@ -26,6 +26,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     },
     onSuccess: async (data) => {
       queryClient.setQueryData(["/api/auth/me"], data);
+      await queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
     },
   });
 
@@ -36,6 +37,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     },
     onSuccess: async (data) => {
       queryClient.setQueryData(["/api/auth/me"], data);
+      await queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
     },
   });
 

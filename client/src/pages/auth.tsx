@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useLocation } from "wouter";
+import { Link, useLocation, Redirect } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -18,9 +18,13 @@ export function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { user, login } = useAuth();
   const [, navigate] = useLocation();
   const { toast } = useToast();
+
+  if (user) {
+    return <Redirect to="/app" />;
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -117,9 +121,13 @@ export function SignupPage() {
   const [userType, setUserType] = useState("individual");
   const [tosAccepted, setTosAccepted] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { signup } = useAuth();
+  const { user, signup } = useAuth();
   const [, navigate] = useLocation();
   const { toast } = useToast();
+
+  if (user) {
+    return <Redirect to="/app" />;
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
