@@ -54,7 +54,7 @@ export function LoginPage() {
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
             <div className="flex justify-center mb-3">
-              <img src={iconPath} alt="BarterConnect" className="h-16 w-auto object-contain" />
+              <img src={iconPath} alt="BarterConnect" className="w-16 h-auto max-w-full" />
             </div>
             <CardTitle className="text-2xl">Welcome back</CardTitle>
             <CardDescription>Log in to your account</CardDescription>
@@ -160,7 +160,7 @@ export function SignupPage() {
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
             <div className="flex justify-center mb-3">
-              <img src={iconPath} alt="BarterConnect" className="h-16 w-auto object-contain" />
+              <img src={iconPath} alt="BarterConnect" className="w-16 h-auto max-w-full" />
             </div>
             <CardTitle className="text-2xl">Create your account</CardTitle>
             <CardDescription>Start bartering your skills today</CardDescription>
