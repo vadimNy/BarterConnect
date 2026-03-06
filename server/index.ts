@@ -23,9 +23,8 @@ app.use(
 
 app.use(express.urlencoded({ extended: false }));
 
-// Basic healthcheck that doesn't depend on DB
 app.get("/health", (_req, res) => {
-  res.json({ status: "ok" });
+  res.status(200).send("OK");
 });
 
 export function log(message: string, source = "express") {
@@ -68,14 +67,11 @@ app.use((req, res, next) => {
 (async () => {
   try {
     await registerRoutes(httpServer, app);
+  } catch (err) {
+    console.error("Route registration error (non-fatal):", err);
+  }
 
-    try {
-      await seedDatabase();
-    } catch (err) {
-      console.error("Seed error:", err);
-    }
-
-    app.use((err: any, _req: Request, res: Response, next: NextFunction) => {
+  app.use((err: any, _req: Request, res: Response, next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
     const message = err.message || "Internal Server Error";
 
@@ -104,10 +100,23 @@ app.use((req, res, next) => {
     },
     () => {
       log(`serving on port ${port}`);
+
+      seedWithRetry();
     },
   );
-} catch (err) {
-  console.error("Critical startup error:", err);
-  process.exit(1);
-}
 })();
+
+async function seedWithRetry(attempts = 0) {
+  const MAX_ATTEMPTS = 5;
+  try {
+    await seedDatabase();
+  } catch (err) {
+    if (attempts < MAX_ATTEMPTS) {
+      const delay = Math.min(2000 * Math.pow(2, attempts), 30000);
+      console.error(`Seed attempt ${attempts + 1} failed, retrying in ${delay}ms...`);
+      setTimeout(() => seedWithRetry(attempts + 1), delay);
+    } else {
+      console.error("Seed failed after all retries (non-fatal):", err);
+    }
+  }
+}

@@ -20,6 +20,14 @@ import pg from "pg";
 
 const pool = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
+  max: 10,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 10000,
+  allowExitOnIdle: false,
+});
+
+pool.on("error", (err) => {
+  console.error("Database pool error (non-fatal):", err.message);
 });
 
 export const db = drizzle(pool);

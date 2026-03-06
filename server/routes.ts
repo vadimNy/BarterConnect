@@ -29,6 +29,13 @@ export async function registerRoutes(
   const PgStore = connectPgSimple(session);
   const sessionPool = new pg.Pool({
     connectionString: process.env.DATABASE_URL,
+    max: 5,
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 10000,
+  });
+
+  sessionPool.on("error", (err) => {
+    console.error("Session pool error (non-fatal):", err.message);
   });
 
   app.use(
