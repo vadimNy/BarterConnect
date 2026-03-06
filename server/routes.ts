@@ -64,6 +64,7 @@ export async function registerRoutes(
   });
 
   app.post("/api/auth/signup", async (req, res) => {
+    return res.status(503).json({ message: "Signups are currently closed. Check back soon!" });
     try {
       const parsed = signupSchema.safeParse(req.body);
       if (!parsed.success) {
@@ -289,7 +290,7 @@ export async function registerRoutes(
         return res.status(403).json({ message: "Not your conversation" });
       }
 
-      const msgs = await storage.getMessages(conv.id);
+      const msgs = await storage.getMessages(conv.id, req.session.userId!);
       res.json(msgs);
     } catch (err: any) {
       res.status(500).json({ message: err.message });
