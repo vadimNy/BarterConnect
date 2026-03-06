@@ -28,6 +28,7 @@ type ConversationData = {
     senderId: number;
     createdAt: string;
   } | null;
+  unreadCount: number;
   createdAt: string;
 };
 
@@ -254,11 +255,16 @@ export default function MessagesPage() {
                       <p className="font-medium text-sm truncate">
                         {conv.otherUser?.name || "Unknown"}
                       </p>
-                      {conv.lastMessage && (
-                        <span className="text-xs text-muted-foreground shrink-0">
-                          {formatTime(conv.lastMessage.createdAt)}
-                        </span>
-                      )}
+                      <div className="flex items-center gap-2">
+                        {conv.unreadCount > 0 && (
+                          <span className="h-2 w-2 rounded-full bg-accent animate-pulse" />
+                        )}
+                        {conv.lastMessage && (
+                          <span className="text-xs text-muted-foreground shrink-0">
+                            {formatTime(conv.lastMessage.createdAt)}
+                          </span>
+                        )}
+                      </div>
                     </div>
                     {conv.lastMessage ? (
                       <p className="text-sm text-muted-foreground truncate mt-0.5">

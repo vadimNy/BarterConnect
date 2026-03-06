@@ -289,7 +289,7 @@ export async function registerRoutes(
         return res.status(403).json({ message: "Not your conversation" });
       }
 
-      const msgs = await storage.getMessages(conv.id);
+      const msgs = await storage.getMessages(conv.id, req.session.userId!);
       res.json(msgs);
     } catch (err: any) {
       res.status(500).json({ message: err.message });

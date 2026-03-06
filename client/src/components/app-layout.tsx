@@ -2,6 +2,7 @@ import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth";
 import { UserAvatar } from "@/components/user-avatar";
+import { useQuery } from "@tanstack/react-query";
 import {
   LayoutDashboard,
   PlusCircle,
@@ -23,13 +24,21 @@ const navItems = [
   { href: "/requests", label: "My Requests", icon: List },
   { href: "/matches", label: "Matches", icon: Zap },
   { href: "/interests", label: "Interests", icon: Heart },
-  { href: "/messages", label: "Messages", icon: MessageCircle },
+  { href: "/messages", label: "Messages", icon: MessageCircle, showBadge: true },
 ];
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const { user, logout } = useAuth();
   const [location, navigate] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const { data: conversations } = useQuery<any[]>({
+    queryKey: ["/api/conversations"],
+    enabled: !!user,
+    refetchInterval: 10000,
+  });
+
+  const hasUnread = conversations?.some(c => c.unreadCount > 0);
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -49,11 +58,14 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                   <Button
                     variant={active ? "secondary" : "ghost"}
                     size="sm"
-                    className="gap-1.5"
+                    className="gap-1.5 relative"
                     data-testid={`nav-${item.label.toLowerCase().replace(/\s/g, "-")}`}
                   >
                     <item.icon className="w-4 h-4" />
                     {item.label}
+                    {item.showBadge && hasUnread && (
+                      <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-accent animate-pulse" />
+                    )}
                   </Button>
                 </Link>
               );
@@ -104,11 +116,14 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 <Link key={item.href} href={item.href} onClick={() => setMobileMenuOpen(false)}>
                   <Button
                     variant={active ? "secondary" : "ghost"}
-                    className="w-full justify-start gap-2"
+                    className="w-full justify-start gap-2 relative"
                     data-testid={`mobile-nav-${item.label.toLowerCase().replace(/\s/g, "-")}`}
                   >
                     <item.icon className="w-4 h-4" />
                     {item.label}
+                    {item.showBadge && hasUnread && (
+                      <span className="absolute top-2 right-4 h-2 w-2 rounded-full bg-accent animate-pulse" />
+                    )}
                   </Button>
                 </Link>
               );

@@ -524,7 +524,18 @@ export class DatabaseStorage implements IStorage {
         .orderBy(desc(messages.createdAt))
         .limit(1);
 
-      const unreadCount = 0;
+      const unreadCountResult = await db
+        .select({ count: sql<number>`count(*)` })
+        .from(messages)
+        .where(
+          and(
+            eq(messages.conversationId, conv.id),
+            ne(messages.senderId, userId),
+            eq(messages.read, false)
+          )
+        );
+
+      const unreadCount = Number(unreadCountResult[0]?.count || 0);
 
       result.push({
         id: conv.id,
@@ -538,6 +549,7 @@ export class DatabaseStorage implements IStorage {
           senderId: lastMessage.senderId,
           createdAt: lastMessage.createdAt,
         } : null,
+        unreadCount,
         createdAt: conv.createdAt,
       });
     }
@@ -551,7 +563,20 @@ export class DatabaseStorage implements IStorage {
     return result;
   }
 
-  async getMessages(conversationId: number): Promise<any[]> {
+  async getMessages(conversationId: number, userId?: number): Promise<any[]> {
+    if (userId) {
+      await db
+        .update(messages)
+        .set({ read: true })
+        .where(
+          and(
+            eq(messages.conversationId, conversationId),
+            ne(messages.senderId, userId),
+            eq(messages.read, false)
+          )
+        );
+    }
+
     const msgs = await db
       .select({
         id: messages.id,
