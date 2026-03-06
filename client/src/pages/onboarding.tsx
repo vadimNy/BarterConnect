@@ -111,7 +111,7 @@ export default function OnboardingPage() {
     <div className="min-h-screen bg-background flex flex-col">
       <header className="border-b px-4 py-3">
         <div className="max-w-5xl mx-auto flex items-center gap-4">
-          <img src={logoPath} alt="BarterConnect" className="h-12" />
+          <img src={logoPath} alt="BarterConnect" className="h-12 w-auto object-contain" />
         </div>
       </header>
 

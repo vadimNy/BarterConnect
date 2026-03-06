@@ -49,7 +49,7 @@ export function LoginPage() {
             </Button>
           </Link>
           <Link href="/">
-            <img src={logoPath} alt="BarterConnect" className="h-12" />
+            <img src={logoPath} alt="BarterConnect" className="h-12 w-auto object-contain" />
           </Link>
         </div>
       </header>
@@ -160,7 +160,7 @@ export function SignupPage() {
             </Button>
           </Link>
           <Link href="/">
-            <img src={logoPath} alt="BarterConnect" className="h-12" />
+            <img src={logoPath} alt="BarterConnect" className="h-12 w-auto object-contain" />
           </Link>
         </div>
       </header>

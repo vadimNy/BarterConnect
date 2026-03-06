@@ -46,7 +46,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <div className="max-w-5xl mx-auto flex items-center justify-between gap-4 px-4 py-3">
           <div className="flex items-center gap-2">
             <Link href="/app">
-              <img src={logoPath} alt="BarterConnect" className="h-12" data-testid="app-header-logo" />
+              <img src={logoPath} alt="BarterConnect" className="h-12 w-auto object-contain" data-testid="app-header-logo" />
             </Link>
           </div>
 
