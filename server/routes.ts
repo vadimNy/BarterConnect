@@ -71,6 +71,7 @@ export async function registerRoutes(
   });
 
   app.post("/api/auth/signup", async (req, res) => {
+    return res.status(503).json({ message: "Signups are currently closed. Check back soon!" });
     try {
       const parsed = signupSchema.safeParse(req.body);
       if (!parsed.success) {

@@ -168,112 +168,21 @@ export function SignupPage() {
 
       <div className="flex-1 flex items-center justify-center px-4 py-8">
         <Card className="w-full max-w-md">
-            <CardHeader className="text-center">
+          <CardHeader className="text-center">
             <div className="flex justify-center mb-3">
               <img src={iconPath} alt="BarterConnect" className="w-16 h-auto max-w-full" />
             </div>
-            <CardTitle className="text-2xl">Create Account</CardTitle>
-            <CardDescription>Join our community of skill barters</CardDescription>
+            <CardTitle className="text-2xl">Coming Soon</CardTitle>
+            <CardDescription>We're putting the finishing touches on BarterConnect</CardDescription>
           </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">Full Name</Label>
-                <Input
-                  id="name"
-                  placeholder="John Doe"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required
-                  data-testid="input-name"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="you@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  data-testid="input-email"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="Min. 8 characters"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  data-testid="input-password"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="city">City</Label>
-                <CityPicker
-                  id="city"
-                  value={city}
-                  onChange={setCity}
-                />
-              </div>
-
-              <div className="flex items-center gap-2 pt-2">
-                <Checkbox
-                  id="tos"
-                  checked={tosAccepted}
-                  onCheckedChange={(checked) => setTosAccepted(checked === true)}
-                  required
-                  data-testid="checkbox-tos"
-                />
-                <Label htmlFor="tos" className="text-xs text-muted-foreground leading-none cursor-pointer">
-                  I agree to the{" "}
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <button type="button" className="text-accent hover:underline">Terms of Service</button>
-                    </DialogTrigger>
-                    <DialogContent className="max-w-2xl max-h-[80vh]">
-                      <DialogHeader>
-                        <DialogTitle>Terms of Service</DialogTitle>
-                      </DialogHeader>
-                      <ScrollArea className="pr-4 mt-4">
-                        <div className="text-sm space-y-4 whitespace-pre-wrap">
-                          {tosContent}
-                          <div className="mt-8 pt-8 border-t">
-                            <h3 className="text-lg font-bold mb-4">Professional Services Addendum</h3>
-                            {professionalDisclaimerContent}
-                          </div>
-                          <div className="mt-8 pt-8 border-t">
-                            <h3 className="text-lg font-bold mb-4">Tax & Financial Addendum</h3>
-                            {taxDisclaimerContent}
-                          </div>
-                          <div className="mt-8 pt-8 border-t">
-                            <h3 className="text-lg font-bold mb-4">Platform Role Addendum</h3>
-                            {platformRoleDisclaimerContent}
-                          </div>
-                          <div className="mt-8 pt-8 border-t">
-                            <h3 className="text-lg font-bold mb-4">Community Guidelines</h3>
-                            {communityGuidelinesContent}
-                          </div>
-                        </div>
-                      </ScrollArea>
-                    </DialogContent>
-                  </Dialog>
-                </Label>
-              </div>
-
-              <Button type="submit" className="w-full" disabled={loading} data-testid="button-submit-signup">
-                {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-                Create Account
-              </Button>
-            </form>
-            <p className="text-sm text-muted-foreground text-center mt-4">
+          <CardContent className="text-center space-y-4 pb-6">
+            <p className="text-sm text-muted-foreground">
+              Signups are not open yet. Check back soon — we're almost ready!
+            </p>
+            <p className="text-sm text-muted-foreground">
               Already have an account?{" "}
               <Link href="/login" className="text-accent hover:underline font-medium" data-testid="link-login">
-                Log in
+                Log in here
               </Link>
             </p>
           </CardContent>
