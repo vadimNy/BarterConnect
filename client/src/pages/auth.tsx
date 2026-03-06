@@ -10,7 +10,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useAuth } from "@/lib/auth";
 import { Loader2, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { tosContent } from "@/pages/terms";
+import { tosContent, professionalDisclaimerContent, taxDisclaimerContent, platformRoleDisclaimerContent } from "@/pages/terms";
 import logoPath from "@assets/BarterConnect_Logo_cropped.png";
 import iconPath from "@assets/BarterConnect_Icon_cropped.png";
 
@@ -237,6 +237,21 @@ export function SignupPage() {
                       <ScrollArea className="h-[60vh] pr-4">
                         <div className="whitespace-pre-wrap text-sm leading-relaxed text-muted-foreground" data-testid="text-tos-dialog-content">
                           {tosContent}
+                        </div>
+                        <hr className="my-6 border-border" />
+                        <h3 className="text-base font-bold mb-2">Addendum A: Professional Services Disclaimer</h3>
+                        <div className="whitespace-pre-wrap text-sm leading-relaxed text-muted-foreground" data-testid="text-tos-professional-disclaimer">
+                          {professionalDisclaimerContent}
+                        </div>
+                        <hr className="my-6 border-border" />
+                        <h3 className="text-base font-bold mb-2">Addendum B: Tax Disclaimer</h3>
+                        <div className="whitespace-pre-wrap text-sm leading-relaxed text-muted-foreground" data-testid="text-tos-tax-disclaimer">
+                          {taxDisclaimerContent}
+                        </div>
+                        <hr className="my-6 border-border" />
+                        <h3 className="text-base font-bold mb-2">Addendum C: Platform Role Disclaimer</h3>
+                        <div className="whitespace-pre-wrap text-sm leading-relaxed text-muted-foreground" data-testid="text-tos-platform-role-disclaimer">
+                          {platformRoleDisclaimerContent}
                         </div>
                       </ScrollArea>
                     </DialogContent>

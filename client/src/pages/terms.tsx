@@ -142,6 +142,57 @@ We may modify these Terms at any time. Updated versions will be posted on the Pl
 
 Continued use constitutes acceptance.`;
 
+export const professionalDisclaimerContent = `BarterConnect is a technology platform that enables users to connect for the exchange of services. BarterConnect does not provide professional services and does not employ, endorse, certify, or supervise any users offering services through the Platform.
+
+Users may offer professional services including, but not limited to, legal, financial, medical, technical, trade, consulting, or other regulated services. BarterConnect:
+- Does not verify licenses, certifications, insurance coverage, or credentials
+- Does not guarantee qualifications, competence, or service outcomes
+- Does not provide professional advice of any kind
+
+Any professional services exchanged through the Platform are provided solely between users. Users are solely responsible for:
+- Confirming the qualifications and licensing of other users
+- Evaluating risks
+- Complying with applicable laws and professional regulations
+
+Nothing on BarterConnect constitutes legal, financial, medical, tax, or professional advice.
+
+Use of professional services arranged through the Platform is at your own risk.`;
+
+export const taxDisclaimerContent = `Barter transactions may have tax consequences under applicable federal, state, or local laws.
+
+In the United States, barter exchanges may be treated as taxable income by the Internal Revenue Service (IRS). Users are solely responsible for:
+- Determining whether a barter transaction constitutes taxable income
+- Reporting any required income
+- Maintaining appropriate records
+- Paying any applicable taxes
+
+BarterConnect does not provide tax advice and does not calculate, withhold, report, or remit taxes on behalf of users.
+
+Users should consult a qualified tax professional regarding their obligations.
+
+BarterConnect disclaims any liability arising from a user's failure to comply with tax laws.`;
+
+export const platformRoleDisclaimerContent = `BarterConnect is a neutral intermediary platform.
+
+We:
+- Do not act as an agent, broker, contractor, employer, or partner of any user
+- Are not a party to any barter agreement
+- Do not control, supervise, or enforce user transactions
+- Do not guarantee completion of services
+
+Any agreement formed between users is a direct agreement between those users.
+
+BarterConnect is not responsible for:
+- Non-performance
+- Misrepresentation
+- Professional negligence
+- Personal injury
+- Property damage
+- Financial loss
+- Disputes between users
+
+Users assume full responsibility for their interactions and transactions.`;
+
 export default function TermsPage() {
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -160,9 +211,33 @@ export default function TermsPage() {
 
       <div className="flex-1 max-w-3xl mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-2" data-testid="text-terms-title">Terms of Service</h1>
-        <p className="text-sm text-muted-foreground mb-6">Last updated: February 2026</p>
+        <p className="text-sm text-muted-foreground mb-6">Last updated: March 2026</p>
         <div className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap text-sm leading-relaxed" data-testid="text-terms-content">
           {tosContent}
+        </div>
+
+        <hr className="my-10 border-border" />
+
+        <h2 className="text-2xl font-bold mb-2" data-testid="text-professional-disclaimer-title">Addendum A: Professional Services Disclaimer</h2>
+        <p className="text-sm text-muted-foreground mb-6">Effective: March 2026</p>
+        <div className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap text-sm leading-relaxed" data-testid="text-professional-disclaimer-content">
+          {professionalDisclaimerContent}
+        </div>
+
+        <hr className="my-10 border-border" />
+
+        <h2 className="text-2xl font-bold mb-2" data-testid="text-tax-disclaimer-title">Addendum B: Tax Disclaimer</h2>
+        <p className="text-sm text-muted-foreground mb-6">Effective: March 2026</p>
+        <div className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap text-sm leading-relaxed" data-testid="text-tax-disclaimer-content">
+          {taxDisclaimerContent}
+        </div>
+
+        <hr className="my-10 border-border" />
+
+        <h2 className="text-2xl font-bold mb-2" data-testid="text-platform-role-disclaimer-title">Addendum C: Platform Role Disclaimer</h2>
+        <p className="text-sm text-muted-foreground mb-6">Effective: March 2026</p>
+        <div className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap text-sm leading-relaxed" data-testid="text-platform-role-disclaimer-content">
+          {platformRoleDisclaimerContent}
         </div>
       </div>
 
