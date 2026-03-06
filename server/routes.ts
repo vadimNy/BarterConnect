@@ -29,6 +29,13 @@ export async function registerRoutes(
   const PgStore = connectPgSimple(session);
   const sessionPool = new pg.Pool({
     connectionString: process.env.DATABASE_URL,
+    max: 5,
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 10000,
+  });
+
+  sessionPool.on("error", (err) => {
+    console.error("Session pool error (non-fatal):", err.message);
   });
 
   app.use(
@@ -71,7 +78,7 @@ export async function registerRoutes(
         return res.status(400).json({ message: parsed.error.errors[0].message });
       }
 
-      const { email, password, name, city, tosAccepted } = parsed.data;
+      const { email, password, name, city, tosAccepted, userType } = parsed.data;
 
       if (!tosAccepted) {
         return res.status(400).json({ message: "You must accept the Terms of Service" });
@@ -83,7 +90,7 @@ export async function registerRoutes(
       }
 
       const passwordHash = await bcrypt.hash(password, 10);
-      const user = await storage.createUser(email, passwordHash, name, city, true);
+      const user = await storage.createUser(email, passwordHash, name, city, true, userType);
       req.session.userId = user.id;
 
       const { passwordHash: _, ...safeUser } = user;
@@ -223,6 +230,33 @@ export async function registerRoutes(
     res.json(matches);
   });
 
+  app.get("/api/suggestions", requireAuth, async (req, res) => {
+    try {
+      const suggestions = await storage.getSuggestedPeople(req.session.userId!);
+      res.json(suggestions);
+    } catch (err: any) {
+      res.status(500).json({ message: err.message });
+    }
+  });
+
+  app.post("/api/interests/:id/complete", requireAuth, async (req, res) => {
+    try {
+      const updated = await storage.markBarterComplete(parseInt(req.params.id as string), req.session.userId!);
+      res.json({ message: "Marked as complete", interest: updated });
+    } catch (err: any) {
+      res.status(400).json({ message: err.message });
+    }
+  });
+
+  app.get("/api/users/:id/requests", requireAuth, async (req, res) => {
+    try {
+      const reqs = await storage.getOpenRequestsByUserId(parseInt(req.params.id as string));
+      res.json(reqs);
+    } catch (err: any) {
+      res.status(500).json({ message: err.message });
+    }
+  });
+
   app.post("/api/interests", requireAuth, async (req, res) => {
     try {
       const parsed = insertInterestSchema.safeParse(req.body);
@@ -269,6 +303,39 @@ export async function registerRoutes(
       res.json({ message: "Interest rejected" });
     } catch (err: any) {
       res.status(403).json({ message: err.message });
+    }
+  });
+
+  app.get("/api/favors", requireAuth, async (req, res) => {
+    try {
+      const balances = await storage.getFavorBalances(req.session.userId!);
+      res.json(balances);
+    } catch (err: any) {
+      res.status(500).json({ message: err.message });
+    }
+  });
+
+  app.post("/api/favors/record", requireAuth, async (req, res) => {
+    try {
+      const { otherUserId, direction } = req.body;
+      if (!otherUserId || !direction) {
+        return res.status(400).json({ message: "otherUserId and direction are required" });
+      }
+      if (!["balanced", "i_owe_them", "they_owe_me"].includes(direction)) {
+        return res.status(400).json({ message: "Invalid direction" });
+      }
+      const hasCompleted = await storage.hasCompletedBarterWith(req.session.userId!, otherUserId);
+      if (!hasCompleted) {
+        return res.status(403).json({ message: "You can only record favors with users you've completed a barter with" });
+      }
+      if (direction === "i_owe_them") {
+        await storage.updateFavorBalance(req.session.userId!, otherUserId, -1);
+      } else if (direction === "they_owe_me") {
+        await storage.updateFavorBalance(req.session.userId!, otherUserId, 1);
+      }
+      res.json({ message: "Favor recorded" });
+    } catch (err: any) {
+      res.status(500).json({ message: err.message });
     }
   });
 
@@ -331,6 +398,38 @@ export async function registerRoutes(
       isRemote: request.isRemote,
       userName: request.userName,
     });
+  });
+
+  app.get("/r/:publicId", async (req, res, next) => {
+    try {
+      const request = await storage.getRequestByPublicId(req.params.publicId);
+      if (!request) {
+        return next();
+      }
+
+      const title = `${request.userName} wants to trade ${request.offerSkill} for ${request.needSkill} | BarterConnect`;
+      const description = request.description
+        ? request.description.substring(0, 160)
+        : `${request.userName} is offering ${request.offerSkill} in exchange for ${request.needSkill} on BarterConnect. ${request.isRemote ? "Available remotely." : `Located in ${request.city}.`}`;
+      const url = `${req.protocol}://${req.get("host")}/r/${req.params.publicId}`;
+
+      const ogTags = `
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="${title.replace(/"/g, "&quot;")}" />
+    <meta property="og:description" content="${description.replace(/"/g, "&quot;")}" />
+    <meta property="og:url" content="${url}" />
+    <meta property="og:site_name" content="BarterConnect" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="${title.replace(/"/g, "&quot;")}" />
+    <meta name="twitter:description" content="${description.replace(/"/g, "&quot;")}" />
+    <title>${title.replace(/</g, "&lt;")}</title>
+    <meta name="description" content="${description.replace(/"/g, "&quot;")}" />`;
+
+      res.locals.ogTags = ogTags;
+      next();
+    } catch {
+      next();
+    }
   });
 
   return httpServer;

@@ -13,6 +13,7 @@ import MatchesPage from "@/pages/matches";
 import InterestsPage from "@/pages/interests";
 import MessagesPage from "@/pages/messages";
 import AccountPage from "@/pages/account";
+import OnboardingPage from "@/pages/onboarding";
 import TermsPage from "@/pages/terms";
 import PrivacyPage from "@/pages/privacy";
 import PublicRequestPage from "@/pages/public-request";
@@ -46,6 +47,9 @@ function Router() {
       <Route path="/terms" component={TermsPage} />
       <Route path="/privacy" component={PrivacyPage} />
       <Route path="/r/:publicId" component={PublicRequestPage} />
+      <Route path="/onboarding">
+        {() => <ProtectedRoute component={OnboardingPage} />}
+      </Route>
       <Route path="/app">
         {() => <ProtectedRoute component={DashboardPage} />}
       </Route>

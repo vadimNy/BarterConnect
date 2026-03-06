@@ -1,0 +1,210 @@
+Update BarterConnect with the following product improvements to make the platform feel more like a living barter network instead of a strict exact-match engine.
+
+PROJECT CONTEXT
+BarterConnect is a mobile-first full-stack web app for skill bartering. Users create requests with:
+- what they OFFER
+- what they NEED
+The current MVP includes signup/login, barter requests, exact/direct matching, interest handshake, public request pages, and legal pages.
+
+GOAL OF THIS UPDATE
+Improve marketplace liquidity, retention, and the feeling of community/network by:
+1. expanding matching beyond only exact two-way matches
+2. surfacing people and connections, not just strict request matches
+3. improving the public sharing loop
+4. adding reputation through completed barter count
+5. improving first-user onboarding by requiring a first barter request after signup
+
+==================================================
+1) FLEXIBLE MATCHING (INSTEAD OF ONLY EXACT MATCHES)
+==================================================
+
+Keep the current exact/direct matching logic, but expand the Matches page into multiple sections.
+
+A. PERFECT MATCHES
+Current logic:
+- other_request.offer_skill == my_request.need_skill
+- other_request.need_skill == my_request.offer_skill
+- other_request.status == "open"
+- other_request.user_id != my_user_id
+
+B. PEOPLE OFFERING WHAT I NEED
+Show users/requests where:
+- other_request.offer_skill == my_request.need_skill
+- other_request.status == "open"
+- other_request.user_id != my_user_id
+Even if their need does not match my offer.
+
+C. PEOPLE WHO NEED WHAT I OFFER
+Show users/requests where:
+- other_request.need_skill == my_request.offer_skill
+- other_request.status == "open"
+- other_request.user_id != my_user_id
+Even if their offer does not match my need.
+
+Sort all lists with:
+1. same city first
+2. remote-compatible next
+3. newest first
+
+UI REQUIREMENT:
+The Matches page should clearly separate these sections:
+- Perfect Matches
+- People Offering What You Need
+- People Who Need What You Offer
+
+This should replace empty/strict “no matches” behavior and make the platform feel more active.
+
+==================================================
+2) “PEOPLE YOU MIGHT BARTER WITH” NETWORK FEEL
+==================================================
+
+Add a section to the dashboard and/or matches page called:
+“People You Might Barter With”
+
+This should feel more relationship/network-oriented than purely transactional.
+
+Use lightweight logic to surface relevant users based on:
+- users in the same city
+- users who offer what I need
+- users who need what I offer
+- users with completed barter history
+- exclude myself
+
+For each person card, show:
+- display name
+- city / remote
+- main offered skill(s) if available
+- main needed skill(s) if available
+- completed barter count
+- CTA button such as:
+  - View profile
+  - View requests
+  - Interested
+
+The goal is to make the platform feel like a barter network / community, not just a listing board.
+
+==================================================
+3) IMPROVED “SHARE YOUR BARTER” FLOW
+==================================================
+
+Enhance the shareable public request pages and the post-request success experience.
+
+A. After a user creates a barter request, show a success screen with:
+- confirmation message that the request is live
+- a “Copy Link” button
+- optional social share buttons (LinkedIn, Facebook, X, WhatsApp if easy)
+- friendly prompt text such as:
+  “Want to increase your chances of finding a match? Share your barter request.”
+
+B. Public request page should remain viewable without signup.
+IMPORTANT:
+Do NOT require signup immediately just to view the public link.
+
+Public page should display:
+- display name
+- offer
+- need
+- city or remote
+- description
+- clean CTA:
+  “Respond on BarterConnect”
+  which leads to signup/login only when the viewer wants to interact
+
+C. Improve public sharing metadata
+Add proper Open Graph / social preview metadata so the shared link looks good on social platforms.
+Use dynamic page title/description like:
+- “Offer Web Design, Need Plumbing Help | BarterConnect”
+or similar based on request data.
+
+The public page should feel like a real landing page for that barter request.
+
+==================================================
+4) REPUTATION / COMPLETED BARTERS COUNT
+==================================================
+
+Add a simple reputation system based on completed barter count.
+
+A. Add completed barter tracking
+Users should be able to mark an accepted barter as completed.
+Use a simple mutual completion flow if possible:
+- User A marks completed
+- User B marks completed
+- Once both confirm, mark the barter as completed
+
+If a simpler MVP approach is needed:
+- allow a single completion flow for now, but structure it so mutual confirmation can be added later
+
+B. Add reputation display
+Show on user profiles, person cards, and/or request cards:
+- “Completed barters: X”
+
+This should act as a trust signal and help with retention and confidence.
+
+C. Add minimal data structure support
+Store completed barter count or completed barter records so this can be displayed reliably.
+
+No star ratings yet.
+No long review system needed right now.
+Keep it simple:
+- completed barters count
+- maybe short “Trusted trader” style badge if helpful
+
+==================================================
+5) REQUEST-FIRST ONBOARDING AFTER SIGNUP
+==================================================
+
+Change the first-user experience.
+
+Current problem:
+After signup, users should NOT land on an empty dashboard.
+
+New flow:
+- User signs up
+- Immediately go to a welcome / onboarding screen or directly to Create Request
+- Require or strongly guide user to create their first barter request before entering the main dashboard
+
+The onboarding should explain:
+- what BarterConnect is
+- that the best way to start is to post what you offer and what you need
+
+Suggested welcome copy:
+“Welcome to BarterConnect. Trade skills instead of paying cash.
+Tell us two things:
+1. What can you offer?
+2. What do you need?”
+
+After the user successfully posts their first barter request:
+- show a success message
+- invite them to share their barter request
+- then allow navigation to dashboard/matches
+
+Suggested success language:
+“Your barter request is live.
+Want more chances to find a match? Share your request.”
+
+==================================================
+UX / PRODUCT REQUIREMENTS
+==================================================
+
+- Keep mobile-first layout
+- Do not overcomplicate the UI
+- Preserve current MVP simplicity
+- Add good empty states where needed
+- Make the app feel active, useful, and community-based
+- Keep legal/privacy/terms functionality intact
+- Do not add chat, payments, points, or credits in this update
+- Do not convert the platform into a global credit system
+- Keep barter direct and relationship-based
+
+==================================================
+DELIVERABLE
+==================================================
+
+Update the existing BarterConnect app with:
+- flexible matching
+- “People You Might Barter With”
+- improved sharing flow and public page behavior
+- completed barter count / reputation
+- request-first onboarding after signup
+
+Make all new flows feel clean, intuitive, and mobile-friendly.

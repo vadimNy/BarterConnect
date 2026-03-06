@@ -23,6 +23,10 @@ app.use(
 
 app.use(express.urlencoded({ extended: false }));
 
+app.get("/health", (_req, res) => {
+  res.status(200).send("OK");
+});
+
 export function log(message: string, source = "express") {
   const formattedTime = new Date().toLocaleTimeString("en-US", {
     hour: "numeric",
@@ -61,12 +65,10 @@ app.use((req, res, next) => {
 });
 
 (async () => {
-  await registerRoutes(httpServer, app);
-
   try {
-    await seedDatabase();
+    await registerRoutes(httpServer, app);
   } catch (err) {
-    console.error("Seed error:", err);
+    console.error("Route registration error (non-fatal):", err);
   }
 
   app.use((err: any, _req: Request, res: Response, next: NextFunction) => {
@@ -82,9 +84,6 @@ app.use((req, res, next) => {
     return res.status(status).json({ message });
   });
 
-  // importantly only setup vite in development and after
-  // setting up all the other routes so the catch-all route
-  // doesn't interfere with the other routes
   if (process.env.NODE_ENV === "production") {
     serveStatic(app);
   } else {
@@ -92,10 +91,6 @@ app.use((req, res, next) => {
     await setupVite(httpServer, app);
   }
 
-  // ALWAYS serve the app on the port specified in the environment variable PORT
-  // Other ports are firewalled. Default to 5000 if not specified.
-  // this serves both the API and the client.
-  // It is the only port that is not firewalled.
   const port = parseInt(process.env.PORT || "5000", 10);
   httpServer.listen(
     {
@@ -105,6 +100,23 @@ app.use((req, res, next) => {
     },
     () => {
       log(`serving on port ${port}`);
+
+      seedWithRetry();
     },
   );
 })();
+
+async function seedWithRetry(attempts = 0) {
+  const MAX_ATTEMPTS = 5;
+  try {
+    await seedDatabase();
+  } catch (err) {
+    if (attempts < MAX_ATTEMPTS) {
+      const delay = Math.min(2000 * Math.pow(2, attempts), 30000);
+      console.error(`Seed attempt ${attempts + 1} failed, retrying in ${delay}ms...`);
+      setTimeout(() => seedWithRetry(attempts + 1), delay);
+    } else {
+      console.error("Seed failed after all retries (non-fatal):", err);
+    }
+  }
+}

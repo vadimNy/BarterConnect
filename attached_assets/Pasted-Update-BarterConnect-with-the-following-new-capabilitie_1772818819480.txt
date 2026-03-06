@@ -1,0 +1,188 @@
+Update BarterConnect with the following new capabilities to support Influencer barter and relationship-based barter using a Favor Ledger system.
+
+PROJECT CONTEXT
+BarterConnect is a mobile-first web application where users exchange skills or services without money. Users create requests with what they OFFER and what they NEED.
+
+This update expands the platform to support:
+• influencers and creators
+• promotion-based barter
+• relationship barter using favor balances
+
+The goal is to keep the system simple while expanding barter possibilities.
+
+==================================================
+1) USER TYPE SELECTION DURING SIGNUP
+==================================================
+
+Add a required "User Type" selection during signup.
+
+Options:
+• Individual
+• Professional
+• Influencer / Creator
+
+Store this value in the users table.
+
+Purpose:
+• differentiate typical users, professionals, and influencers
+• enable additional fields for influencers
+
+==================================================
+2) INFLUENCER PROFILE FIELDS
+==================================================
+
+If a user selects "Influencer / Creator", show additional optional profile fields:
+
+Fields:
+• Primary Platform (Instagram, TikTok, YouTube, Blog, Other)
+• Platform Handle
+• Followers (numeric)
+• Content Niche (optional)
+
+Example display on profile:
+
+Sarah L.
+Influencer / Creator
+
+Platform: Instagram
+Followers: 24,000
+
+These fields should only appear for influencer users.
+
+==================================================
+3) PROMOTION AS A BARTER SKILL
+==================================================
+
+Allow influencers to offer promotion as a skill.
+
+Add skill options such as:
+• Social Media Promotion
+• Content Creation
+• Influencer Promotion
+• Marketing Promotion
+
+Users can use these in barter requests just like other skills.
+
+Example request:
+
+Offer:
+Instagram Promotion
+
+Need:
+Restaurant meal
+
+No special barter type is required yet — treat promotion as a skill.
+
+==================================================
+4) SOCIAL PLATFORM LINKS
+==================================================
+
+Allow influencers to add links to their platforms.
+
+Optional fields:
+• Instagram URL
+• TikTok URL
+• YouTube URL
+• Website
+
+These should appear on their profile so businesses can verify them.
+
+==================================================
+5) FAVOR LEDGER SYSTEM (RELATIONSHIP BARTER)
+==================================================
+
+Introduce a "Favor Ledger" between users.
+
+Purpose:
+Allow barter relationships that do not require immediate equal exchange.
+
+Example:
+User A helps User B today → User B owes User A a favor.
+
+Data structure concept:
+Track favor balances between pairs of users.
+
+Favor balance meanings:
+
++1 → the other user owes you
+-1 → you owe the other user
+0 → balanced
+
+IMPORTANT:
+This is NOT a global credit currency.
+Favor balances exist only between specific users.
+
+==================================================
+6) FAVOR LEDGER BEHAVIOR
+==================================================
+
+When a barter is marked as completed, users can optionally indicate that a favor is owed.
+
+Possible outcomes:
+
+• Balanced barter
+• Favor owed to one user
+• Favor repaid
+
+Store favor balances so they can accumulate over time between the same users.
+
+==================================================
+7) DISPLAY FAVOR BALANCES
+==================================================
+
+On user profiles show:
+
+Completed barters: X
+
+Favor balances (if any):
+John: +1
+Maria: -1
+Alex: 0
+
+Keep this simple and readable.
+
+==================================================
+8) COMPLETED BARTERS (REPUTATION)
+==================================================
+
+Track completed barter count per user.
+
+When a barter is successfully completed:
+increment completed barter count.
+
+Show this on:
+
+• user profile
+• user cards
+• barter request cards
+
+Example:
+
+Completed barters: 5
+
+This acts as a trust signal.
+
+==================================================
+UX REQUIREMENTS
+==================================================
+
+• Keep UI simple and mobile-first
+• Influencer fields should only appear for influencer users
+• Favor ledger should not feel like a currency system
+• Focus on relationship-based barter rather than complex economics
+• Preserve current barter request system
+
+==================================================
+DELIVERABLE
+==================================================
+
+Update the BarterConnect application to support:
+
+• user type classification (Individual / Professional / Influencer)
+• influencer profile fields
+• promotion-based barter via skills
+• social platform links
+• favor ledger system between users
+• completed barter reputation count
+
+All new features should integrate cleanly with the existing request, match, and interest flows.

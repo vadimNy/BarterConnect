@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -7,6 +7,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/lib/auth";
 import { useToast } from "@/hooks/use-toast";
 import { useUpload } from "@/hooks/use-upload";
@@ -25,7 +27,22 @@ import {
   Save,
   Eye,
   EyeOff,
+  Trophy,
+  Star,
+  Globe,
+  Users,
+  HandshakeIcon,
+  ArrowUpRight,
+  ArrowDownRight,
+  Minus,
 } from "lucide-react";
+import { SiInstagram, SiTiktok, SiYoutube } from "react-icons/si";
+
+const USER_TYPE_LABELS: Record<string, string> = {
+  individual: "Individual",
+  professional: "Professional",
+  influencer: "Influencer / Creator",
+};
 
 export default function AccountPage() {
   const { user } = useAuth();
@@ -35,6 +52,17 @@ export default function AccountPage() {
   const [name, setName] = useState(user?.name || "");
   const [city, setCity] = useState(user?.city || "");
   const [bio, setBio] = useState(user?.bio || "");
+  const [userType, setUserType] = useState(user?.userType || "individual");
+
+  const [primaryPlatform, setPrimaryPlatform] = useState(user?.primaryPlatform || "");
+  const [platformHandle, setPlatformHandle] = useState(user?.platformHandle || "");
+  const [followers, setFollowers] = useState(user?.followers?.toString() || "");
+  const [contentNiche, setContentNiche] = useState(user?.contentNiche || "");
+
+  const [instagramUrl, setInstagramUrl] = useState(user?.instagramUrl || "");
+  const [tiktokUrl, setTiktokUrl] = useState(user?.tiktokUrl || "");
+  const [youtubeUrl, setYoutubeUrl] = useState(user?.youtubeUrl || "");
+  const [websiteUrl, setWebsiteUrl] = useState(user?.websiteUrl || "");
 
   const [notifyMatches, setNotifyMatches] = useState(user?.notifyMatches ?? true);
   const [notifyInterests, setNotifyInterests] = useState(user?.notifyInterests ?? true);
@@ -45,6 +73,10 @@ export default function AccountPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
+
+  const { data: favorBalances } = useQuery<Array<{ userId: number; userName: string; balance: number }>>({
+    queryKey: ["/api/favors"],
+  });
 
   const { uploadFile, isUploading } = useUpload({
     onSuccess: async (response) => {
@@ -73,11 +105,23 @@ export default function AccountPage() {
 
   const profileMutation = useMutation({
     mutationFn: async () => {
-      const res = await apiRequest("PATCH", "/api/users/me", {
+      const data: Record<string, any> = {
         name,
         city,
         bio: bio || null,
-      });
+        userType,
+      };
+      if (userType === "influencer") {
+        data.primaryPlatform = primaryPlatform || null;
+        data.platformHandle = platformHandle || null;
+        data.followers = followers ? parseInt(followers) : null;
+        data.contentNiche = contentNiche || null;
+      }
+      data.instagramUrl = instagramUrl || null;
+      data.tiktokUrl = tiktokUrl || null;
+      data.youtubeUrl = youtubeUrl || null;
+      data.websiteUrl = websiteUrl || null;
+      const res = await apiRequest("PATCH", "/api/users/me", data);
       return res.json();
     },
     onSuccess: (data) => {
@@ -156,6 +200,8 @@ export default function AccountPage() {
     ? new Date(user.createdAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })
     : "";
 
+  const nonZeroFavors = (favorBalances || []).filter((f) => f.balance !== 0);
+
   return (
     <AppLayout>
       <div className="max-w-2xl mx-auto space-y-6">
@@ -211,6 +257,16 @@ export default function AccountPage() {
                   <Calendar className="w-3.5 h-3.5" />
                   Member since {memberSince}
                 </p>
+                <div className="flex items-center gap-3 mt-1.5">
+                  <Badge variant="secondary" className="text-xs" data-testid="badge-user-type">
+                    <Users className="w-3 h-3 mr-1" />
+                    {USER_TYPE_LABELS[user?.userType || "individual"]}
+                  </Badge>
+                  <Badge variant="secondary" className="text-xs bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400" data-testid="badge-completed-barters">
+                    <Trophy className="w-3 h-3 mr-1" />
+                    {user?.completedBarters || 0} completed
+                  </Badge>
+                </div>
               </div>
             </div>
 
@@ -260,6 +316,143 @@ export default function AccountPage() {
                 <p className="text-xs text-muted-foreground text-right">{bio.length}/500</p>
               </div>
 
+              <div className="space-y-2">
+                <Label>User Type</Label>
+                <Select value={userType} onValueChange={setUserType}>
+                  <SelectTrigger data-testid="select-user-type">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="individual">Individual</SelectItem>
+                    <SelectItem value="professional">Professional</SelectItem>
+                    <SelectItem value="influencer">Influencer / Creator</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {userType === "influencer" && (
+                <div className="space-y-4 p-4 rounded-lg border bg-muted/30">
+                  <p className="text-sm font-medium flex items-center gap-2">
+                    <Star className="w-4 h-4 text-accent" />
+                    Influencer Details
+                  </p>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="primaryPlatform">Primary Platform</Label>
+                    <Select value={primaryPlatform} onValueChange={setPrimaryPlatform}>
+                      <SelectTrigger data-testid="select-primary-platform">
+                        <SelectValue placeholder="Select platform" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="instagram">Instagram</SelectItem>
+                        <SelectItem value="tiktok">TikTok</SelectItem>
+                        <SelectItem value="youtube">YouTube</SelectItem>
+                        <SelectItem value="blog">Blog</SelectItem>
+                        <SelectItem value="other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="platformHandle">Platform Handle</Label>
+                    <Input
+                      id="platformHandle"
+                      value={platformHandle}
+                      onChange={(e) => setPlatformHandle(e.target.value)}
+                      placeholder="@yourhandle"
+                      data-testid="input-platform-handle"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="followers">Followers</Label>
+                    <Input
+                      id="followers"
+                      type="number"
+                      value={followers}
+                      onChange={(e) => setFollowers(e.target.value)}
+                      placeholder="e.g., 24000"
+                      min="0"
+                      data-testid="input-followers"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="contentNiche">Content Niche</Label>
+                    <Input
+                      id="contentNiche"
+                      value={contentNiche}
+                      onChange={(e) => setContentNiche(e.target.value)}
+                      placeholder="e.g., Food, Fitness, Tech"
+                      data-testid="input-content-niche"
+                    />
+                  </div>
+                </div>
+              )}
+
+              <div className="space-y-4 p-4 rounded-lg border bg-muted/30">
+                <p className="text-sm font-medium flex items-center gap-2">
+                  <Globe className="w-4 h-4 text-accent" />
+                  Social Links
+                </p>
+
+                <div className="space-y-2">
+                  <Label htmlFor="instagramUrl" className="flex items-center gap-1.5">
+                    <SiInstagram className="w-3.5 h-3.5" />
+                    Instagram
+                  </Label>
+                  <Input
+                    id="instagramUrl"
+                    value={instagramUrl}
+                    onChange={(e) => setInstagramUrl(e.target.value)}
+                    placeholder="https://instagram.com/yourhandle"
+                    data-testid="input-instagram-url"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="tiktokUrl" className="flex items-center gap-1.5">
+                    <SiTiktok className="w-3.5 h-3.5" />
+                    TikTok
+                  </Label>
+                  <Input
+                    id="tiktokUrl"
+                    value={tiktokUrl}
+                    onChange={(e) => setTiktokUrl(e.target.value)}
+                    placeholder="https://tiktok.com/@yourhandle"
+                    data-testid="input-tiktok-url"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="youtubeUrl" className="flex items-center gap-1.5">
+                    <SiYoutube className="w-3.5 h-3.5" />
+                    YouTube
+                  </Label>
+                  <Input
+                    id="youtubeUrl"
+                    value={youtubeUrl}
+                    onChange={(e) => setYoutubeUrl(e.target.value)}
+                    placeholder="https://youtube.com/@yourchannel"
+                    data-testid="input-youtube-url"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="websiteUrl" className="flex items-center gap-1.5">
+                    <Globe className="w-3.5 h-3.5" />
+                    Website
+                  </Label>
+                  <Input
+                    id="websiteUrl"
+                    value={websiteUrl}
+                    onChange={(e) => setWebsiteUrl(e.target.value)}
+                    placeholder="https://yourwebsite.com"
+                    data-testid="input-website-url"
+                  />
+                </div>
+              </div>
+
               <Button type="submit" disabled={profileMutation.isPending} data-testid="button-save-profile">
                 {profileMutation.isPending ? (
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -271,6 +464,51 @@ export default function AccountPage() {
             </form>
           </CardContent>
         </Card>
+
+        {nonZeroFavors.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-lg">
+                <HandshakeIcon className="w-5 h-5 text-accent" />
+                Favor Ledger
+              </CardTitle>
+              <CardDescription>Track favor balances with people you've bartered with</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {nonZeroFavors.map((favor) => (
+                <div
+                  key={favor.userId}
+                  className="flex items-center justify-between p-3 rounded-md bg-muted/50"
+                  data-testid={`favor-balance-${favor.userId}`}
+                >
+                  <span className="text-sm font-medium">{favor.userName}</span>
+                  <div className="flex items-center gap-1.5">
+                    {favor.balance > 0 ? (
+                      <>
+                        <ArrowUpRight className="w-4 h-4 text-green-600 dark:text-green-400" />
+                        <span className="text-sm font-medium text-green-700 dark:text-green-400">
+                          +{favor.balance} (they owe you)
+                        </span>
+                      </>
+                    ) : favor.balance < 0 ? (
+                      <>
+                        <ArrowDownRight className="w-4 h-4 text-orange-600 dark:text-orange-400" />
+                        <span className="text-sm font-medium text-orange-700 dark:text-orange-400">
+                          {favor.balance} (you owe them)
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <Minus className="w-4 h-4 text-muted-foreground" />
+                        <span className="text-sm text-muted-foreground">Balanced</span>
+                      </>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        )}
 
         <Card>
           <CardHeader>

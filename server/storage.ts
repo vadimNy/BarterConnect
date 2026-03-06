@@ -8,11 +8,13 @@ import {
   type Conversation,
   type Message,
   type UpdateProfile,
+  type FavorLedger,
   users,
   requests,
   interests,
   conversations,
   messages,
+  favorLedger,
 } from "@shared/schema";
 import { eq, and, ne, desc, sql, or, asc } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/node-postgres";
@@ -20,12 +22,20 @@ import pg from "pg";
 
 const pool = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
+  max: 10,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 10000,
+  allowExitOnIdle: false,
+});
+
+pool.on("error", (err) => {
+  console.error("Database pool error (non-fatal):", err.message);
 });
 
 export const db = drizzle(pool);
 
 export interface IStorage {
-  createUser(email: string, passwordHash: string, name: string, city: string, tosAccepted?: boolean): Promise<User>;
+  createUser(email: string, passwordHash: string, name: string, city: string, tosAccepted?: boolean, userType?: string): Promise<User>;
   getUserByEmail(email: string): Promise<User | undefined>;
   getUserById(id: number): Promise<User | undefined>;
   updateUserAvatar(id: number, avatarUrl: string): Promise<void>;
@@ -50,8 +60,11 @@ export interface IStorage {
   getOrCreateConversation(userAId: number, userBId: number, interestId?: number): Promise<Conversation>;
   getConversationsForUser(userId: number): Promise<any[]>;
   getConversationById(id: number): Promise<Conversation | undefined>;
-  getMessages(conversationId: number): Promise<any[]>;
+  getMessages(conversationId: number, currentUserId?: number): Promise<any[]>;
   createMessage(conversationId: number, senderId: number, body: string): Promise<Message>;
+  hasCompletedBarterWith(userId: number, otherUserId: number): Promise<boolean>;
+  getFavorBalances(userId: number): Promise<Array<{ userId: number; userName: string; balance: number }>>;
+  updateFavorBalance(userAId: number, userBId: number, delta: number): Promise<void>;
 }
 
 function extractKeywords(text: string): string[] {
@@ -81,7 +94,7 @@ function keywordOverlap(keywords1: string[], keywords2: string[]): string[] {
 }
 
 export class DatabaseStorage implements IStorage {
-  async createUser(email: string, passwordHash: string, name: string, city: string, tosAccepted?: boolean): Promise<User> {
+  async createUser(email: string, passwordHash: string, name: string, city: string, tosAccepted?: boolean, userType?: string): Promise<User> {
     const [user] = await db
       .insert(users)
       .values({
@@ -89,6 +102,7 @@ export class DatabaseStorage implements IStorage {
         passwordHash,
         name,
         city,
+        userType: userType || "individual",
         tosAcceptedAt: tosAccepted ? new Date() : null,
       })
       .returning();
@@ -114,6 +128,15 @@ export class DatabaseStorage implements IStorage {
     if (data.name !== undefined) updateData.name = data.name;
     if (data.city !== undefined) updateData.city = data.city;
     if (data.bio !== undefined) updateData.bio = data.bio;
+    if (data.userType !== undefined) updateData.userType = data.userType;
+    if (data.primaryPlatform !== undefined) updateData.primaryPlatform = data.primaryPlatform || null;
+    if (data.platformHandle !== undefined) updateData.platformHandle = data.platformHandle || null;
+    if (data.followers !== undefined) updateData.followers = data.followers;
+    if (data.contentNiche !== undefined) updateData.contentNiche = data.contentNiche || null;
+    if (data.instagramUrl !== undefined) updateData.instagramUrl = data.instagramUrl || null;
+    if (data.tiktokUrl !== undefined) updateData.tiktokUrl = data.tiktokUrl || null;
+    if (data.youtubeUrl !== undefined) updateData.youtubeUrl = data.youtubeUrl || null;
+    if (data.websiteUrl !== undefined) updateData.websiteUrl = data.websiteUrl || null;
     if (data.notifyMatches !== undefined) updateData.notifyMatches = data.notifyMatches;
     if (data.notifyInterests !== undefined) updateData.notifyInterests = data.notifyInterests;
     if (data.notifyMessages !== undefined) updateData.notifyMessages = data.notifyMessages;
@@ -196,13 +219,13 @@ export class DatabaseStorage implements IStorage {
       .where(eq(requests.id, id));
   }
 
-  async getMatchesForUser(userId: number): Promise<any[]> {
+  async getMatchesForUser(userId: number): Promise<any> {
     const myOpenRequests = await db
       .select()
       .from(requests)
       .where(and(eq(requests.userId, userId), eq(requests.status, "open")));
 
-    if (myOpenRequests.length === 0) return [];
+    if (myOpenRequests.length === 0) return { perfectMatches: [], offersWhatINeed: [], needsWhatIOffer: [] };
 
     const allOtherOpenRequests = await db
       .select({
@@ -216,6 +239,7 @@ export class DatabaseStorage implements IStorage {
         createdAt: requests.createdAt,
         userName: users.name,
         userAvatarUrl: users.avatarUrl,
+        userCompletedBarters: users.completedBarters,
       })
       .from(requests)
       .innerJoin(users, eq(requests.userId, users.id))
@@ -226,96 +250,188 @@ export class DatabaseStorage implements IStorage {
         )
       );
 
-    const allMatches: any[] = [];
-    const seenPairs = new Set<string>();
+    const perfectMatches: any[] = [];
+    const offersWhatINeed: any[] = [];
+    const needsWhatIOffer: any[] = [];
+    const seenPerfect = new Set<string>();
+    const seenOffers = new Set<string>();
+    const seenNeeds = new Set<string>();
 
     for (const myReq of myOpenRequests) {
       for (const otherReq of allOtherOpenRequests) {
-        const pairKey = `${myReq.id}-${otherReq.id}`;
-        if (seenPairs.has(pairKey)) continue;
+        const isExactOffer = myReq.offerSkill.toLowerCase() === otherReq.needSkill.toLowerCase();
+        const isExactNeed = myReq.needSkill.toLowerCase() === otherReq.offerSkill.toLowerCase();
+        const isPerfect = isExactOffer && isExactNeed;
 
-        const isExactMatch =
-          myReq.offerSkill.toLowerCase() === otherReq.needSkill.toLowerCase() &&
-          myReq.needSkill.toLowerCase() === otherReq.offerSkill.toLowerCase();
+        const baseMatch = {
+          myRequest: {
+            id: myReq.id,
+            offerSkill: myReq.offerSkill,
+            needSkill: myReq.needSkill,
+            city: myReq.city,
+            isRemote: myReq.isRemote,
+          },
+          matchedRequest: {
+            id: otherReq.id,
+            offerSkill: otherReq.offerSkill,
+            needSkill: otherReq.needSkill,
+            city: otherReq.city,
+            isRemote: otherReq.isRemote,
+            description: otherReq.description,
+            userName: otherReq.userName,
+            userAvatarUrl: otherReq.userAvatarUrl,
+            completedBarters: otherReq.userCompletedBarters,
+          },
+          sameCity: myReq.city.toLowerCase() === otherReq.city.toLowerCase(),
+        };
 
-        let matchType: "exact" | "keyword" | null = null;
-        let matchingKeywords: string[] = [];
-
-        if (isExactMatch) {
-          matchType = "exact";
-        } else {
-          const myOfferKeywords = extractKeywords(
-            `${myReq.offerSkill} ${myReq.description || ""}`
-          );
-          const myNeedKeywords = extractKeywords(
-            `${myReq.needSkill} ${myReq.description || ""}`
-          );
-          const theirOfferKeywords = extractKeywords(
-            `${otherReq.offerSkill} ${otherReq.description || ""}`
-          );
-          const theirNeedKeywords = extractKeywords(
-            `${otherReq.needSkill} ${otherReq.description || ""}`
-          );
-
-          const offerToNeedOverlap = keywordOverlap(myOfferKeywords, theirNeedKeywords);
-          const needToOfferOverlap = keywordOverlap(myNeedKeywords, theirOfferKeywords);
-
-          if (offerToNeedOverlap.length > 0 && needToOfferOverlap.length > 0) {
-            matchType = "keyword";
-            matchingKeywords = Array.from(new Set([...offerToNeedOverlap, ...needToOfferOverlap]));
-          }
-        }
-
-        if (matchType) {
-          seenPairs.add(pairKey);
-
-          const existingInterest = await db
-            .select()
-            .from(interests)
-            .where(
-              and(
-                eq(interests.requesterUserId, userId),
-                eq(interests.requestId, myReq.id),
-                eq(interests.targetRequestId, otherReq.id)
-              )
+        if (isPerfect) {
+          const key = `${myReq.id}-${otherReq.id}`;
+          if (!seenPerfect.has(key)) {
+            seenPerfect.add(key);
+            const existingInterest = await db.select().from(interests).where(
+              and(eq(interests.requesterUserId, userId), eq(interests.requestId, myReq.id), eq(interests.targetRequestId, otherReq.id))
             );
-
-          allMatches.push({
-            myRequest: {
-              id: myReq.id,
-              offerSkill: myReq.offerSkill,
-              needSkill: myReq.needSkill,
-              city: myReq.city,
-              isRemote: myReq.isRemote,
-            },
-            matchedRequest: {
-              id: otherReq.id,
-              offerSkill: otherReq.offerSkill,
-              needSkill: otherReq.needSkill,
-              city: otherReq.city,
-              isRemote: otherReq.isRemote,
-              description: otherReq.description,
-              userName: otherReq.userName,
-              userAvatarUrl: otherReq.userAvatarUrl,
-            },
-            matchType,
-            matchingKeywords,
-            alreadyInterested: existingInterest.length > 0,
-            sameCity: myReq.city.toLowerCase() === otherReq.city.toLowerCase(),
-          });
+            perfectMatches.push({ ...baseMatch, matchType: "exact", alreadyInterested: existingInterest.length > 0 });
+          }
+        } else {
+          if (isExactNeed) {
+            const key = `offer-${otherReq.id}`;
+            if (!seenOffers.has(key)) {
+              seenOffers.add(key);
+              const existingInterest = await db.select().from(interests).where(
+                and(eq(interests.requesterUserId, userId), eq(interests.requestId, myReq.id), eq(interests.targetRequestId, otherReq.id))
+              );
+              offersWhatINeed.push({ ...baseMatch, matchType: "partial_offer", alreadyInterested: existingInterest.length > 0 });
+            }
+          }
+          if (isExactOffer) {
+            const key = `need-${otherReq.id}`;
+            if (!seenNeeds.has(key)) {
+              seenNeeds.add(key);
+              const existingInterest = await db.select().from(interests).where(
+                and(eq(interests.requesterUserId, userId), eq(interests.requestId, myReq.id), eq(interests.targetRequestId, otherReq.id))
+              );
+              needsWhatIOffer.push({ ...baseMatch, matchType: "partial_need", alreadyInterested: existingInterest.length > 0 });
+            }
+          }
         }
       }
     }
 
-    allMatches.sort((a, b) => {
-      if (a.matchType === "exact" && b.matchType !== "exact") return -1;
-      if (a.matchType !== "exact" && b.matchType === "exact") return 1;
+    const sortMatches = (arr: any[]) => arr.sort((a, b) => {
       if (a.sameCity && !b.sameCity) return -1;
       if (!a.sameCity && b.sameCity) return 1;
+      if (a.matchedRequest.isRemote && !b.matchedRequest.isRemote) return -1;
+      if (!a.matchedRequest.isRemote && b.matchedRequest.isRemote) return 1;
       return 0;
     });
 
-    return allMatches;
+    sortMatches(perfectMatches);
+    sortMatches(offersWhatINeed);
+    sortMatches(needsWhatIOffer);
+
+    return { perfectMatches, offersWhatINeed, needsWhatIOffer };
+  }
+
+  async getSuggestedPeople(userId: number): Promise<any[]> {
+    const user = await this.getUserById(userId);
+    if (!user) return [];
+
+    const myOpenRequests = await db
+      .select()
+      .from(requests)
+      .where(and(eq(requests.userId, userId), eq(requests.status, "open")));
+
+    const allOtherUsers = await db
+      .select({
+        id: users.id,
+        name: users.name,
+        city: users.city,
+        avatarUrl: users.avatarUrl,
+        completedBarters: users.completedBarters,
+      })
+      .from(users)
+      .where(ne(users.id, userId));
+
+    const suggestions: any[] = [];
+
+    for (const otherUser of allOtherUsers) {
+      const otherRequests = await db
+        .select()
+        .from(requests)
+        .where(and(eq(requests.userId, otherUser.id), eq(requests.status, "open")));
+
+      if (otherRequests.length === 0) continue;
+
+      let relevanceScore = 0;
+      const offeredSkills = [...new Set(otherRequests.map(r => r.offerSkill))];
+      const neededSkills = [...new Set(otherRequests.map(r => r.needSkill))];
+
+      if (user.city.toLowerCase() === otherUser.city.toLowerCase()) relevanceScore += 2;
+      if (otherUser.completedBarters > 0) relevanceScore += 1;
+
+      for (const myReq of myOpenRequests) {
+        for (const otherReq of otherRequests) {
+          if (myReq.needSkill.toLowerCase() === otherReq.offerSkill.toLowerCase()) relevanceScore += 3;
+          if (myReq.offerSkill.toLowerCase() === otherReq.needSkill.toLowerCase()) relevanceScore += 3;
+        }
+      }
+
+      if (relevanceScore > 0) {
+        suggestions.push({
+          id: otherUser.id,
+          name: otherUser.name,
+          city: otherUser.city,
+          avatarUrl: otherUser.avatarUrl,
+          completedBarters: otherUser.completedBarters,
+          offeredSkills: offeredSkills.slice(0, 3),
+          neededSkills: neededSkills.slice(0, 3),
+          relevanceScore,
+          isRemote: otherRequests.some(r => r.isRemote),
+        });
+      }
+    }
+
+    suggestions.sort((a, b) => b.relevanceScore - a.relevanceScore);
+    return suggestions.slice(0, 10);
+  }
+
+  async markBarterComplete(interestId: number, userId: number): Promise<any> {
+    const [interest] = await db.select().from(interests).where(eq(interests.id, interestId));
+    if (!interest) throw new Error("Interest not found");
+    if (interest.status !== "accepted") throw new Error("Only accepted barters can be marked complete");
+
+    const myReq = await this.getRequestById(interest.requestId);
+    const targetReq = await this.getRequestById(interest.targetRequestId);
+    if (!myReq || !targetReq) throw new Error("Requests not found");
+
+    const isRequester = interest.requesterUserId === userId;
+    const isTarget = targetReq.userId === userId;
+    if (!isRequester && !isTarget) throw new Error("Unauthorized");
+
+    const updateData: Record<string, any> = {};
+    if (isRequester) updateData.completedByRequester = true;
+    if (isTarget) updateData.completedByTarget = true;
+
+    await db.update(interests).set(updateData).where(eq(interests.id, interestId));
+
+    const [updated] = await db.select().from(interests).where(eq(interests.id, interestId));
+
+    if (updated.completedByRequester && updated.completedByTarget) {
+      await db.update(users).set({ completedBarters: sql`${users.completedBarters} + 1` }).where(eq(users.id, interest.requesterUserId));
+      await db.update(users).set({ completedBarters: sql`${users.completedBarters} + 1` }).where(eq(users.id, targetReq.userId));
+    }
+
+    return updated;
+  }
+
+  async getOpenRequestsByUserId(userId: number): Promise<any[]> {
+    return db
+      .select()
+      .from(requests)
+      .where(and(eq(requests.userId, userId), eq(requests.status, "open")))
+      .orderBy(desc(requests.createdAt));
   }
 
   async createInterest(requesterUserId: number, requestId: number, targetRequestId: number): Promise<Interest> {
@@ -359,6 +475,8 @@ export class DatabaseStorage implements IStorage {
         requesterUserId: interests.requesterUserId,
         requestId: interests.requestId,
         targetRequestId: interests.targetRequestId,
+        completedByRequester: interests.completedByRequester,
+        completedByTarget: interests.completedByTarget,
         createdAt: interests.createdAt,
       })
       .from(interests)
@@ -387,10 +505,15 @@ export class DatabaseStorage implements IStorage {
           requesterName: requesterUser.name,
           requesterEmail: interest.status === "accepted" ? requesterUser.email : "",
           requesterAvatarUrl: requesterUser.avatarUrl,
+          requesterUserId: interest.requesterUserId,
+          targetUserId: targetReq.userId,
           myRequestOffer: targetReq.offerSkill,
           myRequestNeed: targetReq.needSkill,
           theirRequestOffer: myReq.offerSkill,
           theirRequestNeed: myReq.needSkill,
+          completedByRequester: interest.completedByRequester,
+          completedByTarget: interest.completedByTarget,
+          isRequester: false,
           createdAt: interest.createdAt,
           conversationId: null as number | null,
         });
@@ -411,10 +534,15 @@ export class DatabaseStorage implements IStorage {
           requesterName: targetOwner?.name || "Unknown",
           requesterEmail: interest.status === "accepted" ? (targetOwner?.email || "") : "",
           requesterAvatarUrl: targetOwner?.avatarUrl || null,
+          requesterUserId: interest.requesterUserId,
+          targetUserId: targetReq.userId,
           myRequestOffer: myReq.offerSkill,
           myRequestNeed: myReq.needSkill,
           theirRequestOffer: targetReq.offerSkill,
           theirRequestNeed: targetReq.needSkill,
+          completedByRequester: interest.completedByRequester,
+          completedByTarget: interest.completedByTarget,
+          isRequester: true,
           createdAt: interest.createdAt,
           conversationId: null as number | null,
         });
@@ -601,6 +729,89 @@ export class DatabaseStorage implements IStorage {
       .values({ conversationId, senderId, body })
       .returning();
     return msg;
+  }
+
+  async hasCompletedBarterWith(userId: number, otherUserId: number): Promise<boolean> {
+    const completedInterests = await db
+      .select({ id: interests.id })
+      .from(interests)
+      .innerJoin(requests, eq(interests.requestId, requests.id))
+      .where(
+        and(
+          eq(interests.completedByRequester, true),
+          eq(interests.completedByTarget, true),
+          or(
+            and(eq(interests.requesterUserId, userId)),
+            and(eq(interests.requesterUserId, otherUserId))
+          )
+        )
+      );
+
+    for (const ci of completedInterests) {
+      const [interest] = await db.select().from(interests).where(eq(interests.id, ci.id));
+      if (!interest) continue;
+      const targetReq = await this.getRequestById(interest.targetRequestId);
+      const myReq = await this.getRequestById(interest.requestId);
+      if (!targetReq || !myReq) continue;
+      const involvedUsers = [interest.requesterUserId, targetReq.userId];
+      if (involvedUsers.includes(userId) && involvedUsers.includes(otherUserId)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  async getFavorBalances(userId: number): Promise<Array<{ userId: number; userName: string; balance: number }>> {
+    const rows = await db
+      .select({
+        id: favorLedger.id,
+        userAId: favorLedger.userAId,
+        userBId: favorLedger.userBId,
+        balance: favorLedger.balance,
+      })
+      .from(favorLedger)
+      .where(or(eq(favorLedger.userAId, userId), eq(favorLedger.userBId, userId)));
+
+    const results: Array<{ userId: number; userName: string; balance: number }> = [];
+    for (const row of rows) {
+      const isA = row.userAId === userId;
+      const otherUserId = isA ? row.userBId : row.userAId;
+      const balanceFromPerspective = isA ? row.balance : -row.balance;
+      const otherUser = await this.getUserById(otherUserId);
+      results.push({
+        userId: otherUserId,
+        userName: otherUser?.name || "Unknown",
+        balance: balanceFromPerspective,
+      });
+    }
+    return results;
+  }
+
+  async updateFavorBalance(userAId: number, userBId: number, delta: number): Promise<void> {
+    const lowId = Math.min(userAId, userBId);
+    const highId = Math.max(userAId, userBId);
+    const adjustedDelta = userAId === lowId ? delta : -delta;
+
+    const existing = await db
+      .select()
+      .from(favorLedger)
+      .where(and(eq(favorLedger.userAId, lowId), eq(favorLedger.userBId, highId)));
+
+    if (existing.length > 0) {
+      await db
+        .update(favorLedger)
+        .set({
+          balance: existing[0].balance + adjustedDelta,
+          updatedAt: new Date(),
+        })
+        .where(eq(favorLedger.id, existing[0].id));
+    } else {
+      await db.insert(favorLedger).values({
+        userAId: lowId,
+        userBId: highId,
+        balance: adjustedDelta,
+      });
+    }
   }
 }
 
