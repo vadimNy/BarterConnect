@@ -12,8 +12,15 @@ export function serveStatic(app: Express) {
 
   app.use(express.static(distPath));
 
-  // fall through to index.html if the file doesn't exist
   app.use("/{*path}", (_req, res) => {
-    res.sendFile(path.resolve(distPath, "index.html"));
+    const indexPath = path.resolve(distPath, "index.html");
+
+    if (res.locals.ogTags) {
+      let html = fs.readFileSync(indexPath, "utf-8");
+      html = html.replace("</head>", `${res.locals.ogTags}\n  </head>`);
+      res.status(200).set({ "Content-Type": "text/html" }).end(html);
+    } else {
+      res.sendFile(indexPath);
+    }
   });
 }

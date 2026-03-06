@@ -230,6 +230,33 @@ export async function registerRoutes(
     res.json(matches);
   });
 
+  app.get("/api/suggestions", requireAuth, async (req, res) => {
+    try {
+      const suggestions = await storage.getSuggestedPeople(req.session.userId!);
+      res.json(suggestions);
+    } catch (err: any) {
+      res.status(500).json({ message: err.message });
+    }
+  });
+
+  app.post("/api/interests/:id/complete", requireAuth, async (req, res) => {
+    try {
+      const updated = await storage.markBarterComplete(parseInt(req.params.id as string), req.session.userId!);
+      res.json({ message: "Marked as complete", interest: updated });
+    } catch (err: any) {
+      res.status(400).json({ message: err.message });
+    }
+  });
+
+  app.get("/api/users/:id/requests", requireAuth, async (req, res) => {
+    try {
+      const reqs = await storage.getOpenRequestsByUserId(parseInt(req.params.id as string));
+      res.json(reqs);
+    } catch (err: any) {
+      res.status(500).json({ message: err.message });
+    }
+  });
+
   app.post("/api/interests", requireAuth, async (req, res) => {
     try {
       const parsed = insertInterestSchema.safeParse(req.body);
@@ -338,6 +365,38 @@ export async function registerRoutes(
       isRemote: request.isRemote,
       userName: request.userName,
     });
+  });
+
+  app.get("/r/:publicId", async (req, res, next) => {
+    try {
+      const request = await storage.getRequestByPublicId(req.params.publicId);
+      if (!request) {
+        return next();
+      }
+
+      const title = `${request.userName} wants to trade ${request.offerSkill} for ${request.needSkill} | BarterConnect`;
+      const description = request.description
+        ? request.description.substring(0, 160)
+        : `${request.userName} is offering ${request.offerSkill} in exchange for ${request.needSkill} on BarterConnect. ${request.isRemote ? "Available remotely." : `Located in ${request.city}.`}`;
+      const url = `${req.protocol}://${req.get("host")}/r/${req.params.publicId}`;
+
+      const ogTags = `
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="${title.replace(/"/g, "&quot;")}" />
+    <meta property="og:description" content="${description.replace(/"/g, "&quot;")}" />
+    <meta property="og:url" content="${url}" />
+    <meta property="og:site_name" content="BarterConnect" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="${title.replace(/"/g, "&quot;")}" />
+    <meta name="twitter:description" content="${description.replace(/"/g, "&quot;")}" />
+    <title>${title.replace(/</g, "&lt;")}</title>
+    <meta name="description" content="${description.replace(/"/g, "&quot;")}" />`;
+
+      res.locals.ogTags = ogTags;
+      next();
+    } catch {
+      next();
+    }
   });
 
   return httpServer;

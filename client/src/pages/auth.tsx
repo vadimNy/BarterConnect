@@ -133,7 +133,7 @@ export function SignupPage() {
     setLoading(true);
     try {
       await signup({ email, password, name, city, tosAccepted: true });
-      navigate("/app");
+      navigate("/onboarding");
     } catch (err: any) {
       toast({ title: "Signup failed", description: err.message || "Could not create account", variant: "destructive" });
     } finally {

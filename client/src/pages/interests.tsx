@@ -16,10 +16,13 @@ import {
   Mail,
   Clock,
   CheckCircle,
+  CheckCircle2,
   XCircle,
   Inbox,
   Send,
   MessageCircle,
+  Trophy,
+  Loader2,
 } from "lucide-react";
 
 type InterestData = {
@@ -32,9 +35,24 @@ type InterestData = {
   myRequestNeed: string;
   theirRequestOffer: string;
   theirRequestNeed: string;
+  completedByRequester: boolean;
+  completedByTarget: boolean;
+  isRequester: boolean;
   createdAt: string;
   conversationId: number | null;
 };
+
+function getCompletionStatus(interest: InterestData) {
+  const bothCompleted = interest.completedByRequester && interest.completedByTarget;
+  const iCompletedMySide = interest.isRequester
+    ? interest.completedByRequester
+    : interest.completedByTarget;
+  const theyCompletedTheirSide = interest.isRequester
+    ? interest.completedByTarget
+    : interest.completedByRequester;
+
+  return { bothCompleted, iCompletedMySide, theyCompletedTheirSide };
+}
 
 export default function InterestsPage() {
   const { data: interestData, isLoading } = useQuery<{
@@ -66,13 +84,82 @@ export default function InterestsPage() {
     },
   });
 
+  const completeMutation = useMutation({
+    mutationFn: async (id: number) => {
+      await apiRequest("POST", `/api/interests/${id}/complete`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/interests"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/user"] });
+      toast({ title: "Marked as completed!", description: "Waiting for the other party to confirm." });
+    },
+    onError: (err: Error) => {
+      toast({ title: "Error", description: err.message, variant: "destructive" });
+    },
+  });
+
   const incoming = interestData?.incoming || [];
   const outgoing = interestData?.outgoing || [];
 
-  const StatusBadge = ({ status }: { status: string }) => {
+  const StatusBadge = ({ status, interest }: { status: string; interest: InterestData }) => {
     if (status === "pending") return <Badge variant="secondary" className="text-xs"><Clock className="w-3 h-3 mr-1" />Pending</Badge>;
-    if (status === "accepted") return <Badge variant="secondary" className="text-xs bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"><CheckCircle className="w-3 h-3 mr-1" />Accepted</Badge>;
+    if (status === "accepted") {
+      const { bothCompleted } = getCompletionStatus(interest);
+      if (bothCompleted) {
+        return <Badge variant="secondary" className="text-xs bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400"><Trophy className="w-3 h-3 mr-1" />Completed</Badge>;
+      }
+      return <Badge variant="secondary" className="text-xs bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"><CheckCircle className="w-3 h-3 mr-1" />Accepted</Badge>;
+    }
     return <Badge variant="secondary" className="text-xs"><XCircle className="w-3 h-3 mr-1" />Rejected</Badge>;
+  };
+
+  const CompletionSection = ({ interest }: { interest: InterestData }) => {
+    if (interest.status !== "accepted") return null;
+
+    const { bothCompleted, iCompletedMySide, theyCompletedTheirSide } = getCompletionStatus(interest);
+
+    if (bothCompleted) {
+      return (
+        <div className="flex items-center gap-2 p-3 rounded-md bg-amber-50 dark:bg-amber-900/10 text-sm" data-testid={`status-completed-${interest.id}`}>
+          <Trophy className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
+          <span className="text-amber-800 dark:text-amber-300 font-medium">Barter completed! Both parties confirmed.</span>
+        </div>
+      );
+    }
+
+    if (iCompletedMySide) {
+      return (
+        <div className="flex items-center gap-2 p-3 rounded-md bg-muted/50 text-sm" data-testid={`status-waiting-${interest.id}`}>
+          <Clock className="w-4 h-4 text-muted-foreground shrink-0" />
+          <span className="text-muted-foreground">You marked this as completed. Waiting for {interest.requesterName} to confirm.</span>
+        </div>
+      );
+    }
+
+    return (
+      <div className="flex items-center gap-2 flex-wrap">
+        {theyCompletedTheirSide && (
+          <div className="flex items-center gap-2 p-3 rounded-md bg-green-50 dark:bg-green-900/10 text-sm flex-1" data-testid={`status-they-completed-${interest.id}`}>
+            <CheckCircle2 className="w-4 h-4 text-green-600 dark:text-green-400 shrink-0" />
+            <span className="text-green-800 dark:text-green-300">{interest.requesterName} marked this as completed. Confirm to finalize!</span>
+          </div>
+        )}
+        <Button
+          size="sm"
+          className="gap-1.5"
+          onClick={() => completeMutation.mutate(interest.id)}
+          disabled={completeMutation.isPending}
+          data-testid={`button-complete-${interest.id}`}
+        >
+          {completeMutation.isPending ? (
+            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+          ) : (
+            <Check className="w-3.5 h-3.5" />
+          )}
+          Mark as Completed
+        </Button>
+      </div>
+    );
   };
 
   const EmptyState = ({ type }: { type: "incoming" | "outgoing" }) => (
@@ -142,7 +229,7 @@ export default function InterestsPage() {
                         />
                         <span className="text-sm font-medium">{interest.requesterName}</span>
                       </div>
-                      <StatusBadge status={interest.status} />
+                      <StatusBadge status={interest.status} interest={interest} />
                     </div>
 
                     <div className="text-sm space-y-1">
@@ -183,6 +270,8 @@ export default function InterestsPage() {
                         )}
                       </div>
                     )}
+
+                    <CompletionSection interest={interest} />
 
                     {interest.status === "pending" && (
                       <div className="flex items-center gap-2">
@@ -237,7 +326,7 @@ export default function InterestsPage() {
                           To: {interest.requesterName}
                         </span>
                       </div>
-                      <StatusBadge status={interest.status} />
+                      <StatusBadge status={interest.status} interest={interest} />
                     </div>
 
                     <div className="text-sm space-y-1">
@@ -278,6 +367,8 @@ export default function InterestsPage() {
                         )}
                       </div>
                     )}
+
+                    <CompletionSection interest={interest} />
                   </CardContent>
                 </Card>
               ))

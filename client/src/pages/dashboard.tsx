@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/lib/auth";
+import { UserAvatar } from "@/components/user-avatar";
 import AppLayout from "@/components/app-layout";
 import {
   PlusCircle,
@@ -15,13 +16,30 @@ import {
   Wifi,
   List,
   MessageCircle,
+  Users,
+  CheckCircle2,
 } from "lucide-react";
 import type { Request } from "@shared/schema";
+
+interface SuggestedPerson {
+  id: number;
+  name: string;
+  city: string;
+  avatarUrl: string | null;
+  completedBarters: number;
+  offeredSkills: string[];
+  neededSkills: string[];
+  relevanceScore: number;
+  isRemote: boolean;
+}
 
 export default function DashboardPage() {
   const { user } = useAuth();
   const { data: myRequests, isLoading } = useQuery<Request[]>({
     queryKey: ["/api/requests"],
+  });
+  const { data: suggestions, isLoading: suggestionsLoading } = useQuery<SuggestedPerson[]>({
+    queryKey: ["/api/suggestions"],
   });
 
   const openRequests = myRequests?.filter((r) => r.status === "open") || [];
@@ -159,6 +177,104 @@ export default function DashboardPage() {
                         </div>
                       </div>
                     </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div>
+          <div className="flex items-center justify-between gap-4 mb-4 flex-wrap">
+            <h2 className="text-lg font-semibold flex items-center gap-2">
+              <Users className="w-5 h-5" />
+              People You Might Barter With
+            </h2>
+          </div>
+
+          {suggestionsLoading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {[1, 2, 3, 4].map((i) => (
+                <Skeleton key={i} className="h-40 w-full rounded-md" />
+              ))}
+            </div>
+          ) : !suggestions || suggestions.length === 0 ? (
+            <Card>
+              <CardContent className="flex flex-col items-center justify-center py-12 text-center">
+                <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center mb-4">
+                  <Users className="w-6 h-6 text-muted-foreground" />
+                </div>
+                <p className="font-medium mb-1" data-testid="text-no-suggestions">No suggestions yet</p>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Create barter requests to find people with matching skills!
+                </p>
+                <Link href="/requests/new">
+                  <Button size="sm" data-testid="button-create-for-suggestions">Create Request</Button>
+                </Link>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {suggestions.map((person) => (
+                <Card key={person.id} data-testid={`card-suggestion-${person.id}`}>
+                  <CardContent className="p-4 space-y-3">
+                    <div className="flex items-center gap-3">
+                      <UserAvatar
+                        name={person.name}
+                        avatarUrl={person.avatarUrl}
+                        className="h-10 w-10"
+                      />
+                      <div className="min-w-0 flex-1">
+                        <p className="font-medium text-sm truncate" data-testid={`text-suggestion-name-${person.id}`}>
+                          {person.name}
+                        </p>
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="text-xs text-muted-foreground flex items-center gap-1">
+                            {person.isRemote ? (
+                              <><Wifi className="w-3 h-3" /> Remote</>
+                            ) : (
+                              <><MapPin className="w-3 h-3" /> {person.city}</>
+                            )}
+                          </span>
+                          {person.completedBarters > 0 && (
+                            <span className="text-xs text-muted-foreground flex items-center gap-1" data-testid={`text-barters-count-${person.id}`}>
+                              <CheckCircle2 className="w-3 h-3" />
+                              {person.completedBarters} completed
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      {person.offeredSkills.length > 0 && (
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span className="text-xs text-muted-foreground shrink-0">Offers:</span>
+                          {person.offeredSkills.map((skill) => (
+                            <Badge key={skill} variant="secondary" className="text-xs">
+                              {skill}
+                            </Badge>
+                          ))}
+                        </div>
+                      )}
+                      {person.neededSkills.length > 0 && (
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span className="text-xs text-muted-foreground shrink-0">Needs:</span>
+                          {person.neededSkills.map((skill) => (
+                            <Badge key={skill} variant="outline" className="text-xs">
+                              {skill}
+                            </Badge>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    <Link href="/matches">
+                      <Button variant="outline" size="sm" className="w-full gap-1.5" data-testid={`button-view-matches-${person.id}`}>
+                        <Zap className="w-3.5 h-3.5" />
+                        View Matches
+                      </Button>
+                    </Link>
                   </CardContent>
                 </Card>
               ))}

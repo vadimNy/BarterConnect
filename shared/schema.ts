@@ -14,6 +14,7 @@ export const users = pgTable("users", {
   notifyMatches: boolean("notify_matches").default(true).notNull(),
   notifyInterests: boolean("notify_interests").default(true).notNull(),
   notifyMessages: boolean("notify_messages").default(true).notNull(),
+  completedBarters: integer("completed_barters").default(0).notNull(),
   tosAcceptedAt: timestamp("tos_accepted_at"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
@@ -37,6 +38,8 @@ export const interests = pgTable("interests", {
   requestId: integer("request_id").notNull().references(() => requests.id),
   targetRequestId: integer("target_request_id").notNull().references(() => requests.id),
   status: text("status").notNull().default("pending"),
+  completedByRequester: boolean("completed_by_requester").default(false).notNull(),
+  completedByTarget: boolean("completed_by_target").default(false).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
