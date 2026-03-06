@@ -193,6 +193,40 @@ BarterConnect is not responsible for:
 
 Users assume full responsibility for their interactions and transactions.`;
 
+export const communityGuidelinesContent = `BarterConnect exists to promote respectful, professional skill exchange. By using the Platform, you agree to the following standards:
+
+1. Accuracy & Honesty
+- Represent your skills truthfully
+- Do not misrepresent qualifications
+- Do not impersonate others
+
+2. Legal Compliance
+- Only offer services that are lawful in your jurisdiction
+- If a service requires a license, you are responsible for maintaining it
+- Do not use the Platform for illegal activity
+
+3. Professional Conduct
+- Communicate respectfully
+- Honor commitments
+- Do not harass, threaten, or discriminate
+
+4. Safety
+- Exercise caution when meeting in person
+- Meet in public spaces when possible
+- Do not request unsafe or inappropriate services
+
+5. Prohibited Content
+
+The following are strictly prohibited:
+- Fraudulent services
+- Illegal services
+- Hate speech or abusive conduct
+- Sexual services
+- Dangerous or violent services
+- Exploitative practices
+
+BarterConnect reserves the right to remove content or suspend accounts that violate these guidelines.`;
+
 export default function TermsPage() {
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -238,6 +272,14 @@ export default function TermsPage() {
         <p className="text-sm text-muted-foreground mb-6">Effective: March 2026</p>
         <div className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap text-sm leading-relaxed" data-testid="text-platform-role-disclaimer-content">
           {platformRoleDisclaimerContent}
+        </div>
+
+        <hr className="my-10 border-border" />
+
+        <h2 className="text-2xl font-bold mb-2" data-testid="text-community-guidelines-title">Reference: Community Guidelines</h2>
+        <p className="text-sm text-muted-foreground mb-6">Effective: March 2026</p>
+        <div className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap text-sm leading-relaxed" data-testid="text-community-guidelines-content">
+          {communityGuidelinesContent}
         </div>
       </div>
 
