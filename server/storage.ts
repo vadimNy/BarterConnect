@@ -8,11 +8,13 @@ import {
   type Conversation,
   type Message,
   type UpdateProfile,
+  type FavorLedger,
   users,
   requests,
   interests,
   conversations,
   messages,
+  favorLedger,
 } from "@shared/schema";
 import { eq, and, ne, desc, sql, or, asc } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/node-postgres";
@@ -33,7 +35,7 @@ pool.on("error", (err) => {
 export const db = drizzle(pool);
 
 export interface IStorage {
-  createUser(email: string, passwordHash: string, name: string, city: string, tosAccepted?: boolean): Promise<User>;
+  createUser(email: string, passwordHash: string, name: string, city: string, tosAccepted?: boolean, userType?: string): Promise<User>;
   getUserByEmail(email: string): Promise<User | undefined>;
   getUserById(id: number): Promise<User | undefined>;
   updateUserAvatar(id: number, avatarUrl: string): Promise<void>;
@@ -58,8 +60,11 @@ export interface IStorage {
   getOrCreateConversation(userAId: number, userBId: number, interestId?: number): Promise<Conversation>;
   getConversationsForUser(userId: number): Promise<any[]>;
   getConversationById(id: number): Promise<Conversation | undefined>;
-  getMessages(conversationId: number): Promise<any[]>;
+  getMessages(conversationId: number, currentUserId?: number): Promise<any[]>;
   createMessage(conversationId: number, senderId: number, body: string): Promise<Message>;
+  hasCompletedBarterWith(userId: number, otherUserId: number): Promise<boolean>;
+  getFavorBalances(userId: number): Promise<Array<{ userId: number; userName: string; balance: number }>>;
+  updateFavorBalance(userAId: number, userBId: number, delta: number): Promise<void>;
 }
 
 function extractKeywords(text: string): string[] {
@@ -89,7 +94,7 @@ function keywordOverlap(keywords1: string[], keywords2: string[]): string[] {
 }
 
 export class DatabaseStorage implements IStorage {
-  async createUser(email: string, passwordHash: string, name: string, city: string, tosAccepted?: boolean): Promise<User> {
+  async createUser(email: string, passwordHash: string, name: string, city: string, tosAccepted?: boolean, userType?: string): Promise<User> {
     const [user] = await db
       .insert(users)
       .values({
@@ -97,6 +102,7 @@ export class DatabaseStorage implements IStorage {
         passwordHash,
         name,
         city,
+        userType: userType || "individual",
         tosAcceptedAt: tosAccepted ? new Date() : null,
       })
       .returning();
@@ -122,6 +128,15 @@ export class DatabaseStorage implements IStorage {
     if (data.name !== undefined) updateData.name = data.name;
     if (data.city !== undefined) updateData.city = data.city;
     if (data.bio !== undefined) updateData.bio = data.bio;
+    if (data.userType !== undefined) updateData.userType = data.userType;
+    if (data.primaryPlatform !== undefined) updateData.primaryPlatform = data.primaryPlatform || null;
+    if (data.platformHandle !== undefined) updateData.platformHandle = data.platformHandle || null;
+    if (data.followers !== undefined) updateData.followers = data.followers;
+    if (data.contentNiche !== undefined) updateData.contentNiche = data.contentNiche || null;
+    if (data.instagramUrl !== undefined) updateData.instagramUrl = data.instagramUrl || null;
+    if (data.tiktokUrl !== undefined) updateData.tiktokUrl = data.tiktokUrl || null;
+    if (data.youtubeUrl !== undefined) updateData.youtubeUrl = data.youtubeUrl || null;
+    if (data.websiteUrl !== undefined) updateData.websiteUrl = data.websiteUrl || null;
     if (data.notifyMatches !== undefined) updateData.notifyMatches = data.notifyMatches;
     if (data.notifyInterests !== undefined) updateData.notifyInterests = data.notifyInterests;
     if (data.notifyMessages !== undefined) updateData.notifyMessages = data.notifyMessages;
@@ -490,6 +505,8 @@ export class DatabaseStorage implements IStorage {
           requesterName: requesterUser.name,
           requesterEmail: interest.status === "accepted" ? requesterUser.email : "",
           requesterAvatarUrl: requesterUser.avatarUrl,
+          requesterUserId: interest.requesterUserId,
+          targetUserId: targetReq.userId,
           myRequestOffer: targetReq.offerSkill,
           myRequestNeed: targetReq.needSkill,
           theirRequestOffer: myReq.offerSkill,
@@ -517,6 +534,8 @@ export class DatabaseStorage implements IStorage {
           requesterName: targetOwner?.name || "Unknown",
           requesterEmail: interest.status === "accepted" ? (targetOwner?.email || "") : "",
           requesterAvatarUrl: targetOwner?.avatarUrl || null,
+          requesterUserId: interest.requesterUserId,
+          targetUserId: targetReq.userId,
           myRequestOffer: myReq.offerSkill,
           myRequestNeed: myReq.needSkill,
           theirRequestOffer: targetReq.offerSkill,
@@ -710,6 +729,89 @@ export class DatabaseStorage implements IStorage {
       .values({ conversationId, senderId, body })
       .returning();
     return msg;
+  }
+
+  async hasCompletedBarterWith(userId: number, otherUserId: number): Promise<boolean> {
+    const completedInterests = await db
+      .select({ id: interests.id })
+      .from(interests)
+      .innerJoin(requests, eq(interests.requestId, requests.id))
+      .where(
+        and(
+          eq(interests.completedByRequester, true),
+          eq(interests.completedByTarget, true),
+          or(
+            and(eq(interests.requesterUserId, userId)),
+            and(eq(interests.requesterUserId, otherUserId))
+          )
+        )
+      );
+
+    for (const ci of completedInterests) {
+      const [interest] = await db.select().from(interests).where(eq(interests.id, ci.id));
+      if (!interest) continue;
+      const targetReq = await this.getRequestById(interest.targetRequestId);
+      const myReq = await this.getRequestById(interest.requestId);
+      if (!targetReq || !myReq) continue;
+      const involvedUsers = [interest.requesterUserId, targetReq.userId];
+      if (involvedUsers.includes(userId) && involvedUsers.includes(otherUserId)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  async getFavorBalances(userId: number): Promise<Array<{ userId: number; userName: string; balance: number }>> {
+    const rows = await db
+      .select({
+        id: favorLedger.id,
+        userAId: favorLedger.userAId,
+        userBId: favorLedger.userBId,
+        balance: favorLedger.balance,
+      })
+      .from(favorLedger)
+      .where(or(eq(favorLedger.userAId, userId), eq(favorLedger.userBId, userId)));
+
+    const results: Array<{ userId: number; userName: string; balance: number }> = [];
+    for (const row of rows) {
+      const isA = row.userAId === userId;
+      const otherUserId = isA ? row.userBId : row.userAId;
+      const balanceFromPerspective = isA ? row.balance : -row.balance;
+      const otherUser = await this.getUserById(otherUserId);
+      results.push({
+        userId: otherUserId,
+        userName: otherUser?.name || "Unknown",
+        balance: balanceFromPerspective,
+      });
+    }
+    return results;
+  }
+
+  async updateFavorBalance(userAId: number, userBId: number, delta: number): Promise<void> {
+    const lowId = Math.min(userAId, userBId);
+    const highId = Math.max(userAId, userBId);
+    const adjustedDelta = userAId === lowId ? delta : -delta;
+
+    const existing = await db
+      .select()
+      .from(favorLedger)
+      .where(and(eq(favorLedger.userAId, lowId), eq(favorLedger.userBId, highId)));
+
+    if (existing.length > 0) {
+      await db
+        .update(favorLedger)
+        .set({
+          balance: existing[0].balance + adjustedDelta,
+          updatedAt: new Date(),
+        })
+        .where(eq(favorLedger.id, existing[0].id));
+    } else {
+      await db.insert(favorLedger).values({
+        userAId: lowId,
+        userBId: highId,
+        balance: adjustedDelta,
+      });
+    }
   }
 }
 

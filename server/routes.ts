@@ -78,7 +78,7 @@ export async function registerRoutes(
         return res.status(400).json({ message: parsed.error.errors[0].message });
       }
 
-      const { email, password, name, city, tosAccepted } = parsed.data;
+      const { email, password, name, city, tosAccepted, userType } = parsed.data;
 
       if (!tosAccepted) {
         return res.status(400).json({ message: "You must accept the Terms of Service" });
@@ -90,7 +90,7 @@ export async function registerRoutes(
       }
 
       const passwordHash = await bcrypt.hash(password, 10);
-      const user = await storage.createUser(email, passwordHash, name, city, true);
+      const user = await storage.createUser(email, passwordHash, name, city, true, userType);
       req.session.userId = user.id;
 
       const { passwordHash: _, ...safeUser } = user;
@@ -303,6 +303,39 @@ export async function registerRoutes(
       res.json({ message: "Interest rejected" });
     } catch (err: any) {
       res.status(403).json({ message: err.message });
+    }
+  });
+
+  app.get("/api/favors", requireAuth, async (req, res) => {
+    try {
+      const balances = await storage.getFavorBalances(req.session.userId!);
+      res.json(balances);
+    } catch (err: any) {
+      res.status(500).json({ message: err.message });
+    }
+  });
+
+  app.post("/api/favors/record", requireAuth, async (req, res) => {
+    try {
+      const { otherUserId, direction } = req.body;
+      if (!otherUserId || !direction) {
+        return res.status(400).json({ message: "otherUserId and direction are required" });
+      }
+      if (!["balanced", "i_owe_them", "they_owe_me"].includes(direction)) {
+        return res.status(400).json({ message: "Invalid direction" });
+      }
+      const hasCompleted = await storage.hasCompletedBarterWith(req.session.userId!, otherUserId);
+      if (!hasCompleted) {
+        return res.status(403).json({ message: "You can only record favors with users you've completed a barter with" });
+      }
+      if (direction === "i_owe_them") {
+        await storage.updateFavorBalance(req.session.userId!, otherUserId, -1);
+      } else if (direction === "they_owe_me") {
+        await storage.updateFavorBalance(req.session.userId!, otherUserId, 1);
+      }
+      res.json({ message: "Favor recorded" });
+    } catch (err: any) {
+      res.status(500).json({ message: err.message });
     }
   });
 

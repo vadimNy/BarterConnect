@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { UserAvatar } from "@/components/user-avatar";
@@ -23,6 +25,10 @@ import {
   MessageCircle,
   Trophy,
   Loader2,
+  HandshakeIcon,
+  ArrowUpRight,
+  ArrowDownRight,
+  Equal,
 } from "lucide-react";
 
 type InterestData = {
@@ -31,6 +37,8 @@ type InterestData = {
   requesterName: string;
   requesterEmail: string;
   requesterAvatarUrl: string | null;
+  requesterUserId: number;
+  targetUserId: number;
   myRequestOffer: string;
   myRequestNeed: string;
   theirRequestOffer: string;
@@ -64,6 +72,11 @@ export default function InterestsPage() {
   const { toast } = useToast();
   const [, setLocation] = useLocation();
 
+  const [favorDialogOpen, setFavorDialogOpen] = useState(false);
+  const [pendingCompleteId, setPendingCompleteId] = useState<number | null>(null);
+  const [pendingOtherUserId, setPendingOtherUserId] = useState<number | null>(null);
+  const [pendingOtherUserName, setPendingOtherUserName] = useState("");
+
   const acceptMutation = useMutation({
     mutationFn: async (id: number) => {
       await apiRequest("POST", `/api/interests/${id}/accept`);
@@ -91,12 +104,48 @@ export default function InterestsPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/interests"] });
       queryClient.invalidateQueries({ queryKey: ["/api/user"] });
-      toast({ title: "Marked as completed!", description: "Waiting for the other party to confirm." });
     },
     onError: (err: Error) => {
       toast({ title: "Error", description: err.message, variant: "destructive" });
     },
   });
+
+  const favorMutation = useMutation({
+    mutationFn: async ({ otherUserId, direction }: { otherUserId: number; direction: string }) => {
+      await apiRequest("POST", "/api/favors/record", { otherUserId, direction });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/favors"] });
+    },
+  });
+
+  const handleMarkComplete = (interest: InterestData) => {
+    const otherUserId = interest.isRequester ? interest.targetUserId : interest.requesterUserId;
+    const { theyCompletedTheirSide } = getCompletionStatus(interest);
+    setPendingCompleteId(interest.id);
+    setPendingOtherUserId(otherUserId);
+    setPendingOtherUserName(interest.requesterName);
+    completeMutation.mutate(interest.id, {
+      onSuccess: () => {
+        if (theyCompletedTheirSide) {
+          setFavorDialogOpen(true);
+        } else {
+          toast({ title: "Marked as completed!", description: "Waiting for the other party to confirm." });
+        }
+      },
+    });
+  };
+
+  const handleFavorChoice = (direction: string) => {
+    if (pendingOtherUserId) {
+      favorMutation.mutate({ otherUserId: pendingOtherUserId, direction });
+    }
+    setFavorDialogOpen(false);
+    setPendingCompleteId(null);
+    setPendingOtherUserId(null);
+    setPendingOtherUserName("");
+    toast({ title: "Barter completed!", description: "Both parties confirmed. Favor recorded." });
+  };
 
   const incoming = interestData?.incoming || [];
   const outgoing = interestData?.outgoing || [];
@@ -147,7 +196,7 @@ export default function InterestsPage() {
         <Button
           size="sm"
           className="gap-1.5"
-          onClick={() => completeMutation.mutate(interest.id)}
+          onClick={() => handleMarkComplete(interest)}
           disabled={completeMutation.isPending}
           data-testid={`button-complete-${interest.id}`}
         >
@@ -376,6 +425,58 @@ export default function InterestsPage() {
           </TabsContent>
         </Tabs>
       </div>
+
+      <Dialog open={favorDialogOpen} onOpenChange={setFavorDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <HandshakeIcon className="w-5 h-5 text-accent" />
+              Favor Ledger
+            </DialogTitle>
+            <DialogDescription>
+              Was this barter balanced, or does someone owe a favor?
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3 py-2">
+            <Button
+              variant="outline"
+              className="w-full justify-start gap-3 h-auto py-3"
+              onClick={() => handleFavorChoice("balanced")}
+              data-testid="button-favor-balanced"
+            >
+              <Equal className="w-5 h-5 text-muted-foreground shrink-0" />
+              <div className="text-left">
+                <p className="font-medium text-sm">Balanced</p>
+                <p className="text-xs text-muted-foreground">Fair exchange, no favors owed</p>
+              </div>
+            </Button>
+            <Button
+              variant="outline"
+              className="w-full justify-start gap-3 h-auto py-3"
+              onClick={() => handleFavorChoice("i_owe_them")}
+              data-testid="button-favor-i-owe"
+            >
+              <ArrowDownRight className="w-5 h-5 text-orange-500 shrink-0" />
+              <div className="text-left">
+                <p className="font-medium text-sm">I owe {pendingOtherUserName} a favor</p>
+                <p className="text-xs text-muted-foreground">They did more for you this time</p>
+              </div>
+            </Button>
+            <Button
+              variant="outline"
+              className="w-full justify-start gap-3 h-auto py-3"
+              onClick={() => handleFavorChoice("they_owe_me")}
+              data-testid="button-favor-they-owe"
+            >
+              <ArrowUpRight className="w-5 h-5 text-green-500 shrink-0" />
+              <div className="text-left">
+                <p className="font-medium text-sm">{pendingOtherUserName} owes me a favor</p>
+                <p className="text-xs text-muted-foreground">You did more for them this time</p>
+              </div>
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </AppLayout>
   );
 }

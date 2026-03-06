@@ -11,6 +11,15 @@ export const users = pgTable("users", {
   city: text("city").notNull(),
   avatarUrl: text("avatar_url"),
   bio: text("bio"),
+  userType: text("user_type").notNull().default("individual"),
+  primaryPlatform: text("primary_platform"),
+  platformHandle: text("platform_handle"),
+  followers: integer("followers"),
+  contentNiche: text("content_niche"),
+  instagramUrl: text("instagram_url"),
+  tiktokUrl: text("tiktok_url"),
+  youtubeUrl: text("youtube_url"),
+  websiteUrl: text("website_url"),
   notifyMatches: boolean("notify_matches").default(true).notNull(),
   notifyInterests: boolean("notify_interests").default(true).notNull(),
   notifyMessages: boolean("notify_messages").default(true).notNull(),
@@ -60,6 +69,14 @@ export const messages = pgTable("messages", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+export const favorLedger = pgTable("favor_ledger", {
+  id: serial("id").primaryKey(),
+  userAId: integer("user_a_id").notNull().references(() => users.id),
+  userBId: integer("user_b_id").notNull().references(() => users.id),
+  balance: integer("balance").notNull().default(0),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
   createdAt: true,
@@ -72,6 +89,7 @@ export const signupSchema = z.object({
   password: z.string().min(8, "Password must be at least 8 characters"),
   name: z.string().min(1, "Display name is required"),
   city: z.string().min(1, "City is required"),
+  userType: z.enum(["individual", "professional", "influencer"]).default("individual"),
   tosAccepted: z.boolean().refine((val) => val === true, { message: "You must accept the Terms of Service" }),
 });
 
@@ -101,6 +119,15 @@ export const updateProfileSchema = z.object({
   name: z.string().min(1, "Name is required").optional(),
   city: z.string().min(1, "City is required").optional(),
   bio: z.string().max(500, "Bio must be 500 characters or less").optional().nullable(),
+  userType: z.enum(["individual", "professional", "influencer"]).optional(),
+  primaryPlatform: z.string().optional().nullable(),
+  platformHandle: z.string().optional().nullable(),
+  followers: z.number().min(0).optional().nullable(),
+  contentNiche: z.string().optional().nullable(),
+  instagramUrl: z.string().url().optional().nullable().or(z.literal("")),
+  tiktokUrl: z.string().url().optional().nullable().or(z.literal("")),
+  youtubeUrl: z.string().url().optional().nullable().or(z.literal("")),
+  websiteUrl: z.string().url().optional().nullable().or(z.literal("")),
   notifyMatches: z.boolean().optional(),
   notifyInterests: z.boolean().optional(),
   notifyMessages: z.boolean().optional(),
@@ -120,3 +147,4 @@ export type Interest = typeof interests.$inferSelect;
 export type InsertInterest = z.infer<typeof insertInterestSchema>;
 export type Conversation = typeof conversations.$inferSelect;
 export type Message = typeof messages.$inferSelect;
+export type FavorLedger = typeof favorLedger.$inferSelect;

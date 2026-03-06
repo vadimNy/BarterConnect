@@ -114,6 +114,7 @@ export function SignupPage() {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [city, setCity] = useState("");
+  const [userType, setUserType] = useState("individual");
   const [tosAccepted, setTosAccepted] = useState(false);
   const [loading, setLoading] = useState(false);
   const { signup } = useAuth();
@@ -132,7 +133,7 @@ export function SignupPage() {
     }
     setLoading(true);
     try {
-      await signup({ email, password, name, city, tosAccepted: true });
+      await signup({ email, password, name, city, userType, tosAccepted: true });
       navigate("/onboarding");
     } catch (err: any) {
       toast({ title: "Signup failed", description: err.message || "Could not create account", variant: "destructive" });
