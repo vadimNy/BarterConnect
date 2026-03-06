@@ -331,127 +331,129 @@ export default function AccountPage() {
               </div>
 
               {userType === "influencer" && (
-                <div className="space-y-4 p-4 rounded-lg border bg-muted/30">
-                  <p className="text-sm font-medium flex items-center gap-2">
-                    <Star className="w-4 h-4 text-accent" />
-                    Influencer Details
-                  </p>
+                <>
+                  <div className="space-y-4 p-4 rounded-lg border bg-muted/30">
+                    <p className="text-sm font-medium flex items-center gap-2">
+                      <Star className="w-4 h-4 text-accent" />
+                      Influencer Details
+                    </p>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="primaryPlatform">Primary Platform</Label>
-                    <Select value={primaryPlatform} onValueChange={setPrimaryPlatform}>
-                      <SelectTrigger data-testid="select-primary-platform">
-                        <SelectValue placeholder="Select platform" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="instagram">Instagram</SelectItem>
-                        <SelectItem value="tiktok">TikTok</SelectItem>
-                        <SelectItem value="youtube">YouTube</SelectItem>
-                        <SelectItem value="blog">Blog</SelectItem>
-                        <SelectItem value="other">Other</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <div className="space-y-2">
+                      <Label htmlFor="primaryPlatform">Primary Platform</Label>
+                      <Select value={primaryPlatform} onValueChange={setPrimaryPlatform}>
+                        <SelectTrigger data-testid="select-primary-platform">
+                          <SelectValue placeholder="Select platform" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="instagram">Instagram</SelectItem>
+                          <SelectItem value="tiktok">TikTok</SelectItem>
+                          <SelectItem value="youtube">YouTube</SelectItem>
+                          <SelectItem value="blog">Blog</SelectItem>
+                          <SelectItem value="other">Other</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="platformHandle">Platform Handle</Label>
+                      <Input
+                        id="platformHandle"
+                        value={platformHandle}
+                        onChange={(e) => setPlatformHandle(e.target.value)}
+                        placeholder="@yourhandle"
+                        data-testid="input-platform-handle"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="followers">Followers</Label>
+                      <Input
+                        id="followers"
+                        type="number"
+                        value={followers}
+                        onChange={(e) => setFollowers(e.target.value)}
+                        placeholder="e.g., 24000"
+                        min="0"
+                        data-testid="input-followers"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="contentNiche">Content Niche</Label>
+                      <Input
+                        id="contentNiche"
+                        value={contentNiche}
+                        onChange={(e) => setContentNiche(e.target.value)}
+                        placeholder="e.g., Food, Fitness, Tech"
+                        data-testid="input-content-niche"
+                      />
+                    </div>
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="platformHandle">Platform Handle</Label>
-                    <Input
-                      id="platformHandle"
-                      value={platformHandle}
-                      onChange={(e) => setPlatformHandle(e.target.value)}
-                      placeholder="@yourhandle"
-                      data-testid="input-platform-handle"
-                    />
-                  </div>
+                  <div className="space-y-4 p-4 rounded-lg border bg-muted/30">
+                    <p className="text-sm font-medium flex items-center gap-2">
+                      <Globe className="w-4 h-4 text-accent" />
+                      Social Links
+                    </p>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="followers">Followers</Label>
-                    <Input
-                      id="followers"
-                      type="number"
-                      value={followers}
-                      onChange={(e) => setFollowers(e.target.value)}
-                      placeholder="e.g., 24000"
-                      min="0"
-                      data-testid="input-followers"
-                    />
-                  </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="instagramUrl" className="flex items-center gap-1.5">
+                        <SiInstagram className="w-3.5 h-3.5" />
+                        Instagram
+                      </Label>
+                      <Input
+                        id="instagramUrl"
+                        value={instagramUrl}
+                        onChange={(e) => setInstagramUrl(e.target.value)}
+                        placeholder="https://instagram.com/yourhandle"
+                        data-testid="input-instagram-url"
+                      />
+                    </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="contentNiche">Content Niche</Label>
-                    <Input
-                      id="contentNiche"
-                      value={contentNiche}
-                      onChange={(e) => setContentNiche(e.target.value)}
-                      placeholder="e.g., Food, Fitness, Tech"
-                      data-testid="input-content-niche"
-                    />
+                    <div className="space-y-2">
+                      <Label htmlFor="tiktokUrl" className="flex items-center gap-1.5">
+                        <SiTiktok className="w-3.5 h-3.5" />
+                        TikTok
+                      </Label>
+                      <Input
+                        id="tiktokUrl"
+                        value={tiktokUrl}
+                        onChange={(e) => setTiktokUrl(e.target.value)}
+                        placeholder="https://tiktok.com/@yourhandle"
+                        data-testid="input-tiktok-url"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="youtubeUrl" className="flex items-center gap-1.5">
+                        <SiYoutube className="w-3.5 h-3.5" />
+                        YouTube
+                      </Label>
+                      <Input
+                        id="youtubeUrl"
+                        value={youtubeUrl}
+                        onChange={(e) => setYoutubeUrl(e.target.value)}
+                        placeholder="https://youtube.com/@yourchannel"
+                        data-testid="input-youtube-url"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="websiteUrl" className="flex items-center gap-1.5">
+                        <Globe className="w-3.5 h-3.5" />
+                        Website
+                      </Label>
+                      <Input
+                        id="websiteUrl"
+                        value={websiteUrl}
+                        onChange={(e) => setWebsiteUrl(e.target.value)}
+                        placeholder="https://yourwebsite.com"
+                        data-testid="input-website-url"
+                      />
+                    </div>
                   </div>
-                </div>
+                </>
               )}
-
-              <div className="space-y-4 p-4 rounded-lg border bg-muted/30">
-                <p className="text-sm font-medium flex items-center gap-2">
-                  <Globe className="w-4 h-4 text-accent" />
-                  Social Links
-                </p>
-
-                <div className="space-y-2">
-                  <Label htmlFor="instagramUrl" className="flex items-center gap-1.5">
-                    <SiInstagram className="w-3.5 h-3.5" />
-                    Instagram
-                  </Label>
-                  <Input
-                    id="instagramUrl"
-                    value={instagramUrl}
-                    onChange={(e) => setInstagramUrl(e.target.value)}
-                    placeholder="https://instagram.com/yourhandle"
-                    data-testid="input-instagram-url"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="tiktokUrl" className="flex items-center gap-1.5">
-                    <SiTiktok className="w-3.5 h-3.5" />
-                    TikTok
-                  </Label>
-                  <Input
-                    id="tiktokUrl"
-                    value={tiktokUrl}
-                    onChange={(e) => setTiktokUrl(e.target.value)}
-                    placeholder="https://tiktok.com/@yourhandle"
-                    data-testid="input-tiktok-url"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="youtubeUrl" className="flex items-center gap-1.5">
-                    <SiYoutube className="w-3.5 h-3.5" />
-                    YouTube
-                  </Label>
-                  <Input
-                    id="youtubeUrl"
-                    value={youtubeUrl}
-                    onChange={(e) => setYoutubeUrl(e.target.value)}
-                    placeholder="https://youtube.com/@yourchannel"
-                    data-testid="input-youtube-url"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="websiteUrl" className="flex items-center gap-1.5">
-                    <Globe className="w-3.5 h-3.5" />
-                    Website
-                  </Label>
-                  <Input
-                    id="websiteUrl"
-                    value={websiteUrl}
-                    onChange={(e) => setWebsiteUrl(e.target.value)}
-                    placeholder="https://yourwebsite.com"
-                    data-testid="input-website-url"
-                  />
-                </div>
-              </div>
 
               <Button type="submit" disabled={profileMutation.isPending} data-testid="button-save-profile">
                 {profileMutation.isPending ? (
