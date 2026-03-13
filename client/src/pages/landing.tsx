@@ -1,10 +1,9 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowRight, Users, Share2, Shield, Sparkles, Handshake, Repeat, Search, MessageCircle, Star, Globe, CheckCircle } from "lucide-react";
+import { ArrowRight, Share2, Sparkles, Handshake, Search, MessageCircle, Star, Globe, CheckCircle } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import logoPath from "@assets/BarterConnect_Logo_cropped.png";
-import iconPath from "@assets/BarterConnect_Icon_cropped.png";
 
 export default function LandingPage() {
   const { user } = useAuth();
