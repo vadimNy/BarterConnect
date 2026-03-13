@@ -31,7 +31,7 @@ export default function LandingPage() {
     {
       icon: MessageCircle,
       title: "Built-In Messaging",
-      desc: "Chat directly within BarterConnect. No need to share personal emails or phone numbers until you	're ready.",
+      desc: "Chat directly within BarterConnect. No need to share personal emails or phone numbers until you    're ready.",
     },
     {
       icon: Share2,
@@ -131,7 +131,7 @@ export default function LandingPage() {
             </div>
           </div>
           <div className="hidden lg:flex absolute right-10 top-1/2 -translate-y-1/2">
-            <img src={logoPath} alt="" className="w-80 opacity-20" />
+            <img src={logoPath} alt="" className="w-80 opacity-50 brightness-200" />
           </div>
         </div>
       </section>
