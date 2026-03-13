@@ -172,11 +172,8 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <div className="hidden lg:block absolute right-0 top-1/2 -translate-y-1/2">
-            <div className="relative">
-              <img src={logoPath} alt="" className="w-72 opacity-10 animate-float-slow" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#3d4a3c] to-transparent" />
-            </div>
+          <div className="hidden lg:block absolute right-6 top-1/2 -translate-y-1/2">
+            <img src={logoPath} alt="" className="w-72 opacity-30 animate-float-slow" />
           </div>
         </div>
 
