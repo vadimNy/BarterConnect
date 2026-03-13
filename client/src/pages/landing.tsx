@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowRight, Share2, Sparkles, Handshake, Search, MessageCircle, Star, Globe, CheckCircle } from "lucide-react";
 import { useAuth } from "@/lib/auth";
-import logoPath from "@assets/BarterConnect_Logo_cropped.png";
+import logoPath from "@assets/BarterConnect_Logo.svg";
 
 export default function LandingPage() {
   const { user } = useAuth();
