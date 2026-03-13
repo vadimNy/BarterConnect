@@ -124,58 +124,39 @@ export default function LandingPage() {
         </div>
       </header>
 
-      <section className="relative min-h-[100vh] flex items-center overflow-hidden bg-gradient-to-br from-[#869C84] via-[#748c72] to-[#5f7a5d]">
+      <section className="relative min-h-[100vh] flex items-center overflow-hidden bg-gradient-to-b from-[#869C84] to-[#6d8a6b]">
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-20 -left-20 w-96 h-96 bg-[#D99B42]/20 rounded-full blur-3xl animate-float-slow" />
-          <div className="absolute bottom-20 right-0 w-[500px] h-[500px] bg-[#F8E1BF]/15 rounded-full blur-3xl animate-float" />
-          <div className="absolute top-1/2 left-1/3 w-64 h-64 bg-[#3d4a3c]/20 rounded-full blur-3xl animate-float-slow" style={{ animationDelay: '2s' }} />
-          <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+          <div className="absolute top-10 right-10 w-[500px] h-[500px] bg-[#D99B42]/12 rounded-full blur-3xl animate-float-slow" />
+          <div className="absolute bottom-20 -left-20 w-96 h-96 bg-[#F8E1BF]/10 rounded-full blur-3xl animate-float" />
         </div>
 
-        <div className="relative max-w-6xl mx-auto px-6 pt-28 pb-20 w-full">
-          <div className="max-w-3xl">
-            <div className="animate-fade-up">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/12 text-white/90 text-sm font-medium mb-8 backdrop-blur-sm border border-white/12" data-testid="badge-platform">
-                <Sparkles className="w-4 h-4 text-[#D99B42]" />
-                <span>The skill-based networking platform</span>
-              </div>
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white mb-6 leading-[1.05]" data-testid="hero-heading">
-                Trade Skills,
-                <br />
-                <span className="bg-gradient-to-r from-[#D99B42] via-[#F8E1BF] to-[#D99B42] bg-clip-text text-transparent animate-shimmer">
-                  Not Cash.
-                </span>
-              </h1>
-            </div>
-            <div className="animate-fade-up stagger-2">
-              <p className="text-2xl md:text-3xl font-bold text-[#F8E1BF] mb-6" data-testid="hero-subheading">
-                It's all about networking.
-              </p>
-              <p className="text-lg text-white/65 max-w-xl mb-4 leading-relaxed">
-                We all wish we knew a plumber, a lawyer, a web designer, a photographer, a marketing expert...
-              </p>
-              <p className="text-lg text-white/65 max-w-xl mb-10 leading-relaxed">
-                <strong className="text-white">BarterConnect is exactly that.</strong> A community where people trade skills instead of dollars. You help someone with what you're great at, and they help you with what they're great at. Simple as that.
-              </p>
-            </div>
-            <div className="flex flex-col sm:flex-row gap-4 animate-fade-up stagger-4">
-              <Link href={user ? "/app" : "/signup"}>
-                <Button size="lg" className="bg-[#D99B42] text-white hover:bg-[#c48a35] font-semibold rounded-full px-8 py-6 text-lg gap-2 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300" data-testid="button-get-started">
-                  Get Started Free
-                  <ArrowRight className="w-5 h-5" />
-                </Button>
-              </Link>
-              <a href="#how-it-works">
-                <Button size="lg" variant="outline" className="border-white/25 text-white hover:bg-white/10 rounded-full px-8 py-6 text-lg hover:border-white/45 transition-all duration-300" data-testid="button-learn-more">
-                  How It Works
-                  <ChevronRight className="w-5 h-5" />
-                </Button>
-              </a>
-            </div>
+        <div className="relative max-w-5xl mx-auto px-6 pt-32 pb-24 w-full text-center">
+          <div className="animate-fade-up">
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white mb-4 leading-[1.08]" data-testid="hero-heading">
+              Trade Skills,{" "}
+              <span className="bg-gradient-to-r from-[#D99B42] via-[#F8E1BF] to-[#D99B42] bg-clip-text text-transparent animate-shimmer">
+                Not Cash.
+              </span>
+            </h1>
+            <p className="text-xl md:text-2xl text-white/90 mb-10 max-w-2xl mx-auto font-medium leading-relaxed" data-testid="hero-subheading">
+              The community where people trade skills instead of dollars.
+              <br className="hidden md:block" />
+              You help someone with what you're great at — they help you back.
+            </p>
           </div>
-
-          <div className="hidden lg:block absolute right-6 top-1/2 -translate-y-1/2">
-            <img src={logoPath} alt="" className="w-72 opacity-80 animate-float-slow" />
+          <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-up stagger-2">
+            <Link href={user ? "/app" : "/signup"}>
+              <Button size="lg" className="bg-[#D99B42] text-white hover:bg-[#c48a35] font-semibold rounded-full px-8 py-6 text-lg gap-2 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300" data-testid="button-get-started">
+                Get Started Free
+                <ArrowRight className="w-5 h-5" />
+              </Button>
+            </Link>
+            <a href="#how-it-works">
+              <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 rounded-full px-8 py-6 text-lg hover:border-white/50 transition-all duration-300" data-testid="button-learn-more">
+                How It Works
+                <ChevronRight className="w-5 h-5" />
+              </Button>
+            </a>
           </div>
         </div>
 
