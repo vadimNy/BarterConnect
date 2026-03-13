@@ -252,7 +252,7 @@ export default function LandingPage() {
                     <f.icon className="w-5 h-5" />
                   </div>
                   <h3 className="font-bold text-lg text-white mb-2 group-hover:text-[#F8E1BF] transition-colors duration-300">{f.title}</h3>
-                  <p className="text-sm text-white/55 leading-relaxed group-hover:text-white/75 transition-colors duration-300">{f.desc}</p>
+                  <p className="text-sm text-white/80 leading-relaxed group-hover:text-white/95 transition-colors duration-300">{f.desc}</p>
                 </div>
               </div>
             ))}
@@ -273,7 +273,7 @@ export default function LandingPage() {
             <br />
             <span className="bg-gradient-to-r from-[#D99B42] to-[#F8E1BF] bg-clip-text text-transparent">More Than You Think</span>
           </h2>
-          <p className="text-lg text-white/65 mb-4 max-w-2xl mx-auto">
+          <p className="text-lg text-white/85 mb-4 max-w-2xl mx-auto">
             Stop paying for services you could trade for. That freelance designer needs accounting help.
             That lawyer needs a new website. That photographer needs someone to manage their social media.
           </p>
