@@ -133,7 +133,7 @@ export default function LandingPage() {
             </div>
           </div>
           <div className="hidden lg:flex absolute right-10 top-1/2 -translate-y-1/2">
-            <img src={logoPath} alt="" className="w-80 opacity-50 brightness-200" />
+            <img src={logoPath} alt="" className="w-80 invert brightness-200 opacity-80" />
           </div>
         </div>
       </section>
