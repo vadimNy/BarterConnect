@@ -126,7 +126,7 @@ export default function LandingPage() {
         </div>
       </header>
 
-      <section className="relative min-h-[100vh] flex items-center overflow-hidden bg-gradient-to-br from-[#3d4a3c] via-[#4a5a48] to-[#3d4a3c] animate-gradient">
+      <section className="relative min-h-[100vh] flex items-center overflow-hidden bg-gradient-to-br from-[#3d4a3c] via-[#4a5a48] to-[#3d4a3c]">
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute top-20 -left-20 w-96 h-96 bg-[#D99B42]/15 rounded-full blur-3xl animate-float-slow" />
           <div className="absolute bottom-20 right-0 w-[500px] h-[500px] bg-[#869C84]/20 rounded-full blur-3xl animate-float" />
