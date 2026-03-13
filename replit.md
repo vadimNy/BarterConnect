@@ -7,6 +7,7 @@ A skills barter platform where users post what they can OFFER and what they NEED
 - **Stack**: React + Express + PostgreSQL + Drizzle ORM
 - **Auth**: bcrypt password hashing + express-session (cookie-based)
 - **File Storage**: Replit Object Storage for avatar uploads
+- **Design**: Earthy warm palette (#907169 mauve, #D99B42 gold, #F8E1BF cream, #B95755 terracotta, #869C84 sage, #D1D1A4 olive). Dark sage nav (#3d4a3c), gold CTAs, scroll-reveal animations, floating blobs, gradient text
 - **Domain**: barterconnect.app (custom domain via Namecheap)
 - **Signups**: Currently disabled (503 on POST /api/auth/signup); re-enable by removing the early return in server/routes.ts
 

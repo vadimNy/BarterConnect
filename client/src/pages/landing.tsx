@@ -1,42 +1,76 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Share2, Sparkles, Handshake, Search, MessageCircle, Star, Globe, CheckCircle, ChevronRight, Users, Zap } from "lucide-react";
+import { ArrowRight, Share2, Sparkles, Handshake, Search, MessageCircle, Star, Globe, CheckCircle, ChevronRight, Users, Zap, ArrowUpRight } from "lucide-react";
 import { useAuth } from "@/lib/auth";
+import { useEffect, useRef } from "react";
 import logoPath from "@assets/BarterConnect_Logo_new.svg";
+
+function useScrollReveal() {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const children = el.querySelectorAll('.reveal-item');
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate-fade-up');
+            entry.target.classList.remove('opacity-0');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+    );
+    children.forEach((child) => observer.observe(child));
+    return () => observer.disconnect();
+  }, []);
+  return ref;
+}
 
 export default function LandingPage() {
   const { user } = useAuth();
+  const revealRef1 = useScrollReveal();
+  const revealRef2 = useScrollReveal();
+  const revealRef3 = useScrollReveal();
 
   const features = [
     {
       icon: Globe,
       title: "Build Your Network, Your Way",
       desc: "Build real relationships with people whose talents complement yours. Your next go-to person is one barter away.",
+      color: "bg-[#869C84]",
     },
     {
       icon: Search,
       title: "Smart, Three-Tier Matching",
       desc: "Find perfect two-way matches, people who offer what you need, or people looking for exactly what you bring.",
+      color: "bg-[#D99B42]",
     },
     {
       icon: Handshake,
       title: "Trust-First Connections",
       desc: "Express interest, wait for mutual acceptance, and only then exchange contact info. Every connection starts with a handshake.",
+      color: "bg-[#907169]",
     },
     {
       icon: Star,
       title: "Reputation That Follows You",
       desc: "Every completed barter builds your profile. The more you exchange, the more trusted you become.",
+      color: "bg-[#B95755]",
     },
     {
       icon: MessageCircle,
       title: "Built-In Messaging",
-      desc: "Chat directly within BarterConnect. No need to share personal emails or phone numbers until you    're ready.",
+      desc: "Chat directly within BarterConnect. No need to share personal emails or phone numbers until you're ready.",
+      color: "bg-[#869C84]",
     },
     {
       icon: Share2,
       title: "Shareable Barter Links",
       desc: "Create a shareable link and post it on LinkedIn, Facebook, or anywhere. Let the right people come to you.",
+      color: "bg-[#D99B42]",
     },
   ];
 
@@ -62,16 +96,16 @@ export default function LandingPage() {
   ];
 
   return (
-    <div className="min-h-screen">
-      <header className="sticky top-0 z-50 bg-[hsl(165,30%,42%)]">
-        <div className="max-w-6xl mx-auto flex items-center justify-between gap-4 px-6 py-4">
+    <div className="min-h-screen overflow-x-hidden">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-[#3d4a3c]/90 backdrop-blur-xl border-b border-white/5">
+        <div className="max-w-6xl mx-auto flex items-center justify-between gap-4 px-6 py-3">
           <Link href="/" className="shrink-0">
-            <img src={logoPath} alt="BarterConnect" className="h-10" data-testid="header-logo" />
+            <img src={logoPath} alt="BarterConnect" className="h-9" data-testid="header-logo" />
           </Link>
           <div className="flex items-center gap-3">
             {user ? (
               <Link href="/app">
-                <Button className="bg-[#f3eddf] text-[hsl(165,30%,25%)] hover:bg-[#f3eddf]/90 font-semibold rounded-full px-6" data-testid="button-go-dashboard">
+                <Button className="bg-[#D99B42] text-white hover:bg-[#c48a35] font-semibold rounded-full px-6 shadow-md" data-testid="button-go-dashboard">
                   Dashboard
                   <ArrowRight className="w-4 h-4 ml-1" />
                 </Button>
@@ -79,10 +113,10 @@ export default function LandingPage() {
             ) : (
               <>
                 <Link href="/login">
-                  <Button variant="ghost" className="text-[#f3eddf] hover:bg-white/10 rounded-full" data-testid="button-login">Log in</Button>
+                  <Button variant="ghost" className="text-white/80 hover:text-white hover:bg-white/10 rounded-full" data-testid="button-login">Log in</Button>
                 </Link>
                 <Link href="/signup">
-                  <Button className="bg-[#f3eddf] text-[hsl(165,30%,25%)] hover:bg-[#f3eddf]/90 font-semibold rounded-full px-6" data-testid="button-signup">
+                  <Button className="bg-[#D99B42] text-white hover:bg-[#c48a35] font-semibold rounded-full px-6 shadow-md animate-pulse-glow" data-testid="button-signup">
                     Get Started
                   </Button>
                 </Link>
@@ -92,70 +126,84 @@ export default function LandingPage() {
         </div>
       </header>
 
-      <section className="relative bg-[hsl(165,30%,42%)] overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-white rounded-full blur-3xl" />
-          <div className="absolute bottom-10 right-20 w-96 h-96 bg-white rounded-full blur-3xl" />
+      <section className="relative min-h-[100vh] flex items-center overflow-hidden bg-gradient-to-br from-[#3d4a3c] via-[#4a5a48] to-[#3d4a3c] animate-gradient">
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-20 -left-20 w-96 h-96 bg-[#D99B42]/15 rounded-full blur-3xl animate-float-slow" />
+          <div className="absolute bottom-20 right-0 w-[500px] h-[500px] bg-[#869C84]/20 rounded-full blur-3xl animate-float" />
+          <div className="absolute top-1/2 left-1/3 w-64 h-64 bg-[#B95755]/10 rounded-full blur-3xl animate-float-slow" style={{ animationDelay: '2s' }} />
+          <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
         </div>
-        <div className="relative max-w-6xl mx-auto px-6 py-20 md:py-32 lg:py-40">
+
+        <div className="relative max-w-6xl mx-auto px-6 pt-28 pb-20 w-full">
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 text-[#f3eddf] text-sm font-medium mb-8 backdrop-blur-sm" data-testid="badge-platform">
-              <Sparkles className="w-4 h-4" />
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-[#D1D1A4] text-sm font-medium mb-8 backdrop-blur-sm border border-white/10 animate-fade-up" data-testid="badge-platform">
+              <Sparkles className="w-4 h-4 text-[#D99B42]" />
               <span>The skill-based networking platform</span>
             </div>
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-[#f3eddf] mb-6 leading-[1.1]" data-testid="hero-heading">
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white mb-6 leading-[1.05] animate-fade-up stagger-1" data-testid="hero-heading">
               Trade Skills,
               <br />
-              <span className="text-white">Not Cash.</span>
+              <span className="bg-gradient-to-r from-[#D99B42] via-[#F8E1BF] to-[#D99B42] bg-clip-text text-transparent animate-shimmer">
+                Not Cash.
+              </span>
             </h1>
-            <p className="text-2xl md:text-3xl font-bold text-white/90 mb-6" data-testid="hero-subheading">
+            <p className="text-2xl md:text-3xl font-bold text-[#D1D1A4] mb-6 animate-fade-up stagger-2" data-testid="hero-subheading">
               It's all about networking.
             </p>
-            <p className="text-lg text-[#f3eddf]/80 max-w-xl mb-4 leading-relaxed">
+            <p className="text-lg text-white/60 max-w-xl mb-4 leading-relaxed animate-fade-up stagger-3">
               We all wish we knew a plumber, a lawyer, a web designer, a photographer, a marketing expert...
             </p>
-            <p className="text-lg text-[#f3eddf]/80 max-w-xl mb-10 leading-relaxed">
-              <strong className="text-white">BarterConnect is exactly that.</strong> A community where people trade skills instead of dollars. You help someone with what you're great at, and they help you with what they're great at. Simple as that.
+            <p className="text-lg text-white/60 max-w-xl mb-10 leading-relaxed animate-fade-up stagger-4">
+              <strong className="text-white/90">BarterConnect is exactly that.</strong> A community where people trade skills instead of dollars. You help someone with what you're great at, and they help you with what they're great at. Simple as that.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col sm:flex-row gap-4 animate-fade-up stagger-5">
               <Link href={user ? "/app" : "/signup"}>
-                <Button size="lg" className="bg-[#f3eddf] text-[hsl(165,30%,25%)] hover:bg-white font-semibold rounded-full px-8 py-6 text-lg gap-2 shadow-lg" data-testid="button-get-started">
+                <Button size="lg" className="bg-[#D99B42] text-white hover:bg-[#c48a35] font-semibold rounded-full px-8 py-6 text-lg gap-2 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300" data-testid="button-get-started">
                   Get Started Free
                   <ArrowRight className="w-5 h-5" />
                 </Button>
               </Link>
               <a href="#how-it-works">
-                <Button size="lg" variant="outline" className="border-[#f3eddf]/30 text-[#f3eddf] hover:bg-white/10 rounded-full px-8 py-6 text-lg" data-testid="button-learn-more">
+                <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 rounded-full px-8 py-6 text-lg hover:border-white/40 transition-all duration-300" data-testid="button-learn-more">
                   How It Works
                   <ChevronRight className="w-5 h-5" />
                 </Button>
               </a>
             </div>
           </div>
-          <div className="hidden lg:flex absolute right-10 top-1/2 -translate-y-1/2">
-            <img src={logoPath} alt="" className="w-80 opacity-40" />
+
+          <div className="hidden lg:block absolute right-0 top-1/2 -translate-y-1/2">
+            <div className="relative">
+              <img src={logoPath} alt="" className="w-72 opacity-10 animate-float-slow" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#3d4a3c] to-transparent" />
+            </div>
           </div>
         </div>
+
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#F8E1BF] to-transparent" />
       </section>
 
-      <section id="how-it-works" className="bg-[#f3eddf]">
-        <div className="max-w-6xl mx-auto px-6 py-20 md:py-28">
+      <section id="how-it-works" className="bg-[#F8E1BF] relative">
+        <div className="max-w-6xl mx-auto px-6 py-24 md:py-32" ref={revealRef1}>
           <div className="text-center mb-16">
-            <p className="text-sm font-semibold tracking-widest uppercase text-[hsl(165,30%,42%)] mb-3">Simple Process</p>
-            <h2 className="text-3xl md:text-4xl font-bold text-[hsl(165,35%,20%)]" data-testid="text-how-it-works">How It Works</h2>
+            <p className="reveal-item opacity-0 text-sm font-bold tracking-[0.2em] uppercase text-[#D99B42] mb-4">Simple Process</p>
+            <h2 className="reveal-item opacity-0 stagger-1 text-3xl md:text-5xl font-bold text-[#3d4a3c]" data-testid="text-how-it-works">How It Works</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
-            {steps.map((step) => (
-              <div key={step.num} className="relative group">
-                <div className="bg-white rounded-2xl p-8 h-full border border-[hsl(165,15%,83%)] hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-[hsl(165,30%,42%)] text-[#f3eddf]">
-                      <step.icon className="w-6 h-6" />
+            {steps.map((step, i) => (
+              <div key={step.num} className={`reveal-item opacity-0 stagger-${i + 2}`}>
+                <div className="group relative bg-white rounded-3xl p-8 h-full border border-[#e8d5b8] hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 overflow-hidden">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-[#869C84]/10 to-transparent rounded-bl-full transition-all duration-500 group-hover:w-40 group-hover:h-40" />
+                  <div className="relative">
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-[#869C84] text-white shadow-lg group-hover:scale-110 transition-transform duration-300">
+                        <step.icon className="w-6 h-6" />
+                      </div>
+                      <span className="text-5xl font-black text-[#869C84]/15 group-hover:text-[#869C84]/25 transition-colors duration-300">{step.num}</span>
                     </div>
-                    <span className="text-4xl font-bold text-[hsl(165,30%,42%)]/20">{step.num}</span>
+                    <h3 className="font-bold text-xl text-[#3d4a3c] mb-3">{step.title}</h3>
+                    <p className="text-[#907169] leading-relaxed">{step.desc}</p>
                   </div>
-                  <h3 className="font-bold text-xl text-[hsl(165,35%,20%)] mb-3">{step.title}</h3>
-                  <p className="text-[hsl(165,15%,40%)] leading-relaxed">{step.desc}</p>
                 </div>
               </div>
             ))}
@@ -163,71 +211,82 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="bg-[hsl(165,30%,42%)]">
-        <div className="max-w-6xl mx-auto px-6 py-20 md:py-28">
+      <section className="bg-[#3d4a3c] relative overflow-hidden">
+        <div className="absolute inset-0">
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#869C84]/20 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-[#D99B42]/10 rounded-full blur-3xl" />
+        </div>
+        <div className="relative max-w-6xl mx-auto px-6 py-24 md:py-32" ref={revealRef2}>
           <div className="text-center mb-16">
-            <p className="text-sm font-semibold tracking-widest uppercase text-[#f3eddf]/70 mb-3">Why Us</p>
-            <h2 className="text-3xl md:text-4xl font-bold text-[#f3eddf]" data-testid="text-why-barterconnect">
+            <p className="reveal-item opacity-0 text-sm font-bold tracking-[0.2em] uppercase text-[#D99B42] mb-4">Why Us</p>
+            <h2 className="reveal-item opacity-0 stagger-1 text-3xl md:text-5xl font-bold text-white" data-testid="text-why-barterconnect">
               Why Choose BarterConnect?
             </h2>
-            <p className="text-[#f3eddf]/70 mt-4 text-lg max-w-2xl mx-auto">
+            <p className="reveal-item opacity-0 stagger-2 text-white/50 mt-4 text-lg max-w-2xl mx-auto">
               More than just a marketplace — it's the network you always wished you had
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {features.map((f) => (
-              <div key={f.title} className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/15 transition-all duration-300">
-                <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-[#f3eddf]/20 text-[#f3eddf] mb-5">
-                  <f.icon className="w-6 h-6" />
+            {features.map((f, i) => (
+              <div key={f.title} className={`reveal-item opacity-0 stagger-${i + 1} group`}>
+                <div className="relative bg-white/5 backdrop-blur-sm rounded-3xl p-7 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-500 hover:-translate-y-1 h-full">
+                  <div className={`flex items-center justify-center w-12 h-12 rounded-2xl ${f.color} text-white mb-5 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg`}>
+                    <f.icon className="w-5 h-5" />
+                  </div>
+                  <h3 className="font-bold text-lg text-white mb-2 group-hover:text-[#D99B42] transition-colors duration-300">{f.title}</h3>
+                  <p className="text-sm text-white/50 leading-relaxed group-hover:text-white/70 transition-colors duration-300">{f.desc}</p>
                 </div>
-                <h3 className="font-bold text-lg text-[#f3eddf] mb-2">{f.title}</h3>
-                <p className="text-sm text-[#f3eddf]/70 leading-relaxed">{f.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="bg-[#f3eddf]">
-        <div className="max-w-4xl mx-auto px-6 py-20 md:py-28 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[hsl(165,30%,42%)]/10 text-[hsl(165,30%,42%)] text-sm font-semibold mb-8">
+      <section className="bg-[#F8E1BF] relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#D99B42]/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
+        <div className="relative max-w-4xl mx-auto px-6 py-24 md:py-32 text-center" ref={revealRef3}>
+          <div className="reveal-item opacity-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#869C84]/10 text-[#869C84] text-sm font-bold mb-8 border border-[#869C84]/20">
             <CheckCircle className="w-4 h-4" />
             <span>Free Forever — No Hidden Fees</span>
           </div>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[hsl(165,35%,20%)] mb-6 leading-tight" data-testid="text-cta-heading">
+          <h2 className="reveal-item opacity-0 stagger-1 text-3xl md:text-4xl lg:text-5xl font-bold text-[#3d4a3c] mb-6 leading-tight" data-testid="text-cta-heading">
             Your Skills Are Worth
             <br />
-            <span className="text-[hsl(165,30%,42%)]">More Than You Think</span>
+            <span className="bg-gradient-to-r from-[#D99B42] to-[#B95755] bg-clip-text text-transparent">More Than You Think</span>
           </h2>
-          <p className="text-lg text-[hsl(165,15%,40%)] mb-4 max-w-2xl mx-auto">
+          <p className="reveal-item opacity-0 stagger-2 text-lg text-[#907169] mb-4 max-w-2xl mx-auto">
             Stop paying for services you could trade for. That freelance designer needs accounting help.
             That lawyer needs a new website. That photographer needs someone to manage their social media.
           </p>
-          <p className="text-lg text-[hsl(165,15%,40%)] mb-10 max-w-2xl mx-auto font-medium">
+          <p className="reveal-item opacity-0 stagger-3 text-lg text-[#907169] mb-10 max-w-2xl mx-auto font-medium">
             Everyone has something valuable to offer.
           </p>
-          <Link href={user ? "/app" : "/signup"}>
-            <Button size="lg" className="bg-[hsl(165,30%,42%)] text-[#f3eddf] hover:bg-[hsl(165,30%,37%)] font-semibold rounded-full px-10 py-6 text-lg gap-2 shadow-lg" data-testid="button-join-now">
-              Join the Community
-              <ArrowRight className="w-5 h-5" />
-            </Button>
-          </Link>
+          <div className="reveal-item opacity-0 stagger-4">
+            <Link href={user ? "/app" : "/signup"}>
+              <Button size="lg" className="bg-[#D99B42] text-white hover:bg-[#c48a35] font-semibold rounded-full px-10 py-6 text-lg gap-2 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 animate-pulse-glow" data-testid="button-join-now">
+                Join the Community
+                <ArrowUpRight className="w-5 h-5" />
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
 
-      <footer className="bg-[hsl(165,30%,25%)]">
-        <div className="max-w-6xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <Link href="/" className="shrink-0">
-            <img src={logoPath} alt="BarterConnect" className="w-36 opacity-80" data-testid="footer-logo" />
-          </Link>
-          <div className="flex items-center gap-6 text-sm text-[#f3eddf]/60">
-            <Link href="/terms" className="hover:text-[#f3eddf] transition-colors" data-testid="link-terms">
-              Terms
+      <footer className="bg-[#3d4a3c]">
+        <div className="max-w-6xl mx-auto px-6 py-10">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
+            <Link href="/" className="shrink-0">
+              <img src={logoPath} alt="BarterConnect" className="w-36 opacity-60 hover:opacity-100 transition-opacity duration-300" data-testid="footer-logo" />
             </Link>
-            <Link href="/privacy" className="hover:text-[#f3eddf] transition-colors" data-testid="link-privacy">
-              Privacy
-            </Link>
-            <span>Trade skills, not cash.</span>
+            <div className="flex items-center gap-8 text-sm text-white/40">
+              <Link href="/terms" className="hover:text-[#D99B42] transition-colors duration-300" data-testid="link-terms">
+                Terms
+              </Link>
+              <Link href="/privacy" className="hover:text-[#D99B42] transition-colors duration-300" data-testid="link-privacy">
+                Privacy
+              </Link>
+              <span className="text-white/25">Trade skills, not cash.</span>
+            </div>
           </div>
         </div>
       </footer>

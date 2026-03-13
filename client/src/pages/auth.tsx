@@ -7,7 +7,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useAuth } from "@/lib/auth";
-import { Loader2, ArrowLeft } from "lucide-react";
+import { Loader2, ArrowLeft, Sparkles } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { CityPicker } from "@/components/city-picker";
 import { tosContent, professionalDisclaimerContent, taxDisclaimerContent, platformRoleDisclaimerContent, communityGuidelinesContent } from "@/pages/terms";
@@ -39,32 +39,38 @@ export function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <header className="bg-[hsl(165,30%,42%)] px-4 py-3">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-[#3d4a3c] via-[#4a5a48] to-[#3d4a3c]">
+      <header className="px-4 py-4">
         <div className="max-w-5xl mx-auto flex items-center gap-4">
           <Link href="/">
-            <Button variant="ghost" size="icon" className="text-[#f3eddf] hover:bg-white/10" data-testid="button-back-home">
+            <Button variant="ghost" size="icon" className="text-white/70 hover:text-white hover:bg-white/10 rounded-full" data-testid="button-back-home">
               <ArrowLeft className="w-4 h-4" />
             </Button>
           </Link>
           <Link href="/">
-            <img src={logoPath} alt="BarterConnect" className="h-10 w-auto object-contain" />
+            <img src={logoPath} alt="BarterConnect" className="h-9 w-auto object-contain" />
           </Link>
         </div>
       </header>
 
-      <div className="flex-1 flex items-center justify-center px-4 py-8 bg-[#f7f3eb]">
-        <div className="w-full max-w-md">
-          <div className="bg-white rounded-2xl shadow-lg border border-[hsl(165,15%,85%)] overflow-hidden">
-            <div className="bg-[hsl(165,30%,42%)] px-8 py-8 text-center">
-              <img src={logoPath} alt="BarterConnect" className="w-20 h-auto mx-auto mb-4" />
-              <h1 className="text-2xl font-bold text-[#f3eddf]">Welcome back</h1>
-              <p className="text-[#f3eddf]/70 text-sm mt-1">Log in to your account</p>
+      <div className="flex-1 flex items-center justify-center px-4 py-8 relative">
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-20 -left-20 w-72 h-72 bg-[#D99B42]/10 rounded-full blur-3xl" />
+          <div className="absolute bottom-20 right-10 w-80 h-80 bg-[#869C84]/15 rounded-full blur-3xl" />
+        </div>
+        <div className="relative w-full max-w-md">
+          <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 overflow-hidden">
+            <div className="px-8 pt-10 pb-2 text-center">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[#869C84] text-white mb-5 shadow-lg">
+                <Sparkles className="w-7 h-7" />
+              </div>
+              <h1 className="text-2xl font-bold text-[#3d4a3c]">Welcome back</h1>
+              <p className="text-[#907169] text-sm mt-1">Log in to your account</p>
             </div>
             <div className="px-8 py-8">
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-[hsl(165,35%,20%)] font-medium">Email</Label>
+                  <Label htmlFor="email" className="text-[#3d4a3c] font-medium text-sm">Email</Label>
                   <Input
                     id="email"
                     type="email"
@@ -72,12 +78,12 @@ export function LoginPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="rounded-lg border-[hsl(165,15%,80%)] focus:border-[hsl(165,30%,42%)] focus:ring-[hsl(165,30%,42%)]"
+                    className="rounded-xl border-[#e8d5b8] bg-[#faf6f0] focus:border-[#869C84] focus:ring-[#869C84] h-12"
                     data-testid="input-email"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="password" className="text-[hsl(165,35%,20%)] font-medium">Password</Label>
+                  <Label htmlFor="password" className="text-[#3d4a3c] font-medium text-sm">Password</Label>
                   <Input
                     id="password"
                     type="password"
@@ -85,13 +91,13 @@ export function LoginPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="rounded-lg border-[hsl(165,15%,80%)] focus:border-[hsl(165,30%,42%)] focus:ring-[hsl(165,30%,42%)]"
+                    className="rounded-xl border-[#e8d5b8] bg-[#faf6f0] focus:border-[#869C84] focus:ring-[#869C84] h-12"
                     data-testid="input-password"
                   />
                 </div>
                 <Button
                   type="submit"
-                  className="w-full bg-[hsl(165,30%,42%)] hover:bg-[hsl(165,30%,37%)] text-[#f3eddf] font-semibold rounded-full py-5"
+                  className="w-full bg-[#869C84] hover:bg-[#748c72] text-white font-semibold rounded-full py-6 shadow-md hover:shadow-lg transition-all duration-200"
                   disabled={loading}
                   data-testid="button-submit-login"
                 >
@@ -99,9 +105,9 @@ export function LoginPage() {
                   Log in
                 </Button>
               </form>
-              <p className="text-sm text-[hsl(165,15%,45%)] text-center mt-6">
+              <p className="text-sm text-[#907169] text-center mt-6">
                 Don't have an account?{" "}
-                <Link href="/signup" className="text-[hsl(165,30%,42%)] hover:underline font-semibold" data-testid="link-signup">
+                <Link href="/signup" className="text-[#D99B42] hover:underline font-semibold" data-testid="link-signup">
                   Sign up
                 </Link>
               </p>
@@ -109,12 +115,6 @@ export function LoginPage() {
           </div>
         </div>
       </div>
-
-      <footer className="bg-[hsl(165,30%,25%)] py-4 px-4">
-        <div className="max-w-5xl mx-auto flex items-center">
-          <img src={logoPath} alt="BarterConnect" className="w-32 opacity-70" />
-        </div>
-      </footer>
     </div>
   );
 }
@@ -157,35 +157,41 @@ export function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <header className="bg-[hsl(165,30%,42%)] px-4 py-3">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-[#3d4a3c] via-[#4a5a48] to-[#3d4a3c]">
+      <header className="px-4 py-4">
         <div className="max-w-5xl mx-auto flex items-center gap-4">
           <Link href="/">
-            <Button variant="ghost" size="icon" className="text-[#f3eddf] hover:bg-white/10" data-testid="button-back-home">
+            <Button variant="ghost" size="icon" className="text-white/70 hover:text-white hover:bg-white/10 rounded-full" data-testid="button-back-home">
               <ArrowLeft className="w-4 h-4" />
             </Button>
           </Link>
           <Link href="/">
-            <img src={logoPath} alt="BarterConnect" className="h-10 w-auto object-contain" />
+            <img src={logoPath} alt="BarterConnect" className="h-9 w-auto object-contain" />
           </Link>
         </div>
       </header>
 
-      <div className="flex-1 flex items-center justify-center px-4 py-8 bg-[#f7f3eb]">
-        <div className="w-full max-w-md">
-          <div className="bg-white rounded-2xl shadow-lg border border-[hsl(165,15%,85%)] overflow-hidden">
-            <div className="bg-[hsl(165,30%,42%)] px-8 py-8 text-center">
-              <img src={logoPath} alt="BarterConnect" className="w-20 h-auto mx-auto mb-4" />
-              <h1 className="text-2xl font-bold text-[#f3eddf]">Coming Soon</h1>
-              <p className="text-[#f3eddf]/70 text-sm mt-1">We're putting the finishing touches on BarterConnect</p>
+      <div className="flex-1 flex items-center justify-center px-4 py-8 relative">
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-20 -left-20 w-72 h-72 bg-[#D99B42]/10 rounded-full blur-3xl" />
+          <div className="absolute bottom-20 right-10 w-80 h-80 bg-[#869C84]/15 rounded-full blur-3xl" />
+        </div>
+        <div className="relative w-full max-w-md">
+          <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 overflow-hidden">
+            <div className="px-8 pt-10 pb-2 text-center">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[#D99B42] text-white mb-5 shadow-lg">
+                <Sparkles className="w-7 h-7" />
+              </div>
+              <h1 className="text-2xl font-bold text-[#3d4a3c]">Coming Soon</h1>
+              <p className="text-[#907169] text-sm mt-1">We're putting the finishing touches on BarterConnect</p>
             </div>
             <div className="px-8 py-8 text-center space-y-4">
-              <p className="text-sm text-[hsl(165,15%,45%)]">
+              <p className="text-sm text-[#907169]">
                 Signups are not open yet. Check back soon — we're almost ready!
               </p>
-              <p className="text-sm text-[hsl(165,15%,45%)]">
+              <p className="text-sm text-[#907169]">
                 Already have an account?{" "}
-                <Link href="/login" className="text-[hsl(165,30%,42%)] hover:underline font-semibold" data-testid="link-login">
+                <Link href="/login" className="text-[#D99B42] hover:underline font-semibold" data-testid="link-login">
                   Log in here
                 </Link>
               </p>
@@ -193,12 +199,6 @@ export function SignupPage() {
           </div>
         </div>
       </div>
-
-      <footer className="bg-[hsl(165,30%,25%)] py-4 px-4">
-        <div className="max-w-5xl mx-auto flex items-center">
-          <img src={logoPath} alt="BarterConnect" className="w-32 opacity-70" />
-        </div>
-      </footer>
     </div>
   );
 }
