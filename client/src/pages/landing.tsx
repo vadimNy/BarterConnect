@@ -124,13 +124,13 @@ export default function LandingPage() {
         </div>
       </header>
 
-      <section className="relative min-h-[100vh] flex items-center overflow-hidden bg-[#F8E1BF]">
+      <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-[#F8E1BF]">
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute -top-40 -right-40 w-[700px] h-[700px] bg-[#869C84]/15 rounded-full blur-3xl" />
           <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#D99B42]/10 rounded-full blur-3xl" />
         </div>
 
-        <div className="relative max-w-6xl mx-auto px-6 pt-28 pb-20 w-full">
+        <div className="relative max-w-6xl mx-auto px-6 pt-28 pb-10 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             <div>
               <div className="animate-fade-up">
@@ -198,7 +198,6 @@ export default function LandingPage() {
           </div>
         </div>
 
-        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#F8E1BF] to-transparent" />
       </section>
 
       <section id="how-it-works" className="bg-[#F8E1BF] relative">
