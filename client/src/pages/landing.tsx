@@ -87,25 +87,25 @@ export default function LandingPage() {
 
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-accent/10" />
-        <div className="relative max-w-5xl mx-auto px-4 py-16 md:py-24 text-center">
-          <div className="flex justify-center mb-8">
+        <div className="relative max-w-5xl mx-auto px-4 py-20 md:py-32 text-center">
+          <div className="flex justify-center mb-12">
             <img src={logoPath} alt="BarterConnect" className="w-64 md:w-80 lg:w-96" data-testid="hero-logo" />
           </div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-8">
             <Sparkles className="w-3.5 h-3.5" />
             <span>The skill-based networking platform</span>
           </div>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-8">
             Trade Skills,{" "}
             <span className="text-accent">Not Cash.</span>
           </h1>
-          <p className="text-xl md:text-2xl font-semibold text-foreground max-w-3xl mx-auto mb-4">
+          <p className="text-2xl md:text-3xl lg:text-4xl font-bold text-primary max-w-3xl mx-auto mb-8">
             It's all about networking.
           </p>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-4">
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-6">
             We all wish we knew a plumber, a lawyer, a web designer, a photographer, a marketing expert...
           </p>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-12">
             <strong className="text-primary">BarterConnect is exactly that.</strong> A community where people trade skills instead of dollars. You help someone with what you're great at, and they help you with what they're great at. Simple as that.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
