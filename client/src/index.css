@@ -170,7 +170,7 @@
 }
 
 @keyframes fade-up {
-  from { opacity: 0; transform: translateY(24px); }
+  from { opacity: 0; transform: translateY(16px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
@@ -186,19 +186,23 @@
 
 .animate-float { animation: float 12s cubic-bezier(0.45, 0, 0.55, 1) infinite; }
 .animate-float-slow { animation: float-slow 16s cubic-bezier(0.45, 0, 0.55, 1) infinite; }
-.animate-fade-up { animation: fade-up 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.animate-fade-up { animation: fade-up 1.2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards; }
 .animate-shimmer {
   background-size: 200% auto;
   animation: shimmer 8s linear infinite;
 }
-.animate-pulse-glow { animation: pulse-glow 4s cubic-bezier(0.45, 0, 0.55, 1) infinite; }
+.stagger-2 { animation-delay: 0.3s; }
+.stagger-4 { animation-delay: 0.6s; }
 
-.stagger-1 { animation-delay: 0.1s; }
-.stagger-2 { animation-delay: 0.2s; }
-.stagger-3 { animation-delay: 0.3s; }
-.stagger-4 { animation-delay: 0.4s; }
-.stagger-5 { animation-delay: 0.5s; }
-.stagger-6 { animation-delay: 0.6s; }
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 1s ease, transform 1s ease;
+}
+.scroll-reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
 
 /**
  * Using the elevate system.

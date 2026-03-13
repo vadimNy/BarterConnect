@@ -10,20 +10,18 @@ function useScrollReveal() {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const children = el.querySelectorAll('.reveal-item');
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add('animate-fade-up');
-            entry.target.classList.remove('opacity-0');
+            entry.target.classList.add('revealed');
             observer.unobserve(entry.target);
           }
         });
       },
-      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+      { threshold: 0.15, rootMargin: '0px 0px -40px 0px' }
     );
-    children.forEach((child) => observer.observe(child));
+    observer.observe(el);
     return () => observer.disconnect();
   }, []);
   return ref;
@@ -136,27 +134,31 @@ export default function LandingPage() {
 
         <div className="relative max-w-6xl mx-auto px-6 pt-28 pb-20 w-full">
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-[#D1D1A4] text-sm font-medium mb-8 backdrop-blur-sm border border-white/10 animate-fade-up" data-testid="badge-platform">
-              <Sparkles className="w-4 h-4 text-[#D99B42]" />
-              <span>The skill-based networking platform</span>
+            <div className="animate-fade-up">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-[#D1D1A4] text-sm font-medium mb-8 backdrop-blur-sm border border-white/10" data-testid="badge-platform">
+                <Sparkles className="w-4 h-4 text-[#D99B42]" />
+                <span>The skill-based networking platform</span>
+              </div>
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white mb-6 leading-[1.05]" data-testid="hero-heading">
+                Trade Skills,
+                <br />
+                <span className="bg-gradient-to-r from-[#D99B42] via-[#F8E1BF] to-[#D99B42] bg-clip-text text-transparent animate-shimmer">
+                  Not Cash.
+                </span>
+              </h1>
             </div>
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white mb-6 leading-[1.05] animate-fade-up stagger-1" data-testid="hero-heading">
-              Trade Skills,
-              <br />
-              <span className="bg-gradient-to-r from-[#D99B42] via-[#F8E1BF] to-[#D99B42] bg-clip-text text-transparent animate-shimmer">
-                Not Cash.
-              </span>
-            </h1>
-            <p className="text-2xl md:text-3xl font-bold text-[#D1D1A4] mb-6 animate-fade-up stagger-2" data-testid="hero-subheading">
-              It's all about networking.
-            </p>
-            <p className="text-lg text-white/60 max-w-xl mb-4 leading-relaxed animate-fade-up stagger-3">
-              We all wish we knew a plumber, a lawyer, a web designer, a photographer, a marketing expert...
-            </p>
-            <p className="text-lg text-white/60 max-w-xl mb-10 leading-relaxed animate-fade-up stagger-4">
-              <strong className="text-white/90">BarterConnect is exactly that.</strong> A community where people trade skills instead of dollars. You help someone with what you're great at, and they help you with what they're great at. Simple as that.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 animate-fade-up stagger-5">
+            <div className="animate-fade-up stagger-2">
+              <p className="text-2xl md:text-3xl font-bold text-[#D1D1A4] mb-6" data-testid="hero-subheading">
+                It's all about networking.
+              </p>
+              <p className="text-lg text-white/60 max-w-xl mb-4 leading-relaxed">
+                We all wish we knew a plumber, a lawyer, a web designer, a photographer, a marketing expert...
+              </p>
+              <p className="text-lg text-white/60 max-w-xl mb-10 leading-relaxed">
+                <strong className="text-white/90">BarterConnect is exactly that.</strong> A community where people trade skills instead of dollars. You help someone with what you're great at, and they help you with what they're great at. Simple as that.
+              </p>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-4 animate-fade-up stagger-4">
               <Link href={user ? "/app" : "/signup"}>
                 <Button size="lg" className="bg-[#D99B42] text-white hover:bg-[#c48a35] font-semibold rounded-full px-8 py-6 text-lg gap-2 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300" data-testid="button-get-started">
                   Get Started Free
@@ -181,14 +183,14 @@ export default function LandingPage() {
       </section>
 
       <section id="how-it-works" className="bg-[#F8E1BF] relative">
-        <div className="max-w-6xl mx-auto px-6 py-24 md:py-32" ref={revealRef1}>
+        <div className="max-w-6xl mx-auto px-6 py-24 md:py-32 scroll-reveal" ref={revealRef1}>
           <div className="text-center mb-16">
-            <p className="reveal-item opacity-0 text-sm font-bold tracking-[0.2em] uppercase text-[#D99B42] mb-4">Simple Process</p>
-            <h2 className="reveal-item opacity-0 stagger-1 text-3xl md:text-5xl font-bold text-[#3d4a3c]" data-testid="text-how-it-works">How It Works</h2>
+            <p className="text-sm font-bold tracking-[0.2em] uppercase text-[#D99B42] mb-4">Simple Process</p>
+            <h2 className="text-3xl md:text-5xl font-bold text-[#3d4a3c]" data-testid="text-how-it-works">How It Works</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
-            {steps.map((step, i) => (
-              <div key={step.num} className={`reveal-item opacity-0 stagger-${i + 2}`}>
+            {steps.map((step) => (
+              <div key={step.num}>
                 <div className="group relative bg-white rounded-3xl p-8 h-full border border-[#e8d5b8] hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 overflow-hidden">
                   <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-[#869C84]/10 to-transparent rounded-bl-full transition-all duration-500 group-hover:w-40 group-hover:h-40" />
                   <div className="relative">
@@ -213,19 +215,19 @@ export default function LandingPage() {
           <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#869C84]/20 rounded-full blur-3xl" />
           <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-[#D99B42]/10 rounded-full blur-3xl" />
         </div>
-        <div className="relative max-w-6xl mx-auto px-6 py-24 md:py-32" ref={revealRef2}>
+        <div className="relative max-w-6xl mx-auto px-6 py-24 md:py-32 scroll-reveal" ref={revealRef2}>
           <div className="text-center mb-16">
-            <p className="reveal-item opacity-0 text-sm font-bold tracking-[0.2em] uppercase text-[#D99B42] mb-4">Why Us</p>
-            <h2 className="reveal-item opacity-0 stagger-1 text-3xl md:text-5xl font-bold text-white" data-testid="text-why-barterconnect">
+            <p className="text-sm font-bold tracking-[0.2em] uppercase text-[#D99B42] mb-4">Why Us</p>
+            <h2 className="text-3xl md:text-5xl font-bold text-white" data-testid="text-why-barterconnect">
               Why Choose BarterConnect?
             </h2>
-            <p className="reveal-item opacity-0 stagger-2 text-white/50 mt-4 text-lg max-w-2xl mx-auto">
+            <p className="text-white/50 mt-4 text-lg max-w-2xl mx-auto">
               More than just a marketplace — it's the network you always wished you had
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {features.map((f, i) => (
-              <div key={f.title} className={`reveal-item opacity-0 stagger-${i + 1} group`}>
+            {features.map((f) => (
+              <div key={f.title} className="group">
                 <div className="relative bg-white/5 backdrop-blur-sm rounded-3xl p-7 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-500 hover:-translate-y-1 h-full">
                   <div className={`flex items-center justify-center w-12 h-12 rounded-2xl ${f.color} text-white mb-5 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg`}>
                     <f.icon className="w-5 h-5" />
@@ -241,24 +243,24 @@ export default function LandingPage() {
 
       <section className="bg-[#F8E1BF] relative overflow-hidden">
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#D99B42]/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
-        <div className="relative max-w-4xl mx-auto px-6 py-24 md:py-32 text-center" ref={revealRef3}>
-          <div className="reveal-item opacity-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#869C84]/10 text-[#869C84] text-sm font-bold mb-8 border border-[#869C84]/20">
+        <div className="relative max-w-4xl mx-auto px-6 py-24 md:py-32 text-center scroll-reveal" ref={revealRef3}>
+          <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#869C84]/10 text-[#869C84] text-sm font-bold mb-8 border border-[#869C84]/20">
             <CheckCircle className="w-4 h-4" />
             <span>Free Forever — No Hidden Fees</span>
           </div>
-          <h2 className="reveal-item opacity-0 stagger-1 text-3xl md:text-4xl lg:text-5xl font-bold text-[#3d4a3c] mb-6 leading-tight" data-testid="text-cta-heading">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#3d4a3c] mb-6 leading-tight" data-testid="text-cta-heading">
             Your Skills Are Worth
             <br />
             <span className="bg-gradient-to-r from-[#D99B42] to-[#B95755] bg-clip-text text-transparent">More Than You Think</span>
           </h2>
-          <p className="reveal-item opacity-0 stagger-2 text-lg text-[#907169] mb-4 max-w-2xl mx-auto">
+          <p className="text-lg text-[#907169] mb-4 max-w-2xl mx-auto">
             Stop paying for services you could trade for. That freelance designer needs accounting help.
             That lawyer needs a new website. That photographer needs someone to manage their social media.
           </p>
-          <p className="reveal-item opacity-0 stagger-3 text-lg text-[#907169] mb-10 max-w-2xl mx-auto font-medium">
+          <p className="text-lg text-[#907169] mb-10 max-w-2xl mx-auto font-medium">
             Everyone has something valuable to offer.
           </p>
-          <div className="reveal-item opacity-0 stagger-4">
+          <div>
             <Link href={user ? "/app" : "/signup"}>
               <Button size="lg" className="bg-[#D99B42] text-white hover:bg-[#c48a35] font-semibold rounded-full px-10 py-6 text-lg gap-2 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300" data-testid="button-join-now">
                 Join the Community
