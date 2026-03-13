@@ -41,12 +41,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const hasUnread = conversations?.some(c => c.unreadCount > 0);
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <div className="min-h-screen bg-[#f7f3eb] flex flex-col">
+      <header className="sticky top-0 z-50 bg-[hsl(165,30%,42%)] shadow-md">
         <div className="max-w-5xl mx-auto flex items-center justify-between gap-4 px-4 py-3">
           <div className="flex items-center gap-2">
             <Link href="/app">
-              <img src={logoPath} alt="BarterConnect" className="h-12 w-auto object-contain" data-testid="app-header-logo" />
+              <img src={logoPath} alt="BarterConnect" className="h-10 w-auto object-contain" data-testid="app-header-logo" />
             </Link>
           </div>
 
@@ -56,15 +56,15 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               return (
                 <Link key={item.href} href={item.href}>
                   <Button
-                    variant={active ? "secondary" : "ghost"}
+                    variant="ghost"
                     size="sm"
-                    className="gap-1.5 relative"
+                    className={`gap-1.5 relative rounded-full text-[#f3eddf]/80 hover:bg-white/15 hover:text-white ${active ? "bg-white/20 text-white font-semibold" : ""}`}
                     data-testid={`nav-${item.label.toLowerCase().replace(/\s/g, "-")}`}
                   >
                     <item.icon className="w-4 h-4" />
                     {item.label}
                     {item.showBadge && hasUnread && (
-                      <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-accent animate-pulse" />
+                      <span className="absolute -top-1 -right-1 h-2.5 w-2.5 rounded-full bg-[#f3eddf] border-2 border-[hsl(165,30%,42%)] animate-pulse" />
                     )}
                   </Button>
                 </Link>
@@ -72,7 +72,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             })}
           </nav>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <button
               onClick={() => navigate("/account")}
               className="relative group cursor-pointer"
@@ -81,25 +81,25 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               <UserAvatar
                 name={user?.name || "?"}
                 avatarUrl={user?.avatarUrl}
-                className="h-8 w-8"
+                className="h-8 w-8 ring-2 ring-white/30"
               />
             </button>
             <Link href="/account">
-              <span className="text-sm text-muted-foreground hidden sm:inline hover:text-foreground transition-colors cursor-pointer">{user?.name}</span>
+              <span className="text-sm text-[#f3eddf]/80 hidden sm:inline hover:text-white transition-colors cursor-pointer">{user?.name}</span>
             </Link>
             <Button
               variant="ghost"
               size="icon"
               onClick={() => { logout(); }}
               data-testid="button-logout"
-              className="hidden md:flex"
+              className="hidden md:flex text-[#f3eddf]/70 hover:text-white hover:bg-white/10"
             >
               <LogOut className="w-4 h-4" />
             </Button>
             <Button
               variant="ghost"
               size="icon"
-              className="md:hidden"
+              className="md:hidden text-[#f3eddf] hover:bg-white/10"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               data-testid="button-mobile-menu"
             >
@@ -109,20 +109,20 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         </div>
 
         {mobileMenuOpen && (
-          <div className="md:hidden border-t bg-background px-4 py-3 space-y-1">
+          <div className="md:hidden border-t border-white/10 bg-[hsl(165,30%,38%)] px-4 py-3 space-y-1">
             {navItems.map((item) => {
               const active = location === item.href;
               return (
                 <Link key={item.href} href={item.href} onClick={() => setMobileMenuOpen(false)}>
                   <Button
-                    variant={active ? "secondary" : "ghost"}
-                    className="w-full justify-start gap-2 relative"
+                    variant="ghost"
+                    className={`w-full justify-start gap-2 relative rounded-lg text-[#f3eddf]/80 hover:bg-white/10 hover:text-white ${active ? "bg-white/15 text-white font-semibold" : ""}`}
                     data-testid={`mobile-nav-${item.label.toLowerCase().replace(/\s/g, "-")}`}
                   >
                     <item.icon className="w-4 h-4" />
                     {item.label}
                     {item.showBadge && hasUnread && (
-                      <span className="absolute top-2 right-4 h-2 w-2 rounded-full bg-accent animate-pulse" />
+                      <span className="absolute top-2 right-4 h-2.5 w-2.5 rounded-full bg-[#f3eddf] animate-pulse" />
                     )}
                   </Button>
                 </Link>
@@ -130,8 +130,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             })}
             <Link href="/account" onClick={() => setMobileMenuOpen(false)}>
               <Button
-                variant={location === "/account" ? "secondary" : "ghost"}
-                className="w-full justify-start gap-2"
+                variant="ghost"
+                className={`w-full justify-start gap-2 rounded-lg text-[#f3eddf]/80 hover:bg-white/10 hover:text-white ${location === "/account" ? "bg-white/15 text-white font-semibold" : ""}`}
                 data-testid="mobile-nav-account"
               >
                 <Settings className="w-4 h-4" />
@@ -140,7 +140,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             </Link>
             <Button
               variant="ghost"
-              className="w-full justify-start gap-2 text-destructive"
+              className="w-full justify-start gap-2 rounded-lg text-red-300 hover:bg-red-500/10 hover:text-red-200"
               onClick={() => { setMobileMenuOpen(false); logout(); }}
               data-testid="mobile-button-logout"
             >
@@ -157,9 +157,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         </div>
       </main>
 
-      <footer className="border-t py-4 px-4">
-        <div className="max-w-5xl mx-auto flex items-center justify-between text-sm text-muted-foreground">
-          <img src={logoPath} alt="BarterConnect" className="w-36" data-testid="app-footer-logo" />
+      <footer className="bg-[hsl(165,30%,25%)] py-4 px-4">
+        <div className="max-w-5xl mx-auto flex items-center justify-between text-sm text-[#f3eddf]/60">
+          <img src={logoPath} alt="BarterConnect" className="w-32 opacity-70" data-testid="app-footer-logo" />
           <span>Trade skills, not money.</span>
         </div>
       </footer>

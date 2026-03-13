@@ -1,7 +1,6 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { ArrowRight, Share2, Sparkles, Handshake, Search, MessageCircle, Star, Globe, CheckCircle } from "lucide-react";
+import { ArrowRight, Share2, Sparkles, Handshake, Search, MessageCircle, Star, Globe, CheckCircle, ChevronRight, Users, Zap } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import logoPath from "@assets/BarterConnect_Logo_new.svg";
 
@@ -12,72 +11,80 @@ export default function LandingPage() {
     {
       icon: Globe,
       title: "Build Your Network, Your Way",
-      desc: "BarterConnect isn't just about trading skills — it's about building real relationships with people whose talents complement yours. Your next go-to person is one barter away.",
+      desc: "Build real relationships with people whose talents complement yours. Your next go-to person is one barter away.",
     },
     {
       icon: Search,
       title: "Smart, Three-Tier Matching",
-      desc: "Our matching engine doesn't just find perfect two-way matches — it also surfaces people who offer what you need or need what you offer, so you never miss an opportunity.",
+      desc: "Find perfect two-way matches, people who offer what you need, or people looking for exactly what you bring.",
     },
     {
       icon: Handshake,
       title: "Trust-First Connections",
-      desc: "No awkward cold calls. Express interest, wait for mutual acceptance, and only then exchange contact info. Every connection starts with a handshake, not a sales pitch.",
+      desc: "Express interest, wait for mutual acceptance, and only then exchange contact info. Every connection starts with a handshake.",
     },
     {
       icon: Star,
       title: "Reputation That Follows You",
-      desc: "Every completed barter builds your profile. The more you exchange, the more trusted you become — making it easier to connect with skilled professionals.",
+      desc: "Every completed barter builds your profile. The more you exchange, the more trusted you become.",
     },
     {
       icon: MessageCircle,
       title: "Built-In Messaging",
-      desc: "Once you're matched, chat directly within BarterConnect. No need to share personal emails or phone numbers until you're ready.",
+      desc: "Chat directly within BarterConnect. No need to share personal emails or phone numbers until you	're ready.",
     },
     {
       icon: Share2,
       title: "Shareable Barter Links",
-      desc: "Got a specific skill to offer? Create a shareable link and post it on LinkedIn, Facebook, or anywhere. Let the right people come to you.",
+      desc: "Create a shareable link and post it on LinkedIn, Facebook, or anywhere. Let the right people come to you.",
     },
   ];
 
   const steps = [
     {
-      num: "1",
-      title: "Tell Us What You've Got — And What You Need",
-      desc: "Create a barter listing by describing the skill you can offer and the skill you're looking for. Whether it's web design, legal advice, photography, plumbing, or social media marketing — if you have it, someone out there needs it.",
+      num: "01",
+      title: "Post What You Offer & Need",
+      desc: "Describe the skill you can offer and what you're looking for. Web design, legal advice, photography, marketing — if you have it, someone needs it.",
+      icon: Zap,
     },
     {
-      num: "2",
-      title: "Get Matched With the Right People",
-      desc: "Our three-tier matching system goes to work instantly. We'll show you perfect two-way matches, people who offer what you need, and people who are looking for exactly what you bring to the table.",
+      num: "02",
+      title: "Get Matched Instantly",
+      desc: "Our three-tier matching system finds perfect matches, people offering what you need, and people looking for your skills.",
+      icon: Users,
     },
     {
-      num: "3",
-      title: "Connect, Chat & Exchange Skills",
-      desc: "Found someone interesting? Send them an interest request. Once they accept, you'll be connected with built-in messaging to work out the details. Complete the exchange, build your reputation, and grow your network — one barter at a time.",
+      num: "03",
+      title: "Connect & Exchange",
+      desc: "Send interest, get accepted, chat, and complete the exchange. Build your reputation and grow your network — one barter at a time.",
+      icon: Handshake,
     },
   ];
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="sticky top-0 z-50 border-b border-primary/20 bg-primary backdrop-blur">
-        <div className="max-w-5xl mx-auto flex items-center justify-between gap-4 px-4 py-3">
+    <div className="min-h-screen">
+      <header className="sticky top-0 z-50 bg-[hsl(165,30%,42%)]">
+        <div className="max-w-6xl mx-auto flex items-center justify-between gap-4 px-6 py-4">
           <Link href="/" className="shrink-0">
-            <img src={logoPath} alt="BarterConnect" className="h-12" data-testid="header-logo" />
+            <img src={logoPath} alt="BarterConnect" className="h-10" data-testid="header-logo" />
           </Link>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             {user ? (
               <Link href="/app">
-                <Button className="bg-primary-foreground text-primary hover:bg-primary-foreground/90" data-testid="button-go-dashboard">Dashboard</Button>
+                <Button className="bg-[#f3eddf] text-[hsl(165,30%,25%)] hover:bg-[#f3eddf]/90 font-semibold rounded-full px-6" data-testid="button-go-dashboard">
+                  Dashboard
+                  <ArrowRight className="w-4 h-4 ml-1" />
+                </Button>
               </Link>
             ) : (
               <>
                 <Link href="/login">
-                  <Button variant="ghost" className="text-primary-foreground hover:bg-primary-foreground/10" data-testid="button-login">Log in</Button>
+                  <Button variant="ghost" className="text-[#f3eddf] hover:bg-white/10 rounded-full" data-testid="button-login">Log in</Button>
                 </Link>
                 <Link href="/signup">
-                  <Button className="bg-primary-foreground text-primary hover:bg-primary-foreground/90" data-testid="button-signup">Sign up</Button>
+                  <Button className="bg-[#f3eddf] text-[hsl(165,30%,25%)] hover:bg-[#f3eddf]/90 font-semibold rounded-full px-6" data-testid="button-signup">
+                    Get Started
+                  </Button>
                 </Link>
               </>
             )}
@@ -85,120 +92,140 @@ export default function LandingPage() {
         </div>
       </header>
 
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-accent/10" />
-        <div className="relative max-w-5xl mx-auto px-4 py-20 md:py-32 text-center">
-          <div className="flex justify-center mb-12">
-            <img src={logoPath} alt="BarterConnect" className="w-64 md:w-80 lg:w-96" data-testid="hero-logo" />
-          </div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-8">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>The skill-based networking platform</span>
-          </div>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-8">
-            Trade Skills,{" "}
-            <span className="text-accent">Not Cash.</span>
-          </h1>
-          <p className="text-2xl md:text-3xl lg:text-4xl font-bold text-primary max-w-3xl mx-auto mb-8">
-            It's all about networking.
-          </p>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-6">
-            We all wish we knew a plumber, a lawyer, a web designer, a photographer, a marketing expert...
-          </p>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-12">
-            <strong className="text-primary">BarterConnect is exactly that.</strong> A community where people trade skills instead of dollars. You help someone with what you're great at, and they help you with what they're great at. Simple as that.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href={user ? "/app" : "/signup"}>
-              <Button size="lg" className="w-full sm:w-auto gap-2" data-testid="button-get-started">
-                Get Started
-                <ArrowRight className="w-4 h-4" />
-              </Button>
-            </Link>
-            <Link href={user ? "/matches" : "/login"}>
-              <Button size="lg" variant="outline" className="w-full sm:w-auto" data-testid="button-browse-matches">
-                Learn More
-              </Button>
-            </Link>
-          </div>
+      <section className="relative bg-[hsl(165,30%,42%)] overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-20 left-10 w-72 h-72 bg-white rounded-full blur-3xl" />
+          <div className="absolute bottom-10 right-20 w-96 h-96 bg-white rounded-full blur-3xl" />
         </div>
-      </section>
-
-      <section className="max-w-5xl mx-auto px-4 py-16">
-        <div className="text-center mb-12">
-          <h2 className="text-2xl md:text-3xl font-bold mb-3" data-testid="text-how-it-works">How It Works</h2>
-          <p className="text-muted-foreground">Getting started is easy — and it's completely free</p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {steps.map((step) => (
-            <div key={step.num} className="text-center">
-              <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-accent text-accent-foreground text-xl font-bold mb-4">
-                {step.num}
-              </div>
-              <h3 className="font-semibold text-lg mb-3">{step.title}</h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">{step.desc}</p>
+        <div className="relative max-w-6xl mx-auto px-6 py-20 md:py-32 lg:py-40">
+          <div className="max-w-3xl">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 text-[#f3eddf] text-sm font-medium mb-8 backdrop-blur-sm" data-testid="badge-platform">
+              <Sparkles className="w-4 h-4" />
+              <span>The skill-based networking platform</span>
             </div>
-          ))}
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-[#f3eddf] mb-6 leading-[1.1]" data-testid="hero-heading">
+              Trade Skills,
+              <br />
+              <span className="text-white">Not Cash.</span>
+            </h1>
+            <p className="text-2xl md:text-3xl font-bold text-white/90 mb-6" data-testid="hero-subheading">
+              It's all about networking.
+            </p>
+            <p className="text-lg text-[#f3eddf]/80 max-w-xl mb-10 leading-relaxed">
+              We all wish we knew a plumber, a lawyer, a web designer, a photographer...
+              <strong className="text-white"> BarterConnect is exactly that.</strong> Trade skills instead of dollars.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Link href={user ? "/app" : "/signup"}>
+                <Button size="lg" className="bg-[#f3eddf] text-[hsl(165,30%,25%)] hover:bg-white font-semibold rounded-full px-8 py-6 text-lg gap-2 shadow-lg" data-testid="button-get-started">
+                  Get Started Free
+                  <ArrowRight className="w-5 h-5" />
+                </Button>
+              </Link>
+              <a href="#how-it-works">
+                <Button size="lg" variant="outline" className="border-[#f3eddf]/30 text-[#f3eddf] hover:bg-white/10 rounded-full px-8 py-6 text-lg" data-testid="button-learn-more">
+                  How It Works
+                  <ChevronRight className="w-5 h-5" />
+                </Button>
+              </a>
+            </div>
+          </div>
+          <div className="hidden lg:flex absolute right-10 top-1/2 -translate-y-1/2">
+            <img src={logoPath} alt="" className="w-80 opacity-20" />
+          </div>
         </div>
       </section>
 
-      <section className="bg-card border-y">
-        <div className="max-w-5xl mx-auto px-4 py-16">
-          <div className="text-center mb-12">
-            <h2 className="text-2xl md:text-3xl font-bold mb-3" data-testid="text-why-barterconnect">Why Choose BarterConnect?</h2>
-            <p className="text-muted-foreground">More than just a marketplace — it's the network you always wished you had</p>
+      <section id="how-it-works" className="bg-[#f3eddf]">
+        <div className="max-w-6xl mx-auto px-6 py-20 md:py-28">
+          <div className="text-center mb-16">
+            <p className="text-sm font-semibold tracking-widest uppercase text-[hsl(165,30%,42%)] mb-3">Simple Process</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-[hsl(165,35%,20%)]" data-testid="text-how-it-works">How It Works</h2>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {features.map((f) => (
-              <Card key={f.title} className="p-6">
-                <div className="flex items-start gap-4">
-                  <div className="flex items-center justify-center w-10 h-10 rounded-md bg-accent/15 text-accent shrink-0">
-                    <f.icon className="w-5 h-5" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
+            {steps.map((step) => (
+              <div key={step.num} className="relative group">
+                <div className="bg-white rounded-2xl p-8 h-full border border-[hsl(165,15%,83%)] hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-[hsl(165,30%,42%)] text-[#f3eddf]">
+                      <step.icon className="w-6 h-6" />
+                    </div>
+                    <span className="text-4xl font-bold text-[hsl(165,30%,42%)]/20">{step.num}</span>
                   </div>
-                  <div>
-                    <h3 className="font-semibold mb-1">{f.title}</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
-                  </div>
+                  <h3 className="font-bold text-xl text-[hsl(165,35%,20%)] mb-3">{step.title}</h3>
+                  <p className="text-[hsl(165,15%,40%)] leading-relaxed">{step.desc}</p>
                 </div>
-              </Card>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="max-w-5xl mx-auto px-4 py-16 text-center">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 text-accent text-sm font-medium mb-6">
-          <CheckCircle className="w-4 h-4" />
-          <span>Free Forever — No Hidden Fees</span>
+      <section className="bg-[hsl(165,30%,42%)]">
+        <div className="max-w-6xl mx-auto px-6 py-20 md:py-28">
+          <div className="text-center mb-16">
+            <p className="text-sm font-semibold tracking-widest uppercase text-[#f3eddf]/70 mb-3">Why Us</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-[#f3eddf]" data-testid="text-why-barterconnect">
+              Why Choose BarterConnect?
+            </h2>
+            <p className="text-[#f3eddf]/70 mt-4 text-lg max-w-2xl mx-auto">
+              More than just a marketplace — it's the network you always wished you had
+            </p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {features.map((f) => (
+              <div key={f.title} className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/15 transition-all duration-300">
+                <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-[#f3eddf]/20 text-[#f3eddf] mb-5">
+                  <f.icon className="w-6 h-6" />
+                </div>
+                <h3 className="font-bold text-lg text-[#f3eddf] mb-2">{f.title}</h3>
+                <p className="text-sm text-[#f3eddf]/70 leading-relaxed">{f.desc}</p>
+              </div>
+            ))}
+          </div>
         </div>
-        <h2 className="text-2xl md:text-3xl font-bold mb-3" data-testid="text-cta-heading">Your Skills Are Worth More Than You Think</h2>
-        <p className="text-muted-foreground mb-4 max-w-2xl mx-auto">
-          Stop paying for services you could trade for. That freelance designer needs accounting help. That lawyer needs a new website. That photographer needs someone to manage their social media.
-        </p>
-        <p className="text-muted-foreground mb-8 max-w-2xl mx-auto font-medium">
-          Everyone has something valuable to offer. <span className="text-primary">BarterConnect helps you find each other.</span>
-        </p>
-        <Link href={user ? "/app" : "/signup"}>
-          <Button size="lg" className="gap-2" data-testid="button-join-now">
-            Join the Community
-            <ArrowRight className="w-4 h-4" />
-          </Button>
-        </Link>
       </section>
 
-      <footer className="border-t py-6">
-        <div className="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-muted-foreground">
-          <Link href="/" className="flex items-center gap-0 shrink-0">
-            <img src={logoPath} alt="BarterConnect" className="w-40" data-testid="footer-logo" />
+      <section className="bg-[#f3eddf]">
+        <div className="max-w-4xl mx-auto px-6 py-20 md:py-28 text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[hsl(165,30%,42%)]/10 text-[hsl(165,30%,42%)] text-sm font-semibold mb-8">
+            <CheckCircle className="w-4 h-4" />
+            <span>Free Forever — No Hidden Fees</span>
+          </div>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[hsl(165,35%,20%)] mb-6 leading-tight" data-testid="text-cta-heading">
+            Your Skills Are Worth
+            <br />
+            <span className="text-[hsl(165,30%,42%)]">More Than You Think</span>
+          </h2>
+          <p className="text-lg text-[hsl(165,15%,40%)] mb-4 max-w-2xl mx-auto">
+            Stop paying for services you could trade for. That freelance designer needs accounting help.
+            That lawyer needs a new website. That photographer needs someone to manage their social media.
+          </p>
+          <p className="text-lg text-[hsl(165,15%,40%)] mb-10 max-w-2xl mx-auto font-medium">
+            Everyone has something valuable to offer.
+          </p>
+          <Link href={user ? "/app" : "/signup"}>
+            <Button size="lg" className="bg-[hsl(165,30%,42%)] text-[#f3eddf] hover:bg-[hsl(165,30%,37%)] font-semibold rounded-full px-10 py-6 text-lg gap-2 shadow-lg" data-testid="button-join-now">
+              Join the Community
+              <ArrowRight className="w-5 h-5" />
+            </Button>
           </Link>
-          <div className="flex items-center gap-4">
-            <Link href="/terms" className="hover:text-foreground transition-colors" data-testid="link-terms">
-              Terms of Service
+        </div>
+      </section>
+
+      <footer className="bg-[hsl(165,30%,25%)]">
+        <div className="max-w-6xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <Link href="/" className="shrink-0">
+            <img src={logoPath} alt="BarterConnect" className="w-36 opacity-80" data-testid="footer-logo" />
+          </Link>
+          <div className="flex items-center gap-6 text-sm text-[#f3eddf]/60">
+            <Link href="/terms" className="hover:text-[#f3eddf] transition-colors" data-testid="link-terms">
+              Terms
             </Link>
-            <Link href="/privacy" className="hover:text-foreground transition-colors" data-testid="link-privacy">
-              Privacy Policy
+            <Link href="/privacy" className="hover:text-[#f3eddf] transition-colors" data-testid="link-privacy">
+              Privacy
             </Link>
-            <p>Trade skills, not cash.</p>
+            <span>Trade skills, not cash.</span>
           </div>
         </div>
       </footer>
