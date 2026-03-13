@@ -13,8 +13,8 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 import { Loader2, ArrowRight, Copy, Check, Share2, Sparkles } from "lucide-react";
 import { SiLinkedin, SiFacebook, SiX, SiWhatsapp } from "react-icons/si";
 import { CityPicker } from "@/components/city-picker";
-import logoPath from "@assets/BarterConnect_Logo_cropped.png";
-import iconPath from "@assets/BarterConnect_Icon_cropped.png";
+import logoPath from "@assets/BarterConnect_Logo_new.svg";
+import iconPath from "@assets/BarterConnect_Logo_new.svg";
 
 type OnboardingStep = "welcome" | "create" | "success";
 

@@ -5,8 +5,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowRight, MapPin, Wifi, User, Repeat, ArrowRightLeft } from "lucide-react";
-import logoPath from "@assets/BarterConnect_Logo_cropped.png";
-import iconPath from "@assets/BarterConnect_Icon_cropped.png";
+import logoPath from "@assets/BarterConnect_Logo_new.svg";
+import iconPath from "@assets/BarterConnect_Logo_new.svg";
 import { useEffect } from "react";
 
 type PublicRequest = {

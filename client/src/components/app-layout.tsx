@@ -16,7 +16,7 @@ import {
   Settings,
 } from "lucide-react";
 import { useState } from "react";
-import logoPath from "@assets/BarterConnect_Logo_cropped.png";
+import logoPath from "@assets/BarterConnect_Logo_new.svg";
 
 const navItems = [
   { href: "/app", label: "Dashboard", icon: LayoutDashboard },

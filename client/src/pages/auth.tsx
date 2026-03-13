@@ -12,8 +12,8 @@ import { Loader2, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { CityPicker } from "@/components/city-picker";
 import { tosContent, professionalDisclaimerContent, taxDisclaimerContent, platformRoleDisclaimerContent, communityGuidelinesContent } from "@/pages/terms";
-import logoPath from "@assets/BarterConnect_Logo_cropped.png";
-import iconPath from "@assets/BarterConnect_Icon_cropped.png";
+import logoPath from "@assets/BarterConnect_Logo_new.svg";
+import iconPath from "@assets/BarterConnect_Logo_new.svg";
 
 export function LoginPage() {
   const [email, setEmail] = useState("");

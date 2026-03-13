@@ -1,7 +1,7 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
-import logoPath from "@assets/BarterConnect_Logo_cropped.png";
+import logoPath from "@assets/BarterConnect_Logo_new.svg";
 
 export const privacyContent = `1. Information We Collect
 
