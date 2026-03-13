@@ -61,7 +61,7 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <header className="sticky top-0 z-50 border-b border-primary/20 bg-primary backdrop-blur">
         <div className="max-w-5xl mx-auto flex items-center justify-between gap-4 px-4 py-3">
           <Link href="/" className="shrink-0">
             <img src={logoPath} alt="BarterConnect" className="h-12" data-testid="header-logo" />
@@ -69,15 +69,15 @@ export default function LandingPage() {
           <div className="flex items-center gap-2">
             {user ? (
               <Link href="/app">
-                <Button data-testid="button-go-dashboard">Dashboard</Button>
+                <Button className="bg-primary-foreground text-primary hover:bg-primary-foreground/90" data-testid="button-go-dashboard">Dashboard</Button>
               </Link>
             ) : (
               <>
                 <Link href="/login">
-                  <Button variant="ghost" data-testid="button-login">Log in</Button>
+                  <Button variant="ghost" className="text-primary-foreground hover:bg-primary-foreground/10" data-testid="button-login">Log in</Button>
                 </Link>
                 <Link href="/signup">
-                  <Button data-testid="button-signup">Sign up</Button>
+                  <Button className="bg-primary-foreground text-primary hover:bg-primary-foreground/90" data-testid="button-signup">Sign up</Button>
                 </Link>
               </>
             )}
