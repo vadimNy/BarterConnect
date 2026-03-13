@@ -96,14 +96,14 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen overflow-x-hidden">
       <header className="fixed top-0 left-0 right-0 z-50 bg-[#3d4a3c]/90 backdrop-blur-xl border-b border-white/5">
-        <div className="max-w-6xl mx-auto flex items-center justify-between gap-4 px-6 py-3">
+        <div className="max-w-6xl mx-auto flex items-center justify-between gap-2 sm:gap-4 px-4 sm:px-6 py-3">
           <Link href="/" className="shrink-0">
-            <img src={logoPath} alt="BarterConnect" className="h-9" data-testid="header-logo" />
+            <img src={logoPath} alt="BarterConnect" className="h-7 sm:h-9" data-testid="header-logo" />
           </Link>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             {user ? (
               <Link href="/app">
-                <Button className="bg-[#B95755] text-white hover:bg-[#a34a48] font-semibold rounded-full px-6 shadow-md" data-testid="button-go-dashboard">
+                <Button className="bg-[#B95755] text-white hover:bg-[#a34a48] font-semibold rounded-full px-4 sm:px-6 text-sm sm:text-base shadow-md" data-testid="button-go-dashboard">
                   Dashboard
                   <ArrowRight className="w-4 h-4 ml-1" />
                 </Button>
@@ -111,10 +111,10 @@ export default function LandingPage() {
             ) : (
               <>
                 <Link href="/login">
-                  <Button variant="ghost" className="text-white/80 hover:text-white hover:bg-white/10 rounded-full" data-testid="button-login">Log in</Button>
+                  <Button variant="ghost" className="text-white/80 hover:text-white hover:bg-white/10 rounded-full text-sm sm:text-base px-3 sm:px-4" data-testid="button-login">Log in</Button>
                 </Link>
                 <Link href="/signup">
-                  <Button className="bg-[#B95755] text-white hover:bg-[#a34a48] font-semibold rounded-full px-6 shadow-md" data-testid="button-signup">
+                  <Button className="bg-[#B95755] text-white hover:bg-[#a34a48] font-semibold rounded-full px-4 sm:px-6 text-sm sm:text-base shadow-md" data-testid="button-signup">
                     Get Started
                   </Button>
                 </Link>
