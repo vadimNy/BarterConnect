@@ -38,37 +38,37 @@ export default function LandingPage() {
       icon: Globe,
       title: "Build Your Network, Your Way",
       desc: "Build real relationships with people whose talents complement yours. Your next go-to person is one barter away.",
-      color: "bg-[#869C84]",
+      color: "bg-[#D99B42]",
     },
     {
       icon: Search,
       title: "Smart, Three-Tier Matching",
       desc: "Find perfect two-way matches, people who offer what you need, or people looking for exactly what you bring.",
-      color: "bg-[#D99B42]",
+      color: "bg-[#B95755]",
     },
     {
       icon: Handshake,
       title: "Trust-First Connections",
       desc: "Express interest, wait for mutual acceptance, and only then exchange contact info. Every connection starts with a handshake.",
-      color: "bg-[#907169]",
+      color: "bg-[#869C84]",
     },
     {
       icon: Star,
       title: "Reputation That Follows You",
       desc: "Every completed barter builds your profile. The more you exchange, the more trusted you become.",
-      color: "bg-[#B95755]",
+      color: "bg-[#D99B42]",
     },
     {
       icon: MessageCircle,
       title: "Built-In Messaging",
       desc: "Chat directly within BarterConnect. No need to share personal emails or phone numbers until you're ready.",
-      color: "bg-[#869C84]",
+      color: "bg-[#B95755]",
     },
     {
       icon: Share2,
       title: "Shareable Barter Links",
       desc: "Create a shareable link and post it on LinkedIn, Facebook, or anywhere. Let the right people come to you.",
-      color: "bg-[#D99B42]",
+      color: "bg-[#869C84]",
     },
   ];
 
@@ -95,7 +95,7 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen overflow-x-hidden">
-      <header className="fixed top-0 left-0 right-0 z-50 bg-[#3d4a3c]/90 backdrop-blur-xl border-b border-white/5">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-[#907169]/90 backdrop-blur-xl border-b border-white/10">
         <div className="max-w-6xl mx-auto flex items-center justify-between gap-4 px-6 py-3">
           <Link href="/" className="shrink-0">
             <img src={logoPath} alt="BarterConnect" className="h-9" data-testid="header-logo" />
@@ -103,7 +103,7 @@ export default function LandingPage() {
           <div className="flex items-center gap-3">
             {user ? (
               <Link href="/app">
-                <Button className="bg-[#D99B42] text-white hover:bg-[#c48a35] font-semibold rounded-full px-6 shadow-md" data-testid="button-go-dashboard">
+                <Button className="bg-[#B95755] text-white hover:bg-[#a34a48] font-semibold rounded-full px-6 shadow-md" data-testid="button-go-dashboard">
                   Dashboard
                   <ArrowRight className="w-4 h-4 ml-1" />
                 </Button>
@@ -114,7 +114,7 @@ export default function LandingPage() {
                   <Button variant="ghost" className="text-white/80 hover:text-white hover:bg-white/10 rounded-full" data-testid="button-login">Log in</Button>
                 </Link>
                 <Link href="/signup">
-                  <Button className="bg-[#D99B42] text-white hover:bg-[#c48a35] font-semibold rounded-full px-6 shadow-md" data-testid="button-signup">
+                  <Button className="bg-[#B95755] text-white hover:bg-[#a34a48] font-semibold rounded-full px-6 shadow-md" data-testid="button-signup">
                     Get Started
                   </Button>
                 </Link>
@@ -124,31 +124,31 @@ export default function LandingPage() {
         </div>
       </header>
 
-      <section className="relative min-h-[100vh] flex items-center overflow-hidden bg-gradient-to-br from-[#3d4a3c] via-[#4a5a48] to-[#3d4a3c]">
+      <section className="relative min-h-[100vh] flex items-center overflow-hidden bg-gradient-to-br from-[#907169] via-[#7d5f58] to-[#907169]">
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-20 -left-20 w-96 h-96 bg-[#D99B42]/15 rounded-full blur-3xl animate-float-slow" />
-          <div className="absolute bottom-20 right-0 w-[500px] h-[500px] bg-[#869C84]/20 rounded-full blur-3xl animate-float" />
-          <div className="absolute top-1/2 left-1/3 w-64 h-64 bg-[#B95755]/10 rounded-full blur-3xl animate-float-slow" style={{ animationDelay: '2s' }} />
-          <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+          <div className="absolute top-20 -left-20 w-96 h-96 bg-[#869C84]/20 rounded-full blur-3xl animate-float-slow" />
+          <div className="absolute bottom-20 right-0 w-[500px] h-[500px] bg-[#D99B42]/15 rounded-full blur-3xl animate-float" />
+          <div className="absolute top-1/2 left-1/3 w-64 h-64 bg-[#F8E1BF]/10 rounded-full blur-3xl animate-float-slow" style={{ animationDelay: '2s' }} />
+          <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
         </div>
 
         <div className="relative max-w-6xl mx-auto px-6 pt-28 pb-20 w-full">
           <div className="max-w-3xl">
             <div className="animate-fade-up">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-[#D1D1A4] text-sm font-medium mb-8 backdrop-blur-sm border border-white/10" data-testid="badge-platform">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-[#F8E1BF] text-sm font-medium mb-8 backdrop-blur-sm border border-white/10" data-testid="badge-platform">
                 <Sparkles className="w-4 h-4 text-[#D99B42]" />
                 <span>The skill-based networking platform</span>
               </div>
               <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white mb-6 leading-[1.05]" data-testid="hero-heading">
                 Trade Skills,
                 <br />
-                <span className="bg-gradient-to-r from-[#D99B42] via-[#F8E1BF] to-[#D99B42] bg-clip-text text-transparent animate-shimmer">
+                <span className="bg-gradient-to-r from-[#F8E1BF] via-[#D99B42] to-[#F8E1BF] bg-clip-text text-transparent animate-shimmer">
                   Not Cash.
                 </span>
               </h1>
             </div>
             <div className="animate-fade-up stagger-2">
-              <p className="text-2xl md:text-3xl font-bold text-[#D1D1A4] mb-6" data-testid="hero-subheading">
+              <p className="text-2xl md:text-3xl font-bold text-[#F8E1BF] mb-6" data-testid="hero-subheading">
                 It's all about networking.
               </p>
               <p className="text-lg text-white/60 max-w-xl mb-4 leading-relaxed">
@@ -179,61 +179,30 @@ export default function LandingPage() {
           </div>
         </div>
 
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#F8E1BF] to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#869C84] to-transparent" />
       </section>
 
-      <section id="how-it-works" className="bg-[#F8E1BF] relative">
+      <section id="how-it-works" className="bg-[#869C84] relative">
         <div className="max-w-6xl mx-auto px-6 py-24 md:py-32 scroll-reveal" ref={revealRef1}>
           <div className="text-center mb-16">
-            <p className="text-sm font-bold tracking-[0.2em] uppercase text-[#D99B42] mb-4">Simple Process</p>
-            <h2 className="text-3xl md:text-5xl font-bold text-[#3d4a3c]" data-testid="text-how-it-works">How It Works</h2>
+            <p className="text-sm font-bold tracking-[0.2em] uppercase text-[#F8E1BF] mb-4">Simple Process</p>
+            <h2 className="text-3xl md:text-5xl font-bold text-white" data-testid="text-how-it-works">How It Works</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
             {steps.map((step) => (
               <div key={step.num}>
-                <div className="group relative bg-white rounded-3xl p-8 h-full border border-[#e8d5b8] hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 overflow-hidden">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-[#869C84]/10 to-transparent rounded-bl-full transition-all duration-500 group-hover:w-40 group-hover:h-40" />
+                <div className="group relative bg-white/10 backdrop-blur-sm rounded-3xl p-8 h-full border border-white/15 hover:bg-white/20 hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 overflow-hidden">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-[#D99B42]/15 to-transparent rounded-bl-full transition-all duration-500 group-hover:w-40 group-hover:h-40" />
                   <div className="relative">
                     <div className="flex items-center gap-4 mb-6">
-                      <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-[#869C84] text-white shadow-lg group-hover:scale-110 transition-transform duration-300">
+                      <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-[#D99B42] text-white shadow-lg group-hover:scale-110 transition-transform duration-300">
                         <step.icon className="w-6 h-6" />
                       </div>
-                      <span className="text-5xl font-black text-[#869C84]/15 group-hover:text-[#869C84]/25 transition-colors duration-300">{step.num}</span>
+                      <span className="text-5xl font-black text-white/10 group-hover:text-white/20 transition-colors duration-300">{step.num}</span>
                     </div>
-                    <h3 className="font-bold text-xl text-[#3d4a3c] mb-3">{step.title}</h3>
-                    <p className="text-[#907169] leading-relaxed">{step.desc}</p>
+                    <h3 className="font-bold text-xl text-white mb-3">{step.title}</h3>
+                    <p className="text-white/70 leading-relaxed">{step.desc}</p>
                   </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-[#3d4a3c] relative overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#869C84]/20 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-[#D99B42]/10 rounded-full blur-3xl" />
-        </div>
-        <div className="relative max-w-6xl mx-auto px-6 py-24 md:py-32 scroll-reveal" ref={revealRef2}>
-          <div className="text-center mb-16">
-            <p className="text-sm font-bold tracking-[0.2em] uppercase text-[#D99B42] mb-4">Why Us</p>
-            <h2 className="text-3xl md:text-5xl font-bold text-white" data-testid="text-why-barterconnect">
-              Why Choose BarterConnect?
-            </h2>
-            <p className="text-white/50 mt-4 text-lg max-w-2xl mx-auto">
-              More than just a marketplace — it's the network you always wished you had
-            </p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {features.map((f) => (
-              <div key={f.title} className="group">
-                <div className="relative bg-white/5 backdrop-blur-sm rounded-3xl p-7 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-500 hover:-translate-y-1 h-full">
-                  <div className={`flex items-center justify-center w-12 h-12 rounded-2xl ${f.color} text-white mb-5 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg`}>
-                    <f.icon className="w-5 h-5" />
-                  </div>
-                  <h3 className="font-bold text-lg text-white mb-2 group-hover:text-[#D99B42] transition-colors duration-300">{f.title}</h3>
-                  <p className="text-sm text-white/50 leading-relaxed group-hover:text-white/70 transition-colors duration-300">{f.desc}</p>
                 </div>
               </div>
             ))}
@@ -242,27 +211,59 @@ export default function LandingPage() {
       </section>
 
       <section className="bg-[#F8E1BF] relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#D99B42]/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
+        <div className="absolute inset-0">
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#907169]/10 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-[#D99B42]/10 rounded-full blur-3xl" />
+        </div>
+        <div className="relative max-w-6xl mx-auto px-6 py-24 md:py-32 scroll-reveal" ref={revealRef2}>
+          <div className="text-center mb-16">
+            <p className="text-sm font-bold tracking-[0.2em] uppercase text-[#B95755] mb-4">Why Us</p>
+            <h2 className="text-3xl md:text-5xl font-bold text-[#3d4a3c]" data-testid="text-why-barterconnect">
+              Why Choose BarterConnect?
+            </h2>
+            <p className="text-[#907169] mt-4 text-lg max-w-2xl mx-auto">
+              More than just a marketplace — it's the network you always wished you had
+            </p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {features.map((f) => (
+              <div key={f.title} className="group">
+                <div className="relative bg-white rounded-3xl p-7 border border-[#e8d5b8] hover:shadow-xl hover:border-[#D99B42]/30 transition-all duration-500 hover:-translate-y-1 h-full">
+                  <div className={`flex items-center justify-center w-12 h-12 rounded-2xl ${f.color} text-white mb-5 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg`}>
+                    <f.icon className="w-5 h-5" />
+                  </div>
+                  <h3 className="font-bold text-lg text-[#3d4a3c] mb-2 group-hover:text-[#B95755] transition-colors duration-300">{f.title}</h3>
+                  <p className="text-sm text-[#907169] leading-relaxed">{f.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-[#3d4a3c] relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#869C84]/15 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#D99B42]/10 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4" />
         <div className="relative max-w-4xl mx-auto px-6 py-24 md:py-32 text-center scroll-reveal" ref={revealRef3}>
-          <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#869C84]/10 text-[#869C84] text-sm font-bold mb-8 border border-[#869C84]/20">
+          <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#D99B42]/15 text-[#D99B42] text-sm font-bold mb-8 border border-[#D99B42]/25">
             <CheckCircle className="w-4 h-4" />
             <span>Free Forever — No Hidden Fees</span>
           </div>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#3d4a3c] mb-6 leading-tight" data-testid="text-cta-heading">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight" data-testid="text-cta-heading">
             Your Skills Are Worth
             <br />
-            <span className="bg-gradient-to-r from-[#D99B42] to-[#B95755] bg-clip-text text-transparent">More Than You Think</span>
+            <span className="bg-gradient-to-r from-[#869C84] to-[#D99B42] bg-clip-text text-transparent">More Than You Think</span>
           </h2>
-          <p className="text-lg text-[#907169] mb-4 max-w-2xl mx-auto">
+          <p className="text-lg text-white/60 mb-4 max-w-2xl mx-auto">
             Stop paying for services you could trade for. That freelance designer needs accounting help.
             That lawyer needs a new website. That photographer needs someone to manage their social media.
           </p>
-          <p className="text-lg text-[#907169] mb-10 max-w-2xl mx-auto font-medium">
+          <p className="text-lg text-[#D1D1A4] mb-10 max-w-2xl mx-auto font-medium">
             Everyone has something valuable to offer.
           </p>
           <div>
             <Link href={user ? "/app" : "/signup"}>
-              <Button size="lg" className="bg-[#D99B42] text-white hover:bg-[#c48a35] font-semibold rounded-full px-10 py-6 text-lg gap-2 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300" data-testid="button-join-now">
+              <Button size="lg" className="bg-[#B95755] text-white hover:bg-[#a34a48] font-semibold rounded-full px-10 py-6 text-lg gap-2 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300" data-testid="button-join-now">
                 Join the Community
                 <ArrowUpRight className="w-5 h-5" />
               </Button>
@@ -271,17 +272,17 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <footer className="bg-[#3d4a3c]">
+      <footer className="bg-[#907169]">
         <div className="max-w-6xl mx-auto px-6 py-10">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
             <Link href="/" className="shrink-0">
               <img src={logoPath} alt="BarterConnect" className="w-36 opacity-60 hover:opacity-100 transition-opacity duration-300" data-testid="footer-logo" />
             </Link>
             <div className="flex items-center gap-8 text-sm text-white/40">
-              <Link href="/terms" className="hover:text-[#D99B42] transition-colors duration-300" data-testid="link-terms">
+              <Link href="/terms" className="hover:text-[#F8E1BF] transition-colors duration-300" data-testid="link-terms">
                 Terms
               </Link>
-              <Link href="/privacy" className="hover:text-[#D99B42] transition-colors duration-300" data-testid="link-privacy">
+              <Link href="/privacy" className="hover:text-[#F8E1BF] transition-colors duration-300" data-testid="link-privacy">
                 Privacy
               </Link>
               <span className="text-white/25">Trade skills, not cash.</span>
