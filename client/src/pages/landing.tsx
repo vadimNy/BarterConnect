@@ -116,7 +116,7 @@ export default function LandingPage() {
                   <Button variant="ghost" className="text-white/80 hover:text-white hover:bg-white/10 rounded-full" data-testid="button-login">Log in</Button>
                 </Link>
                 <Link href="/signup">
-                  <Button className="bg-[#D99B42] text-white hover:bg-[#c48a35] font-semibold rounded-full px-6 shadow-md animate-pulse-glow" data-testid="button-signup">
+                  <Button className="bg-[#D99B42] text-white hover:bg-[#c48a35] font-semibold rounded-full px-6 shadow-md" data-testid="button-signup">
                     Get Started
                   </Button>
                 </Link>
@@ -260,7 +260,7 @@ export default function LandingPage() {
           </p>
           <div className="reveal-item opacity-0 stagger-4">
             <Link href={user ? "/app" : "/signup"}>
-              <Button size="lg" className="bg-[#D99B42] text-white hover:bg-[#c48a35] font-semibold rounded-full px-10 py-6 text-lg gap-2 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 animate-pulse-glow" data-testid="button-join-now">
+              <Button size="lg" className="bg-[#D99B42] text-white hover:bg-[#c48a35] font-semibold rounded-full px-10 py-6 text-lg gap-2 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300" data-testid="button-join-now">
                 Join the Community
                 <ArrowUpRight className="w-5 h-5" />
               </Button>
