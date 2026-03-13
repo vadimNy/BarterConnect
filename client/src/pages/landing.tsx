@@ -124,62 +124,81 @@ export default function LandingPage() {
         </div>
       </header>
 
-      <section className="relative min-h-[100vh] flex items-center overflow-hidden bg-gradient-to-br from-[#869C84] via-[#748c72] to-[#5f7a5d]">
+      <section className="relative min-h-[100vh] flex items-center overflow-hidden bg-[#F8E1BF]">
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-20 -left-20 w-96 h-96 bg-[#D99B42]/20 rounded-full blur-3xl animate-float-slow" />
-          <div className="absolute bottom-20 right-0 w-[500px] h-[500px] bg-[#F8E1BF]/15 rounded-full blur-3xl animate-float" />
-          <div className="absolute top-1/2 left-1/3 w-64 h-64 bg-[#3d4a3c]/20 rounded-full blur-3xl animate-float-slow" style={{ animationDelay: '2s' }} />
-          <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+          <div className="absolute -top-40 -right-40 w-[700px] h-[700px] bg-[#869C84]/15 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#D99B42]/10 rounded-full blur-3xl" />
         </div>
 
         <div className="relative max-w-6xl mx-auto px-6 pt-28 pb-20 w-full">
-          <div className="max-w-3xl">
-            <div className="animate-fade-up">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/12 text-white text-sm font-medium mb-8 backdrop-blur-sm border border-white/12" data-testid="badge-platform">
-                <Sparkles className="w-4 h-4 text-[#D99B42]" />
-                <span>The skill-based networking platform</span>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            <div>
+              <div className="animate-fade-up">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#869C84]/10 text-[#3d4a3c] text-sm font-medium mb-8 border border-[#869C84]/20" data-testid="badge-platform">
+                  <Sparkles className="w-4 h-4 text-[#D99B42]" />
+                  <span>The skill-based networking platform</span>
+                </div>
+                <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-[#3d4a3c] mb-6 leading-[1.05]" data-testid="hero-heading">
+                  Trade Skills,
+                  <br />
+                  <span className="bg-gradient-to-r from-[#D99B42] via-[#B95755] to-[#D99B42] bg-clip-text text-transparent animate-shimmer">
+                    Not Cash.
+                  </span>
+                </h1>
               </div>
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white mb-6 leading-[1.05]" data-testid="hero-heading">
-                Trade Skills,
-                <br />
-                <span className="bg-gradient-to-r from-[#D99B42] via-[#F8E1BF] to-[#D99B42] bg-clip-text text-transparent animate-shimmer">
-                  Not Cash.
-                </span>
-              </h1>
+              <div className="animate-fade-up stagger-2">
+                <p className="text-2xl md:text-3xl font-bold text-[#869C84] mb-6" data-testid="hero-subheading">
+                  It's all about networking.
+                </p>
+                <p className="text-lg text-[#5a4a44] max-w-xl mb-4 leading-relaxed">
+                  We all wish we knew a plumber, a lawyer, a web designer, a photographer, a marketing expert...
+                </p>
+                <p className="text-lg text-[#5a4a44] max-w-xl mb-10 leading-relaxed">
+                  <strong className="text-[#3d4a3c]">BarterConnect is exactly that.</strong> A community where people trade skills instead of dollars. You help someone with what you're great at, and they help you with what they're great at. Simple as that.
+                </p>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-4 animate-fade-up stagger-4">
+                <Link href={user ? "/app" : "/signup"}>
+                  <Button size="lg" className="bg-[#D99B42] text-white hover:bg-[#c48a35] font-semibold rounded-full px-8 py-6 text-lg gap-2 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300" data-testid="button-get-started">
+                    Get Started Free
+                    <ArrowRight className="w-5 h-5" />
+                  </Button>
+                </Link>
+                <a href="#how-it-works">
+                  <Button size="lg" variant="outline" className="border-[#3d4a3c]/20 text-[#3d4a3c] hover:bg-[#3d4a3c]/5 rounded-full px-8 py-6 text-lg hover:border-[#3d4a3c]/40 transition-all duration-300" data-testid="button-learn-more">
+                    How It Works
+                    <ChevronRight className="w-5 h-5" />
+                  </Button>
+                </a>
+              </div>
             </div>
-            <div className="animate-fade-up stagger-2">
-              <p className="text-2xl md:text-3xl font-bold text-white mb-6" data-testid="hero-subheading">
-                It's all about networking.
-              </p>
-              <p className="text-lg text-white/85 max-w-xl mb-4 leading-relaxed">
-                We all wish we knew a plumber, a lawyer, a web designer, a photographer, a marketing expert...
-              </p>
-              <p className="text-lg text-white/85 max-w-xl mb-10 leading-relaxed">
-                <strong className="text-white">BarterConnect is exactly that.</strong> A community where people trade skills instead of dollars. You help someone with what you're great at, and they help you with what they're great at. Simple as that.
-              </p>
-            </div>
-            <div className="flex flex-col sm:flex-row gap-4 animate-fade-up stagger-4">
-              <Link href={user ? "/app" : "/signup"}>
-                <Button size="lg" className="bg-[#D99B42] text-white hover:bg-[#c48a35] font-semibold rounded-full px-8 py-6 text-lg gap-2 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300" data-testid="button-get-started">
-                  Get Started Free
-                  <ArrowRight className="w-5 h-5" />
-                </Button>
-              </Link>
-              <a href="#how-it-works">
-                <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 rounded-full px-8 py-6 text-lg hover:border-white/50 transition-all duration-300" data-testid="button-learn-more">
-                  How It Works
-                  <ChevronRight className="w-5 h-5" />
-                </Button>
-              </a>
-            </div>
-          </div>
 
-          <div className="hidden lg:block absolute right-6 top-1/2 -translate-y-1/2">
-            <img src={logoPath} alt="" className="w-72 opacity-80 animate-float-slow" />
+            <div className="hidden lg:flex items-center justify-center">
+              <div className="relative">
+                <div className="absolute -inset-6 bg-gradient-to-br from-[#869C84]/20 to-[#D99B42]/20 rounded-[2rem] blur-2xl" />
+                <div className="relative bg-[#3d4a3c] rounded-[2rem] p-10 shadow-2xl">
+                  <img src={logoPath} alt="" className="w-56 mx-auto mb-8 animate-float-slow" />
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3 bg-white/10 rounded-xl px-4 py-3">
+                      <div className="w-8 h-8 rounded-lg bg-[#D99B42] flex items-center justify-center shrink-0"><Zap className="w-4 h-4 text-white" /></div>
+                      <div><p className="text-white/90 text-sm font-medium">I offer web design</p><p className="text-white/40 text-xs">Looking for legal advice</p></div>
+                    </div>
+                    <div className="flex items-center gap-3 bg-white/10 rounded-xl px-4 py-3">
+                      <div className="w-8 h-8 rounded-lg bg-[#869C84] flex items-center justify-center shrink-0"><Users className="w-4 h-4 text-white" /></div>
+                      <div><p className="text-white/90 text-sm font-medium">I offer photography</p><p className="text-white/40 text-xs">Looking for marketing help</p></div>
+                    </div>
+                    <div className="flex items-center gap-3 bg-white/10 rounded-xl px-4 py-3">
+                      <div className="w-8 h-8 rounded-lg bg-[#B95755] flex items-center justify-center shrink-0"><Handshake className="w-4 h-4 text-white" /></div>
+                      <div><p className="text-white/90 text-sm font-medium">I offer accounting</p><p className="text-white/40 text-xs">Looking for web design</p></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#F8E1BF] to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#F8E1BF] to-transparent" />
       </section>
 
       <section id="how-it-works" className="bg-[#F8E1BF] relative">
