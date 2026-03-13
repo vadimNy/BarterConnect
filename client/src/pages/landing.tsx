@@ -247,12 +247,12 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((f) => (
               <div key={f.title} className="group">
-                <div className="relative bg-white/10 backdrop-blur-sm rounded-3xl p-7 border border-white/12 hover:bg-white/18 hover:border-white/25 transition-all duration-500 hover:-translate-y-1 h-full">
+                <div className="relative bg-[#3d4a3c] rounded-3xl p-7 border border-white/10 hover:border-white/20 transition-all duration-500 hover:-translate-y-1 h-full shadow-lg">
                   <div className={`flex items-center justify-center w-12 h-12 rounded-2xl ${f.color} text-white mb-5 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg`}>
                     <f.icon className="w-5 h-5" />
                   </div>
                   <h3 className="font-bold text-lg text-white mb-2 group-hover:text-[#F8E1BF] transition-colors duration-300">{f.title}</h3>
-                  <p className="text-sm text-white/80 leading-relaxed group-hover:text-white/95 transition-colors duration-300">{f.desc}</p>
+                  <p className="text-sm text-[#F8E1BF]/85 leading-relaxed group-hover:text-[#F8E1BF] transition-colors duration-300">{f.desc}</p>
                 </div>
               </div>
             ))}
