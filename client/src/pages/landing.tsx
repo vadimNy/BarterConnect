@@ -111,9 +111,11 @@ export default function LandingPage() {
             <p className="text-2xl md:text-3xl font-bold text-white/90 mb-6" data-testid="hero-subheading">
               It's all about networking.
             </p>
+            <p className="text-lg text-[#f3eddf]/80 max-w-xl mb-4 leading-relaxed">
+              We all wish we knew a plumber, a lawyer, a web designer, a photographer, a marketing expert...
+            </p>
             <p className="text-lg text-[#f3eddf]/80 max-w-xl mb-10 leading-relaxed">
-              We all wish we knew a plumber, a lawyer, a web designer, a photographer...
-              <strong className="text-white"> BarterConnect is exactly that.</strong> Trade skills instead of dollars.
+              <strong className="text-white">BarterConnect is exactly that.</strong> A community where people trade skills instead of dollars. You help someone with what you're great at, and they help you with what they're great at. Simple as that.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link href={user ? "/app" : "/signup"}>
