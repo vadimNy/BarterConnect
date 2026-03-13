@@ -241,29 +241,29 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="bg-[#D99B42] relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#F8E1BF]/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#3d4a3c]/10 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4" />
+      <section className="bg-[#3d4a3c] relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#869C84]/15 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#D99B42]/10 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4" />
         <div className="relative max-w-4xl mx-auto px-6 py-24 md:py-32 text-center scroll-reveal" ref={revealRef3}>
-          <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/15 text-white text-sm font-bold mb-8 border border-white/20">
+          <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#D99B42]/15 text-[#D99B42] text-sm font-bold mb-8 border border-[#D99B42]/25">
             <CheckCircle className="w-4 h-4" />
             <span>Free Forever — No Hidden Fees</span>
           </div>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight" data-testid="text-cta-heading">
             Your Skills Are Worth
             <br />
-            <span className="bg-gradient-to-r from-[#3d4a3c] to-[#F8E1BF] bg-clip-text text-transparent">More Than You Think</span>
+            <span className="bg-gradient-to-r from-[#D99B42] to-[#F8E1BF] bg-clip-text text-transparent">More Than You Think</span>
           </h2>
-          <p className="text-lg text-white/75 mb-4 max-w-2xl mx-auto">
+          <p className="text-lg text-white/65 mb-4 max-w-2xl mx-auto">
             Stop paying for services you could trade for. That freelance designer needs accounting help.
             That lawyer needs a new website. That photographer needs someone to manage their social media.
           </p>
-          <p className="text-lg text-white mb-10 max-w-2xl mx-auto font-medium">
+          <p className="text-lg text-white/90 mb-10 max-w-2xl mx-auto font-medium">
             Everyone has something valuable to offer.
           </p>
           <div>
             <Link href={user ? "/app" : "/signup"}>
-              <Button size="lg" className="bg-[#3d4a3c] text-white hover:bg-[#4a5a48] font-semibold rounded-full px-10 py-6 text-lg gap-2 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300" data-testid="button-join-now">
+              <Button size="lg" className="bg-[#D99B42] text-white hover:bg-[#c48a35] font-semibold rounded-full px-10 py-6 text-lg gap-2 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300" data-testid="button-join-now">
                 Join the Community
                 <ArrowUpRight className="w-5 h-5" />
               </Button>
