@@ -12,6 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import { CityPicker } from "@/components/city-picker";
 import { tosContent, professionalDisclaimerContent, taxDisclaimerContent, platformRoleDisclaimerContent, communityGuidelinesContent } from "@/pages/terms";
 import logoPath from "@assets/BarterConnect_Logo_new.svg";
+import iconPath from "@assets/BarterConnect_Icon_new.svg";
 
 export function LoginPage() {
   const [email, setEmail] = useState("");
@@ -61,8 +62,8 @@ export function LoginPage() {
         <div className="relative w-full max-w-md">
           <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 overflow-hidden">
             <div className="px-8 pt-10 pb-2 text-center">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[#869C84] text-white mb-5 shadow-lg">
-                <Sparkles className="w-7 h-7" />
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[#869C84] mb-5 shadow-lg p-3">
+                <img src={iconPath} alt="" className="w-full h-full" />
               </div>
               <h1 className="text-2xl font-bold text-[#3d4a3c]">Welcome back</h1>
               <p className="text-[#907169] text-sm mt-1">Log in to your account</p>
@@ -179,8 +180,8 @@ export function SignupPage() {
         <div className="relative w-full max-w-md">
           <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 overflow-hidden">
             <div className="px-8 pt-10 pb-2 text-center">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[#D99B42] text-white mb-5 shadow-lg">
-                <Sparkles className="w-7 h-7" />
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[#D99B42] mb-5 shadow-lg p-3">
+                <img src={iconPath} alt="" className="w-full h-full" />
               </div>
               <h1 className="text-2xl font-bold text-[#3d4a3c]">Coming Soon</h1>
               <p className="text-[#907169] text-sm mt-1">We're putting the finishing touches on BarterConnect</p>

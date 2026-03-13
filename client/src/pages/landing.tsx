@@ -294,16 +294,16 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto px-6 py-10">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
             <Link href="/" className="shrink-0">
-              <img src={logoPath} alt="BarterConnect" className="w-36 opacity-60 hover:opacity-100 transition-opacity duration-300" data-testid="footer-logo" />
+              <img src={logoPath} alt="BarterConnect" className="w-36 opacity-90 hover:opacity-100 transition-opacity duration-300" data-testid="footer-logo" />
             </Link>
-            <div className="flex items-center gap-8 text-sm text-white/40">
+            <div className="flex items-center gap-8 text-sm text-white/75">
               <Link href="/terms" className="hover:text-[#D99B42] transition-colors duration-300" data-testid="link-terms">
                 Terms
               </Link>
               <Link href="/privacy" className="hover:text-[#D99B42] transition-colors duration-300" data-testid="link-privacy">
                 Privacy
               </Link>
-              <span className="text-white/25">Trade skills, not cash.</span>
+              <span className="text-white/60">Trade skills, not cash.</span>
             </div>
           </div>
         </div>
