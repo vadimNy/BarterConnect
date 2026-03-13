@@ -132,7 +132,7 @@ export default function LandingPage() {
 
         <div className="relative max-w-6xl mx-auto px-6 pt-28 pb-10 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-            <div>
+            <div className="text-center lg:text-left">
               <div className="animate-fade-up">
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#869C84]/10 text-[#3d4a3c] text-sm font-medium mb-8 border border-[#869C84]/20" data-testid="badge-platform">
                   <Sparkles className="w-4 h-4 text-[#D99B42]" />
@@ -150,14 +150,14 @@ export default function LandingPage() {
                 <p className="text-2xl md:text-3xl font-bold text-[#869C84] mb-6" data-testid="hero-subheading">
                   It's all about networking.
                 </p>
-                <p className="text-lg text-[#5a4a44] max-w-xl mb-4 leading-relaxed">
+                <p className="text-lg text-[#5a4a44] max-w-xl mx-auto lg:mx-0 mb-4 leading-relaxed">
                   We all wish we knew a plumber, a lawyer, a web designer, a photographer, a marketing expert...
                 </p>
-                <p className="text-lg text-[#5a4a44] max-w-xl mb-10 leading-relaxed">
+                <p className="text-lg text-[#5a4a44] max-w-xl mx-auto lg:mx-0 mb-10 leading-relaxed">
                   <strong className="text-[#3d4a3c]">BarterConnect is exactly that.</strong> A community where people trade skills instead of dollars. You help someone with what you're great at, and they help you with what they're great at. Simple as that.
                 </p>
               </div>
-              <div className="flex flex-col sm:flex-row gap-4 animate-fade-up stagger-4">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-fade-up stagger-4">
                 <Link href={user ? "/app" : "/signup"}>
                   <Button size="lg" className="bg-[#D99B42] text-white hover:bg-[#c48a35] font-semibold rounded-full px-8 py-6 text-lg gap-2 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300" data-testid="button-get-started">
                     Get Started Free
@@ -173,7 +173,7 @@ export default function LandingPage() {
               </div>
             </div>
 
-            <div className="hidden lg:flex items-center justify-center">
+            <div className="flex items-center justify-center">
               <div className="relative">
                 <div className="absolute -inset-6 bg-gradient-to-br from-[#869C84]/20 to-[#D99B42]/20 rounded-[2rem] blur-2xl" />
                 <div className="relative bg-[#3d4a3c] rounded-[2rem] p-10 shadow-2xl">
