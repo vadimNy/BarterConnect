@@ -3,7 +3,14 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowRight, Share2, Sparkles, Handshake, Search, MessageCircle, Star, Globe, CheckCircle } from "lucide-react";
 import { useAuth } from "@/lib/auth";
-import logoPath from "@assets/BarterConnect_Logo.svg";
+
+const Logo = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" width="3162.3603351955308" height="488.0666534380348" viewBox="0 0 3162.3603351955308 488.0666534380348">
+    <g transform="scale(8.118016759776536) translate(10, 10)">
+      <defs id="SvgjsDefs2693"></defs><g id="SvgjsG2694" featureKey="symbolFeature-0" transform="matrix(0.6272400901973744,0,0,0.6272400901973744,-3.136200450986872,-11.300984829508108)" fill="#f3eddf"><g xmlns="http://www.w3.org/2000/svg"><g><path d="M56.736,32.923H50h-6.736c-2.325,0-4.21,1.884-4.21,4.21v15.212c0,2.325,1.885,4.212,4.209,4.212h1.023v22.179    c0,1.793,1.453,3.246,3.246,3.246h4.935c1.794,0,3.247-1.453,3.247-3.246V56.558h1.023c2.324,0,4.21-1.887,4.21-4.212V37.134    C60.946,34.808,59.061,32.923,56.736,32.923z"></path></g><circle cx="50" cy="24.576" r="6.559"></circle><g><path d="M33.347,36.718h-5.239h-5.239c-1.809,0-3.274,1.465-3.274,3.274v11.832c0,1.809,1.466,3.275,3.273,3.275h0.796v17.251    c0,1.395,1.129,2.524,2.523,2.524h3.838c1.396,0,2.526-1.13,2.526-2.524V55.1h0.795c1.808,0,3.274-1.467,3.274-3.275V39.993    C36.621,38.184,35.155,36.718,33.347,36.718z"></path></g><circle cx="28.107" cy="30.226" r="5.102"></circle><g><path d="M14.822,40.513h-3.742H7.339C6.047,40.513,5,41.56,5,42.853v8.451c0,1.291,1.047,2.339,2.337,2.339h0.569v12.322    c0,0.996,0.807,1.804,1.803,1.804h2.741c0.997,0,1.804-0.808,1.804-1.804V53.643h0.567c1.292,0,2.339-1.048,2.339-2.339v-8.451    C17.162,41.56,16.114,40.513,14.822,40.513z"></path></g><circle cx="11.081" cy="35.876" r="3.644"></circle><g><path d="M77.131,36.718h-5.238h-5.239c-1.809,0-3.274,1.465-3.274,3.274v11.832c0,1.809,1.466,3.275,3.273,3.275h0.796v17.251    c0,1.395,1.129,2.524,2.523,2.524h3.839c1.396,0,2.525-1.13,2.525-2.524V55.1h0.795c1.809,0,3.275-1.467,3.275-3.275V39.993    C80.406,38.184,78.939,36.718,77.131,36.718z"></path></g><circle cx="71.893" cy="30.226" r="5.102"></circle><g><path d="M92.661,40.513h-3.742h-3.741c-1.293,0-2.339,1.047-2.339,2.34v8.451c0,1.291,1.046,2.339,2.337,2.339h0.568v12.322    c0,0.996,0.808,1.804,1.804,1.804h2.741c0.997,0,1.804-0.808,1.804-1.804V53.643h0.568c1.292,0,2.339-1.048,2.339-2.339v-8.451    C95,41.56,93.953,40.513,92.661,40.513z"></path></g><circle cx="88.92" cy="35.876" r="3.644"></circle></g></g><g id="SvgjsG2695" featureKey="textFeature-0" transform="translate(175, 0)" fill="#2a1a47"><text xmlns="http://www.w3.org/2000/svg" fontFamily="Helvetica, Arial, sans-serif" fontSize="50" fontWeight="700" fontStyle="normal" fontVariant="normal" textAnchor="start" fill="#2a1a47" fillOpacity="1" stroke="none"><tspan x="0" y="50" textLength="150">Barter</tspan><tspan x="150" y="50" textLength="163.75" fontWeight="700" fill="#c85c1e">Connect</tspan></text></g>
+    </g>
+  </svg>
+);
 
 export default function LandingPage() {
   const { user } = useAuth();
@@ -63,8 +70,8 @@ export default function LandingPage() {
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="max-w-5xl mx-auto flex items-center justify-between gap-4 px-4 py-3">
-          <Link href="/" className="shrink-0">
-            <img src={logoPath} alt="BarterConnect" className="h-12" data-testid="header-logo" />
+          <Link href="/" className="shrink-0 h-12">
+            <Logo />
           </Link>
           <div className="flex items-center gap-2">
             {user ? (
@@ -88,8 +95,8 @@ export default function LandingPage() {
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-accent/10" />
         <div className="relative max-w-5xl mx-auto px-4 py-20 md:py-32 text-center">
-          <div className="flex justify-center mb-12">
-            <img src={logoPath} alt="BarterConnect" className="w-64 md:w-80 lg:w-96" data-testid="hero-logo" />
+          <div className="flex justify-center mb-12 w-64 md:w-80 lg:w-96">
+            <Logo />
           </div>
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-8">
             <Sparkles className="w-3.5 h-3.5" />
@@ -188,8 +195,8 @@ export default function LandingPage() {
 
       <footer className="border-t py-6">
         <div className="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-muted-foreground">
-          <Link href="/" className="flex items-center gap-0 shrink-0">
-            <img src={logoPath} alt="BarterConnect" className="w-40" data-testid="footer-logo" />
+          <Link href="/" className="flex items-center gap-0 shrink-0 w-40">
+            <Logo />
           </Link>
           <div className="flex items-center gap-4">
             <Link href="/terms" className="hover:text-foreground transition-colors" data-testid="link-terms">
